@@ -13,7 +13,7 @@ jobs:
       - python/install-packages
       - run:
           name: Run tests
-          command: pytest --junitxml=junit.xml || ((($? == 5)) && echo 'Did not find any tests to run.')
+          command: python -m pytest
       - store_test_results:
           path: junit.xml
   deploy:
