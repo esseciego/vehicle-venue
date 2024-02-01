@@ -4,18 +4,19 @@ version: 2.1
 orbs:
   python: circleci/python@2
 jobs:
-  test-python:
-    # Install dependencies and run tests
-    docker:
-      - image: cimg/python:3.8-node
+  build_and_test: 
+    executor: python/default
     steps:
       - checkout
-      - python/install-packages
+      - python/install-packages:
+          pkg-manager: pip
       - run:
           name: Run tests
           command: python -m pytest
-      - store_test_results:
-          path: junit.xml
+      - persist_to_workspace:
+          root: ~/team-76
+          paths: businessObjects
+        - .
   deploy:
     # This is an example deploy job, not actually used by the workflow
     docker:
