@@ -143,7 +143,6 @@ class LogInWindow(QWidget):
     def login(self):
         if self.username.text() == "Username" and self.password.text() == "Password":
             self.confirmation_label.setText("Login Successful")
-            QWidget.qWait(msecs)
             self.main_window = MainWindow()
             self.main_window.show()
             self.close()
