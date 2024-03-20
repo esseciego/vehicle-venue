@@ -48,10 +48,10 @@ class SignUpWindow(QWidget):
         super().__init__()
 
         self.layout = QGridLayout()
-        self.layout.setContentsMargins(50, 50, 50, 50)
-        self.layout.setSpacing(10)
+        self.layout.setContentsMargins(100, 100, 100, 100)
+        self.layout.setSpacing(100)
 
-        self.setWindowTitle("User Sign Up")
+        self.setWindowTitle("Log In")
         self.setLayout(self.layout)
         self.resize(800, 600)
 
@@ -99,7 +99,10 @@ class LogInWindow(QWidget):
         self.layout.setContentsMargins(100, 100, 100, 100)
         self.layout.setSpacing(100)
 
-        # Sign Up button
+        self.setWindowTitle("Log In")
+        self.setLayout(self.layout)
+        self.resize(800, 600)
+
         sign_up_button = QPushButton("Sign Up")
         sign_up_button.clicked.connect(self.signUpWindow)
         self.layout.addWidget(sign_up_button, 4, 0)
@@ -107,10 +110,6 @@ class LogInWindow(QWidget):
         title = QLabel("User Login")
         title.setProperty("class", "heading")
         self.layout.addWidget(title, 0, 0, 1, 0, Qt.AlignmentFlag.AlignCenter)
-
-        self.setWindowTitle("User Login")
-        self.setLayout(self.layout)
-        self.resize(800, 600)
 
         #Username label
         user_name = QLabel("Username:")
@@ -131,9 +130,9 @@ class LogInWindow(QWidget):
         self.layout.addWidget(self.confirmation_label, 0, 0, 3, 0, Qt.AlignmentFlag.AlignCenter)
 
         #Login Button
-        button2 = QPushButton("Login")
-        button2.clicked.connect(self.login)
-        self.layout.addWidget(button2, 4, 2)
+        login_button = QPushButton("Login")
+        login_button.clicked.connect(self.login)
+        self.layout.addWidget(login_button, 4, 2)
 
     def signUpWindow(self):
         self.sign_up_window = SignUpWindow()
@@ -150,8 +149,8 @@ class LogInWindow(QWidget):
             self.confirmation_label.setText("Invalid Username or Password. Please try again")
 
 
+
 app = QApplication(sys.argv)
 window = MainWindow()
 window.show()
 app.exec()
-
