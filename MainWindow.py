@@ -15,7 +15,7 @@ class MainWindow(QWidget):
 
         self.setWindowTitle("Home Page")
         self.setLayout(self.layout)
-        self.resize(800, 600)
+        self.resize(screen_size)
 
         #Welcomes to home page
         welcome_label = QLabel("Welcome to the Car Rental Site")
@@ -24,23 +24,21 @@ class MainWindow(QWidget):
 
         # Sign Up button
         sign_up_button = QPushButton("Sign Up")
-        sign_up_button.clicked.connect(self.signUpWindow)
+        sign_up_button.clicked.connect(self.sign_up_window)
         self.layout.addWidget(sign_up_button, 0, 3)
 
         # Log In button
         log_in_button = QPushButton("Log In")
-        log_in_button.clicked.connect(self.loginWindow)
+        log_in_button.clicked.connect(self.log_in_window)
         self.layout.addWidget(log_in_button, 0, 4)
 
-    def loginWindow(self):
+    def log_in_window(self):
         self.log_in_window = LogInWindow()
         self.log_in_window.show()
-        self.close()
 
-    def signUpWindow(self):
+    def sign_up_window(self):
         self.sign_up_window = SignUpWindow()
         self.sign_up_window.show()
-        self.close()
 
 #Sign up window just a stand in
 class SignUpWindow(QWidget):
@@ -53,9 +51,9 @@ class SignUpWindow(QWidget):
 
         self.setWindowTitle("Log In")
         self.setLayout(self.layout)
-        self.resize(800, 600)
+        self.resize(screen_size / 2.0)
 
-        # Firstd Label
+        # First Name Label
         user_name_first = QLabel("First Name")
         user_name_first.setProperty("class", "normal")
         self.layout.addWidget(user_name_first, 0, 0)
@@ -101,7 +99,7 @@ class LogInWindow(QWidget):
 
         self.setWindowTitle("Log In")
         self.setLayout(self.layout)
-        self.resize(800, 600)
+        self.resize(screen_size / 2.0)
 
         sign_up_button = QPushButton("Sign Up")
         sign_up_button.clicked.connect(self.signUpWindow)
@@ -148,9 +146,9 @@ class LogInWindow(QWidget):
         else:
             self.confirmation_label.setText("Invalid Username or Password. Please try again")
 
-
-
 app = QApplication(sys.argv)
+screen = app.primaryScreen()
+screen_size = screen.size()
 window = MainWindow()
 window.show()
 app.exec()
