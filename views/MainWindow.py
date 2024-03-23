@@ -1,13 +1,15 @@
 import sys
-from log_in_window import LogInWindow
-from sign_up_window import SignUpWindow
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
     QWidget, QPushButton, QApplication, QGridLayout,
-    QLabel, QLineEdit)
+    QLabel)
 
-#Basically the home page just a stand in
+from views.LogInWindow import LogInWindow
+from views.SignUpWindow import SignUpWindow
+
+
 class MainWindow(QWidget):
+    # Basically the home page just a stand in
     def __init__(self):
         super().__init__()
 
@@ -17,9 +19,10 @@ class MainWindow(QWidget):
 
         self.setWindowTitle("Home Page")
         self.setLayout(self.layout)
+
         self.resize(screen_size)
 
-        #Welcomes to home page
+        # Welcomes to home page
         welcome_label = QLabel("Welcome to the Car Rental Site")
         welcome_label.setProperty("class", "heading")
         self.layout.addWidget(welcome_label, 0, 0, 3, 0, Qt.AlignmentFlag.AlignCenter)
@@ -45,6 +48,7 @@ class MainWindow(QWidget):
 app = QApplication(sys.argv)
 screen = app.primaryScreen()
 screen_size = screen.size()
+
 window = MainWindow()
 window.show()
-app.exec()
+sys.exit(app.exec())

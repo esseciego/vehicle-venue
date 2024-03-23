@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import (
     QWidget, QPushButton, QApplication, QGridLayout,
     QLabel, QLineEdit)
 
+
 class SignUpWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -50,6 +51,7 @@ class SignUpWindow(QWidget):
         self.layout.addWidget(user_name_first, 4, 0)
         self.password = QLineEdit()
         self.layout.addWidget(self.password, 4, 1, 1, 2)
+
 
 app = QApplication(sys.argv)
 screen = app.primaryScreen()
