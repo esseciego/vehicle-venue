@@ -1,9 +1,10 @@
 import sys
-from sign_up_window import SignUpWindow
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
     QWidget, QPushButton, QApplication, QGridLayout,
     QLabel, QLineEdit)
+
+from views.SignUpWindow import SignUpWindow
 class LogInWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -17,14 +18,14 @@ class LogInWindow(QWidget):
         self.resize(screen_size / 2.0)
 
         sign_up_button = QPushButton("Sign Up")
-        sign_up_button.clicked.connect(self.signUpWindow)
+        sign_up_button.clicked.connect(self.sign_up_window)
         self.layout.addWidget(sign_up_button, 4, 0)
 
         title = QLabel("User Login")
         title.setProperty("class", "heading")
         self.layout.addWidget(title, 0, 0, 1, 0, Qt.AlignmentFlag.AlignCenter)
 
-        #Username label
+        # Username label
         user_name = QLabel("Username:")
         user_name.setProperty("class", "normal")
         self.layout.addWidget(user_name, 1, 0)
@@ -42,12 +43,12 @@ class LogInWindow(QWidget):
         self.confirmation_label.setProperty("class", "heading")
         self.layout.addWidget(self.confirmation_label, 0, 0, 3, 0, Qt.AlignmentFlag.AlignCenter)
 
-        #Login Button
+        # Login Button
         login_button = QPushButton("Login")
         login_button.clicked.connect(self.login)
         self.layout.addWidget(login_button, 4, 2)
 
-    def signUpWindow(self):
+    def sign_up_window(self):
         self.sign_up_window = SignUpWindow()
         self.sign_up_window.show()
         self.close()
