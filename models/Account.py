@@ -7,7 +7,7 @@ class Account:
         self.role = role
         self.city = city
 
-    def get_data(self):
+    def get_all_data(self):
         # Returns dictionary of account data
         return {
             'username': self.username,
@@ -16,3 +16,4 @@ class Account:
             'role': self.role,
             'city': self.city,
         }
+
