@@ -1,0 +1,18 @@
+class Account:
+    # Model that represents a user's account in system
+    def __init__(self, username: str, password: str, email: str, role: str, city: str):
+        self.username = username
+        self.password = password
+        self.email = email
+        self.role = role
+        self.city = city
+
+    def get_data(self):
+        # Returns dictionary of account data
+        return {
+            'username': self.username,
+            'password': self.password,
+            'email': self.email,
+            'role': self.role,
+            'city': self.city,
+        }
