@@ -1,3 +1,5 @@
+from helpers.Crypt import Crypt
+
 class Account:
     # Model that represents a user's account in system
     def __init__(self, username: str, password: str, email: str, role: str, city: str):
@@ -17,3 +19,7 @@ class Account:
             'city': self.city,
         }
 
+    def encrypt_password(self):
+        # Encodes password
+        crypt = Crypt()
+        self.password = crypt.encrypt(self.password)

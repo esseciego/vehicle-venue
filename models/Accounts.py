@@ -17,11 +17,11 @@ class Accounts:
 
         new_account = Account(username, password, email, role, city)
 
-        # Validates user input
         error_log = self.validate(new_account)
 
         if self.operation_success(error_log) == True:
             try:
+                new_account.encrypt_password()
                 result = accounts.insert_one(new_account.get_all_data()).inserted_id
                 print(result)
             except ConnectionError:
@@ -30,7 +30,7 @@ class Accounts:
         return error_log
 
     def delete_account(self, username):
-        # Deletes new_account document from accounts collection
+        # Deletes account with matching username from accounts collection
         # Returns true if deletion was successful. Else, returns false
 
         database = Database()
@@ -46,6 +46,9 @@ class Accounts:
             print('Server unavailable.')
 
     def delete_all_accounts(self):
+        # Deletes all accounts from database
+        # Returns true if deletion was successful. Else returns false
+
         database = Database()
         accounts = database.accounts_col
 
@@ -102,8 +105,10 @@ class Accounts:
     def operation_success(self, error_log):
         # Takes in error log from a CRUD operation
         # If an error was reported, return false. Else, return true
+
         for key, value in error_log.items():
             if value == False:
                 return False
 
         return True
+
