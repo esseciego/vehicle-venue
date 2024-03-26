@@ -6,7 +6,33 @@ from models.Accounts import Accounts
 
 #update acc function should go here
 class TestAccounts:
-    # Accounts test suite
+    def setup_method(self):
+        # Initialize the Accounts model and add dummy accounts for testing
+        self.accounts = Accounts()
+        self.create_dummy_accounts()
+
+    def create_dummy_accounts(self):
+        # Add dummy accounts here
+        self.accounts.add_account("admin1", "adminpass", "admin1@example.com", "admin", "CityA")
+        self.accounts.add_account("user1", "userpass", "user1@example.com", "user", "CityB")
+        # ... Add more dummy accounts as needed ...
+
+    def teardown_method(self):
+        # Clean up / delete dummy accounts after tests run
+        self.accounts.delete_account("admin1")
+        self.accounts.delete_account("user1")
+        # ... Add more cleanup as needed ...
+
+    def get_dummy_accounts(self):
+        # Method to retrieve dummy accounts for other uses such as GUI display
+        return [
+            {'username': 'admin1', 'password': 'adminpass', 'email': 'admin1@example.com', 'role': 'admin',
+             'city': 'CityA'},
+            {'username': 'user1', 'password': 'userpass', 'email': 'user1@example.com', 'role': 'user',
+             'city': 'CityB'},
+            # ... Include the rest of the dummy accounts ...
+        ]
+
 
     def test_valid_new_acc(self):
         accounts = Accounts()
@@ -125,5 +151,8 @@ class TestAccounts:
 
 
 if __name__ == '__main__':
-    # Runs test suite when script is run
+    test_accounts = TestAccounts()
+    test_accounts.setup_method()  # Set up dummy accounts
+
+    # Optionally, run the tests
     pytest.main()
