@@ -5,13 +5,16 @@ from PyQt6.QtWidgets import (
     QLabel, QLineEdit)
 
 from views.SignUpWindow import SignUpWindow
+from views.SignUpWindow import screen_size
+from models.Accounts import Accounts
+
 class LogInWindow(QWidget):
     def __init__(self):
         super().__init__()
 
         self.layout = QGridLayout()
-        self.layout.setContentsMargins(100, 100, 100, 100)
-        self.layout.setSpacing(100)
+        self.layout.setContentsMargins(50, 50, 50, 50)
+        self.layout.setSpacing(50)
 
         self.setWindowTitle("Log In")
         self.setLayout(self.layout)
@@ -54,11 +57,10 @@ class LogInWindow(QWidget):
         self.close()
 
     def login(self):
-        if self.username.text() == "Username" and self.password.text() == "Password":
+        account = Accounts()
+        error_log = account.login(self.username.text(), self.password.text())
+        if(account.operation_success(error_log)):
             self.confirmation_label.setText("Login Successful")
+            self.close()
         else:
             self.confirmation_label.setText("Invalid Username or Password. Please try again")
-
-app = QApplication(sys.argv)
-screen = app.primaryScreen()
-screen_size = screen.size()

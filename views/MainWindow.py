@@ -6,6 +6,8 @@ from PyQt6.QtWidgets import (
 
 from views.LogInWindow import LogInWindow
 from views.SignUpWindow import SignUpWindow
+from views.SignUpWindow import screen_size
+from models.Accounts import Accounts
 
 
 class MainWindow(QWidget):
@@ -22,8 +24,10 @@ class MainWindow(QWidget):
 
         self.resize(screen_size)
 
+        self.account = Accounts()
+
         # Welcomes to home page
-        welcome_label = QLabel("Welcome to the Car Rental Site")
+        welcome_label = QLabel("Welcome to the VehicleVenue")
         welcome_label.setProperty("class", "heading")
         self.layout.addWidget(welcome_label, 0, 0, 3, 0, Qt.AlignmentFlag.AlignCenter)
 
@@ -33,22 +37,28 @@ class MainWindow(QWidget):
         self.layout.addWidget(sign_up_button, 0, 3)
 
         # Log In button
-        log_in_button = QPushButton("Log In")
-        log_in_button.clicked.connect(self.log_in_window)
-        self.layout.addWidget(log_in_button, 0, 4)
+        login_button = QPushButton("Log In")
+        login_button.clicked.connect(self.login_window)
+        self.layout.addWidget(login_button, 0, 4)
 
-    def log_in_window(self):
-        self.log_in_window = LogInWindow()
-        self.log_in_window.show()
+        # Log Out button
+        logout_button = QPushButton("Log Out")
+        logout_button.clicked.connect(self.logout)
+        self.layout.addWidget(logout_button, 0, 4)
+        logout_button.hide()
+
+    def login_window(self):
+        self.login_window = LogInWindow()
+        self.login_window.show()
+
+    def logout(self):
+        self.account.logout()
 
     def sign_up_window(self):
         self.sign_up_window = SignUpWindow()
         self.sign_up_window.show()
 
 app = QApplication(sys.argv)
-screen = app.primaryScreen()
-screen_size = screen.size()
-
 window = MainWindow()
 window.show()
 sys.exit(app.exec())
