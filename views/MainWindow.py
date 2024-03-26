@@ -8,7 +8,7 @@ from views.LogInWindow import LogInWindow
 from views.SignUpWindow import SignUpWindow
 from views.SignUpWindow import screen_size
 from models.Accounts import Accounts
-
+from helpers.EnvVariables import EnvVariables
 
 class MainWindow(QWidget):
     # Basically the home page just a stand in
@@ -42,10 +42,21 @@ class MainWindow(QWidget):
         self.layout.addWidget(login_button, 0, 4)
 
         # Log Out button
+        login_button = QPushButton("")
         logout_button = QPushButton("Log Out")
         logout_button.clicked.connect(self.logout)
         self.layout.addWidget(logout_button, 0, 4)
+
+        login_button.hide()
         logout_button.hide()
+
+        if EnvVariables.get_user(self) == "NONE":
+            login_button.show()
+            logout_button.hide()
+        else:
+            logout_button.show()
+            login_button.hide()
+
 
     def login_window(self):
         self.login_window = LogInWindow()
@@ -57,6 +68,7 @@ class MainWindow(QWidget):
     def sign_up_window(self):
         self.sign_up_window = SignUpWindow()
         self.sign_up_window.show()
+
 
 app = QApplication(sys.argv)
 window = MainWindow()
