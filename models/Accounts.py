@@ -1,6 +1,7 @@
 from Database import Database
 from models.Account import Account
 
+#database manager for accounts
 
 class Accounts:
     # Model that represents all user accounts in system

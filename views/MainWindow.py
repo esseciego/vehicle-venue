@@ -6,6 +6,7 @@ from PyQt6.QtWidgets import (
 
 from views.LogInWindow import LogInWindow
 from views.SignUpWindow import SignUpWindow
+from views.SettingsWindow import SettingsWindow
 
 
 class MainWindow(QWidget):
@@ -19,6 +20,10 @@ class MainWindow(QWidget):
 
         self.setWindowTitle("Home Page")
         self.setLayout(self.layout)
+
+        app = QApplication.instance()
+        screen = app.primaryScreen()
+        screen_size = screen.size()
 
         self.resize(screen_size)
 
@@ -37,6 +42,12 @@ class MainWindow(QWidget):
         log_in_button.clicked.connect(self.log_in_window)
         self.layout.addWidget(log_in_button, 0, 4)
 
+        settings_button = QPushButton("Settings")
+        settings_button.clicked.connect(self.settings_window)
+        self.layout.addWidget(settings_button, 0, 5)
+
+        self.settings_window_instance = None
+
     def log_in_window(self):
         self.log_in_window = LogInWindow()
         self.log_in_window.show()
@@ -44,6 +55,12 @@ class MainWindow(QWidget):
     def sign_up_window(self):
         self.sign_up_window = SignUpWindow()
         self.sign_up_window.show()
+
+    def settings_window(self):
+        if self.settings_window_instance is None or not self.settings_window_instance.isVisible():
+            self.settings_window_instance = SettingsWindow()
+        self.settings_window_instance.show()
+
 
 app = QApplication(sys.argv)
 screen = app.primaryScreen()
