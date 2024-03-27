@@ -1,16 +1,17 @@
 import sys
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import (Qt, pyqtSignal)
 from PyQt6.QtWidgets import (
     QWidget, QPushButton, QApplication, QGridLayout,
     QLabel, QLineEdit)
+
 
 class SignUpWindow(QWidget):
     def __init__(self):
         super().__init__()
 
         self.layout = QGridLayout()
-        self.layout.setContentsMargins(100, 100, 100, 100)
-        self.layout.setSpacing(100)
+        self.layout.setContentsMargins(50, 50, 50, 50)
+        self.layout.setSpacing(50)
 
         self.setWindowTitle("Log In")
         self.setLayout(self.layout)
@@ -50,6 +51,7 @@ class SignUpWindow(QWidget):
         self.layout.addWidget(user_name_first, 4, 0)
         self.password = QLineEdit()
         self.layout.addWidget(self.password, 4, 1, 1, 2)
+
 
 app = QApplication(sys.argv)
 screen = app.primaryScreen()
