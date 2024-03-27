@@ -161,7 +161,8 @@ class Accounts:
 
         # Password correct?
         account = Account(result['username'], result['password'], result['email'], result['role'], result['city'])
-        decrypted_password = account.get_decrypt_password()
+        #decrypted_password = account.get_decrypt_password()
+        decrypted_password = account.password
         if decrypted_password != password:
             error_log['password-correct'] = False
 
