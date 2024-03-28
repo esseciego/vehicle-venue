@@ -1,7 +1,9 @@
 from Database import Database
+from helpers.EnvVariables import EnvVariables
 from models.Account import Account
 
 #database manager for accounts
+
 
 class Accounts:
     # Model that represents all user accounts in system
@@ -9,7 +11,7 @@ class Accounts:
     def __init__(self):
         pass
 
-    def add_account(self, username, password, email, role, city):
+    def add_account(self, username, password, email, role = "Client", city = "None"):
         # Inserts new_account document into accounts collection if user input is valid. Doesn't insert if invalid
         # Returns error log
 
@@ -46,6 +48,8 @@ class Accounts:
         except ConnectionError:
             print('Server unavailable.')
 
+        return
+
     def delete_all_accounts(self):
         # Deletes all accounts from database
         # Returns true if deletion was successful. Else returns false
@@ -62,6 +66,7 @@ class Accounts:
             print('Server unavailable.')
 
     def validate(self, account):
+        # FIXME: Change name to 'validate_new_account'
         # Validates user input
         # Returns an error-log
 
@@ -100,6 +105,66 @@ class Accounts:
         # City entered?
         if account.city == '':
             error_log['city-entered'] = False
+
+        return error_log
+
+    def login(self, username, password):
+        # Logs in user
+        # Returns error log
+
+        database = Database()
+        accounts = database.accounts_col
+
+        error_log = self.validate_login(username, password)
+        # FIXME: Error log won't process
+        if self.operation_success(error_log) == True:
+            env_vars = EnvVariables()
+
+            # Change USER .env variable
+            env_vars.set_user(username)
+
+            # Change ROLE .env variable
+            account_to_find = {"username": username}
+            result = accounts.find_one(account_to_find)
+            role = result['role']
+            env_vars.set_role(role)
+
+        return error_log
+
+    def logout(self):
+        # Logs out user
+
+        env_vars = EnvVariables()
+
+        env_vars.set_user('NONE')
+        env_vars.set_role('NONE')
+        return
+
+    def validate_login(self, username, password):
+        # Validates whether login was correct
+
+        database = Database()
+        accounts = database.accounts_col
+
+        # Initializes error log
+        error_log = {
+            'user-exists': True,
+            'password-correct': True,
+        }
+
+        # User account exists?
+        account_to_find = {"username": username}
+        result = accounts.find_one(account_to_find)
+        if result == None:
+            error_log['user-exists'] = False
+            error_log['password-correct'] = False
+            return error_log
+
+        # Password correct?
+        account = Account(result['username'], result['password'], result['email'], result['role'], result['city'])
+        decrypted_password = account.get_decrypt_password()
+        if decrypted_password != password:
+            error_log['password-correct'] = False
 
         return error_log
 

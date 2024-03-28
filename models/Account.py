@@ -2,6 +2,7 @@ from helpers.Crypt import Crypt
 
 class Account:
     # Model that represents a user's account in system
+
     def __init__(self, username: str, password: str, email: str, role: str, city: str):
         self.username = username
         self.password = password
@@ -23,3 +24,8 @@ class Account:
         # Encodes password
         crypt = Crypt()
         self.password = crypt.encrypt(self.password)
+
+    def get_decrypt_password(self):
+        crypt = Crypt()
+        decrypt_password = crypt.decrypt(self.password)
+        return decrypt_password
