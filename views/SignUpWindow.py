@@ -7,6 +7,9 @@ from models.Accounts import Accounts
 
 
 class SignUpWindow(QWidget):
+    # signal that is sent to Mainwindow so it can check if the user is logged in
+    window_closed = pyqtSignal()
+
     def __init__(self):
         super().__init__()
 
@@ -55,6 +58,7 @@ class SignUpWindow(QWidget):
         error_log = account.add_account(self.username.text(), self.password.text(), self.email.text())
         if (account.operation_success(error_log)):
             self.title.setText("Account Created Successfully")
+            error_log = account.login(self.username.text(), self.password.text())
         else:
             if error_log['username-valid'] == False:
                 self.title.setText("Username must be between 6-16 characters AND only uses alphanumeric characters")
@@ -68,7 +72,11 @@ class SignUpWindow(QWidget):
             elif error_log['email-entered'] == False:
                 self.title.setText("Please enter a valid Email")
 
-
+    def closeEvent(self, event):
+        #when window is closed, main window will check if user is logged in
+        #will replace login button with logout button
+        self.window_closed.emit()
+        event.accept()
 
 
 app = QApplication(sys.argv)

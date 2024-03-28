@@ -83,7 +83,7 @@ class Accounts:
 
         # Username valid? (Between 6-16 characters AND only uses alphanumeric characters)
         if ((len(account.username) < 6) or (len(account.username) > 16)
-                or (any(chr.isdigit() for chr in account.username))):
+                or not (account.username.isalnum())):
             error_log['username-valid'] = False
 
         # Username unique?
