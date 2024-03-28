@@ -10,7 +10,7 @@ class Accounts:
     def __init__(self):
         pass
 
-    def add_account(self, username, password, email, role, city):
+    def add_account(self, username, password, email, role = "Client", city = "None"):
         # Inserts new_account document into accounts collection if user input is valid. Doesn't insert if invalid
         # Returns error log
 
@@ -83,7 +83,7 @@ class Accounts:
 
         # Username valid? (Between 6-16 characters AND only uses alphanumeric characters)
         if ((len(account.username) < 6) or (len(account.username) > 16)
-                or not (account.username.isalnum())):
+                or (any(chr.isdigit() for chr in account.username))):
             error_log['username-valid'] = False
 
         # Username unique?

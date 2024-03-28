@@ -16,8 +16,8 @@ class MainWindow(QWidget):
         super().__init__()
 
         self.layout = QGridLayout()
-        self.layout.setContentsMargins(100, 100, 100, 100)
-        self.layout.setSpacing(100)
+        self.layout.setContentsMargins(50, 50, 50, 50)
+        self.layout.setSpacing(10)
 
         self.setWindowTitle("Home Page")
         self.setLayout(self.layout)

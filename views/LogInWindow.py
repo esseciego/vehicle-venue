@@ -16,7 +16,7 @@ class LogInWindow(QWidget):
 
         self.layout = QGridLayout()
         self.layout.setContentsMargins(50, 50, 50, 50)
-        self.layout.setSpacing(50)
+        self.layout.setSpacing(100)
 
         self.setWindowTitle("Log In")
         self.setLayout(self.layout)
@@ -69,6 +69,7 @@ class LogInWindow(QWidget):
             self.confirmation_label.setText("Login Successful")
         else:
             self.confirmation_label.setText("Invalid Username or Password. Please try again")
+
     def closeEvent(self, event):
         #when window is closed, main window will check if user is logged in
         #will replace login button with logout button
