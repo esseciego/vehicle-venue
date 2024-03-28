@@ -16,8 +16,8 @@ class MainWindow(QWidget):
         super().__init__()
 
         self.layout = QGridLayout()
-        self.layout.setContentsMargins(100, 100, 100, 100)
-        self.layout.setSpacing(100)
+        self.layout.setContentsMargins(50, 50, 50, 50)
+        self.layout.setSpacing(10)
 
         self.setWindowTitle("Home Page")
         self.setLayout(self.layout)
@@ -53,18 +53,22 @@ class MainWindow(QWidget):
 
         self. logout_button.hide()
 
-    def login_window(self):
+        self.sign_up_window = SignUpWindow()
+        self.sign_up_window.window_closed.connect(self.login_check)
+
         self.login_window = LogInWindow()
         self.login_window.window_closed.connect(self.login_check)
+
+    def sign_up_window(self):
+        self.sign_up_window.show()
+
+    def login_window(self):
         self.login_window.show()
 
     def logout(self):
         self.account.logout()
+        self.login_check()
         self.user_name_label.setText("Guest")
-
-    def sign_up_window(self):
-        self.sign_up_window = SignUpWindow()
-        self.sign_up_window.show()
 
     def login_check(self):
         #checks if a user is logged in

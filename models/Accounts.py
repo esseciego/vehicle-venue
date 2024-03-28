@@ -10,7 +10,7 @@ class Accounts:
     def __init__(self):
         pass
 
-    def add_account(self, username, password, email, role, city):
+    def add_account(self, username, password, email, role = "Client", city = "None"):
         # Inserts new_account document into accounts collection if user input is valid. Doesn't insert if invalid
         # Returns error log
 
