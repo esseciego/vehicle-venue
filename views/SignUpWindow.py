@@ -75,6 +75,9 @@ class SignUpWindow(QWidget):
     def closeEvent(self, event):
         #when window is closed, main window will check if user is logged in
         #will replace login button with logout button
+        self.password.clear()
+        self.username.clear()
+        self.email.clear()
         self.window_closed.emit()
         event.accept()
 

@@ -59,6 +59,8 @@ class LogInWindow(QWidget):
         #When sign up Button Pressed, send user to Sign Up window
         self.sign_up_window = SignUpWindow()
         self.sign_up_window.show()
+        self.password.clear()
+        self.username.clear()
         self.close()
 
     def login(self):
@@ -73,5 +75,7 @@ class LogInWindow(QWidget):
     def closeEvent(self, event):
         #when window is closed, main window will check if user is logged in
         #will replace login button with logout button
+        self.password.clear()
+        self.username.clear()
         self.window_closed.emit()
         event.accept()
