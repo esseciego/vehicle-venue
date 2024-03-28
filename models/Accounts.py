@@ -2,6 +2,7 @@ from Database import Database
 from helpers.EnvVariables import EnvVariables
 from models.Account import Account
 
+#database manager for accounts
 
 
 class Accounts:
