@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import (
     QWidget, QPushButton, QApplication, QGridLayout,
     QLabel, )
 
+
 from views.LogInWindow import LogInWindow
 from views.SignUpWindow import SignUpWindow
 from views.SignUpWindow import screen_size
