@@ -1,7 +1,7 @@
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
-
+# a class that helps connect to mongo DB
 class Database:
     # Holds car rentals database
     def __init__(self):
