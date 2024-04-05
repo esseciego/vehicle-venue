@@ -133,6 +133,8 @@ class SettingsWindow(QWidget):
             # Convert ObjectId to string because QTableWidgetItem can only store strings as data
             username_item.setData(Qt.ItemDataRole.UserRole, str(account['_id']))
 
+            print(f"Row {row}: Storing _id {account['_id']}")
+
             # Add items to the table
             self.table_widget.setItem(row, 0, username_item)
             self.table_widget.setItem(row, 2, email_item)
@@ -142,24 +144,35 @@ class SettingsWindow(QWidget):
     def on_cell_changed(self, row, column):
         print(f"Cell changed - Row: {row}, Column: {column}")
 
-        account_id = self.table_widget.item(row, 0).data(Qt.ItemDataRole.UserRole)
-        new_value = self.table_widget.item(row, column).text()
+        # Assuming the _id is stored in the first column's user data
+        account_id_str = self.table_widget.item(row, 0).data(Qt.ItemDataRole.UserRole)
+        print(f"Retrieved _id string for update: {account_id_str}")
 
-        fields = ["username", "password", "email", "role", "city"]
-        if column < len(fields):
-            field = fields[column]
+        if account_id_str:
+            account_id = ObjectId(account_id_str)
+            new_value = self.table_widget.item(row, column).text()
+
+            fields = ["username", "password", "email", "role", "city"]
+            if column < len(fields):
+                field = fields[column]
+                accounts_model = Accounts()
+                success = accounts_model.update_account(account_id, field, new_value)
+                if success:
+                    print(f"Successfully updated account with id {account_id}")
+                else:
+                    print(f"Failed to update account with id {account_id}")
+            else:
+                print(f"Column index {column} out of range")
         else:
-            print(f"Column index {column} out of range")
-            return
+            print("No _id found for this row, update aborted.")
 
-        print(f"Attempting to update account with ID: {account_id} - Field: {field}, New Value: {new_value}")
-
-        accounts_model = Accounts()
-        success = accounts_model.update_account(account_id, field, new_value)
-        if success:
-            print(f"Successfully updated account with id {account_id}")
-        else:
-            print(f"Failed to update account with id {account_id}")
+    def populate_table(self, account_list):
+        self.table_widget.setRowCount(len(account_list))
+        for row, account in enumerate(account_list):
+            username_item = QTableWidgetItem(account['username'])
+            username_item.setData(Qt.ItemDataRole.UserRole, str(account['_id']))
+            self.table_widget.setItem(row, 0, username_item)
+            # Populate other cells as needed
 
 
 if __name__ == "__main__":
