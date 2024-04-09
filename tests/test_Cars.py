@@ -103,6 +103,36 @@ class TestCars:
         assert result_log == expected_log
         assert result_success == expected_success
 
+    # NOTE: Not sure how to unit test show_all_cars(). Might be easier to see if function works by seeing result in view
+    # For now, will test get_num_cars() as a proxy
+        # get_number_cars() returns number of cars that would match a get_all_cars() query
+
+    def test_get_num_cars_many(self):
+        cars = Cars()
+
+        cars.add_car("CRYING", "<TYPE>", "<CURR_RENTAL_LOCATION>", 1, 00.01, 00.01)
+        cars.add_car("IN", "<TYPE>", "<CURR_RENTAL_LOCATION>", 1, 00.01, 00.01)
+        cars.add_car("PUBLIC", "<TYPE>", "<CURR_RENTAL_LOCATION>", 1, 00.01, 00.01)
+
+        result_count = cars.get_num_cars()
+
+        expected_count = 3
+
+        assert result_count == expected_count
+
+        # Removes test cars from database
+        cars.delete_car("CRYING")
+        cars.delete_car("IN")
+        cars.delete_car("PUBLIC")
+
+    def test_get_num_cars_none(self):
+        cars = Cars()
+
+        result_count = cars.get_num_cars()
+
+        expected_count = 0
+
+        assert result_count == expected_count
 
 
 if __name__ == '__main__':
