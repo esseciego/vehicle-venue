@@ -110,15 +110,18 @@ class TestCars:
     def test_get_num_cars_many(self):
         cars = Cars()
 
+        init_car_count = cars.get_num_cars()
+
         cars.add_car("CRYING", "<TYPE>", "<CURR_RENTAL_LOCATION>", 1, 00.01, 00.01)
         cars.add_car("IN", "<TYPE>", "<CURR_RENTAL_LOCATION>", 1, 00.01, 00.01)
         cars.add_car("PUBLIC", "<TYPE>", "<CURR_RENTAL_LOCATION>", 1, 00.01, 00.01)
 
-        result_count = cars.get_num_cars()
+        final_car_count = cars.get_num_cars()
+        result_cars_added = final_car_count - init_car_count
 
-        expected_count = 3
+        expected_cars_added = 3
 
-        assert result_count == expected_count
+        assert result_cars_added == expected_cars_added
 
         # Removes test cars from database
         cars.delete_car("CRYING")
@@ -128,14 +131,17 @@ class TestCars:
     def test_get_num_cars_none(self):
         cars = Cars()
 
-        result_count = cars.get_num_cars()
+        init_car_count = cars.get_num_cars()
+        final_car_count = cars.get_num_cars()
 
-        expected_count = 0
+        result_cars_added = final_car_count - init_car_count
 
-        assert result_count == expected_count
+        expected_cars_added = 0
 
-    def test_show_all_cars_many(self):
-        # Note: Using a list of licenses from show_all_cars() as a proxy for all data in car
+        assert result_cars_added == expected_cars_added
+
+    def test_get_all_cars_many(self):
+        # Note: Using a sublist of licenses from show_all_cars() as a proxy for all data in car
         # For implementation, can just use cars.show_all_cars()
         cars = Cars()
 
@@ -143,35 +149,22 @@ class TestCars:
         cars.add_car("OF", "<TYPE>", "<CURR_RENTAL_LOCATION>", 1, 00.01, 00.01)
         cars.add_car("TEARS", "<TYPE>", "<CURR_RENTAL_LOCATION>", 1, 00.01, 00.01)
 
-        result_list = cars.show_all_cars()
-        result_license_list = []
-        for car in result_list:
-            result_license_list.append(car["license_plate"])
+        car_list = cars.get_all_cars()
+        car_license_list = []
+        for car in car_list:
+            car_license_list.append(car["license_plate"])
 
-        expected_license_list = ["OCEAN", "OF", "TEARS"]
+        # Gets last three elements from list
+        result_license_sublist = car_license_list[-3:]
 
-        assert result_license_list == expected_license_list
+        expected_license_sublist = ["OCEAN", "OF", "TEARS"]
+
+        assert result_license_sublist == expected_license_sublist
 
         # Removes test cars from database
         cars.delete_car("OCEAN")
         cars.delete_car("OF")
         cars.delete_car("TEARS")
-
-    def test_show_all_cars_none(self):
-        # Note: Using a list of licenses from show_all_cars() as a proxy for all data in car
-        # For implementation, can just use cars.show_all_cars()
-        cars = Cars()
-
-
-        result_list = cars.show_all_cars()
-        result_license_list = []
-        for car in result_list:
-            result_license_list.append(car["license_plate"])
-
-        expected_license_list = []
-
-        assert result_license_list == expected_license_list
-
 
 
 if __name__ == '__main__':

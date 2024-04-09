@@ -47,7 +47,7 @@ class Cars:
 
         return
 
-    def show_all_cars(self):
+    def get_all_cars(self):
         # Returns a list of all cars + all their car data
 
         database = Database()
