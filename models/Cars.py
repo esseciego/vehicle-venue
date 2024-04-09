@@ -47,6 +47,39 @@ class Cars:
 
         return
 
+    def show_all_cars(self):
+        # Returns a list of all cars + all their car data
+
+        database = Database()
+        cars = database.cars_col
+
+        try:
+            cursors = cars.find({})
+            result = list(cursors)
+            print(result)
+            return result
+
+        except ConnectionError:
+            print('Server unavailable.')
+
+        return
+
+    def get_num_cars(self):
+        # Returns an int with total num of cars in database
+
+        database = Database()
+        cars = database.cars_col
+
+        try:
+            result = cars.count_documents({})
+            return result
+        except ConnectionError:
+            print('Server unavailable.')
+
+        return
+
+
+
     def validate_new_car(self, car):
         # Validates user input
         # Returns an error-log
