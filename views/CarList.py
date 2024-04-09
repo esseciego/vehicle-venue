@@ -16,6 +16,7 @@ class CarList(QWidget):
 
         self.window_layout = SpecificCarWindow()
 
+
         self.scroll = QScrollArea()  # Scroll Area which contains the widgets
         self.car_list = QWidget()  # Widget that contains the collection of the cars
         self.list_layout = QGridLayout() #Layout of the cars
@@ -44,9 +45,9 @@ class CarList(QWidget):
         car_object.setIcon(icon)
         car_object.setIconSize(QtCore.QSize(200, 200))
         car_object.setFixedSize(200, 200)
-        car_object.clicked.connect(self.CarWindow(i))
+        car_object.clicked.connect(lambda : self.CarWindow(car_object, i))
         return car_object
 
-    def CarWindow(self, i):
+    def CarWindow(self, car_object, i):
         self.window_layout.show()
 
