@@ -48,13 +48,14 @@ class Cars:
         return
 
     def show_all_cars(self):
-        # Returns a list of all cars in database
+        # Returns a list of all cars + all their car data
 
         database = Database()
         cars = database.cars_col
 
         try:
-            result = cars.find({})
+            cursors = cars.find({})
+            result = list(cursors)
             print(result)
             return result
 

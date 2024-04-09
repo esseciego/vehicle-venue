@@ -134,6 +134,45 @@ class TestCars:
 
         assert result_count == expected_count
 
+    def test_show_all_cars_many(self):
+        # Note: Using a list of licenses from show_all_cars() as a proxy for all data in car
+        # For implementation, can just use cars.show_all_cars()
+        cars = Cars()
+
+        cars.add_car("OCEAN", "<TYPE>", "<CURR_RENTAL_LOCATION>", 1, 00.01, 00.01)
+        cars.add_car("OF", "<TYPE>", "<CURR_RENTAL_LOCATION>", 1, 00.01, 00.01)
+        cars.add_car("TEARS", "<TYPE>", "<CURR_RENTAL_LOCATION>", 1, 00.01, 00.01)
+
+        result_list = cars.show_all_cars()
+        result_license_list = []
+        for car in result_list:
+            result_license_list.append(car["license_plate"])
+
+        expected_license_list = ["OCEAN", "OF", "TEARS"]
+
+        assert result_license_list == expected_license_list
+
+        # Removes test cars from database
+        cars.delete_car("OCEAN")
+        cars.delete_car("OF")
+        cars.delete_car("TEARS")
+
+    def test_show_all_cars_none(self):
+        # Note: Using a list of licenses from show_all_cars() as a proxy for all data in car
+        # For implementation, can just use cars.show_all_cars()
+        cars = Cars()
+
+
+        result_list = cars.show_all_cars()
+        result_license_list = []
+        for car in result_list:
+            result_license_list.append(car["license_plate"])
+
+        expected_license_list = []
+
+        assert result_license_list == expected_license_list
+
+
 
 if __name__ == '__main__':
     pytest.main()
