@@ -169,10 +169,11 @@ class SettingsWindow(QWidget):
     def populate_table(self, account_list):
         self.table_widget.setRowCount(len(account_list))
         for row, account in enumerate(account_list):
-            username_item = QTableWidgetItem(account['username'])
-            username_item.setData(Qt.ItemDataRole.UserRole, str(account['_id']))
-            self.table_widget.setItem(row, 0, username_item)
-            # Populate other cells as needed
+            for col, key in enumerate(['username', 'password', 'email', 'role', 'city']):
+                item = QTableWidgetItem(str(account[key]))
+                item.setData(Qt.ItemDataRole.UserRole, str(account['_id']))
+                self.table_widget.setItem(row, col, item)
+            print(f"Inserted account into row {row}: {account}")
 
 
 if __name__ == "__main__":
