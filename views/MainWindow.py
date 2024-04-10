@@ -10,6 +10,21 @@ from views.SettingsWindow import SettingsWindow
 from views.SignUpWindow import screen_size
 from models.Accounts import Accounts
 from helpers.EnvVariables import EnvVariables
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel
+from views.CarWindow import CarWindow
+
+class CarWindow(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.initUI()
+
+    def initUI(self):
+        layout = QVBoxLayout()
+        label = QLabel("Car Management")
+        layout.addWidget(label)
+        self.setLayout(layout)
+        self.setWindowTitle("Car Management")
+
 
 class MainWindow(QWidget):
     # Basically the home page just a stand in
@@ -40,6 +55,11 @@ class MainWindow(QWidget):
         self.user_name_label.setProperty("class", "heading")
         self.layout.addWidget(self.user_name_label, 0, 0, 0, 0, Qt.AlignmentFlag.AlignTop)
 
+        self.car_window_button = QPushButton("Car Window")
+        self.car_window_button.clicked.connect(self.open_car_window)
+        self.layout.addWidget(self.car_window_button, 1, 0)
+
+        self.car_window_instance = None  # Keep a reference to the car window
 
         # Sign Up button
         sign_up_button = QPushButton("Sign Up")
@@ -50,7 +70,7 @@ class MainWindow(QWidget):
         self.login_button = QPushButton("Log In")
         self.login_button.clicked.connect(self.login_window)
         self.layout.addWidget(self.login_button, 0, 4)
-        
+
         # Log Out button
         self.logout_button = QPushButton("Log Out")
         self.logout_button.clicked.connect(self.logout)
@@ -61,7 +81,7 @@ class MainWindow(QWidget):
         self.layout.addWidget(settings_button, 0, 5)
 
         self.settings_window_instance = None
-        
+
         self. logout_button.hide()
 
         self.sign_up_window = SignUpWindow()
@@ -69,7 +89,8 @@ class MainWindow(QWidget):
 
         self.login_window = LogInWindow()
         self.login_window.window_closed.connect(self.login_check)
-        
+
+
     def log_in_window(self):
         self.log_in_window = LogInWindow()
         self.log_in_window.show()
@@ -82,6 +103,11 @@ class MainWindow(QWidget):
         if self.settings_window_instance is None or not self.settings_window_instance.isVisible():
             self.settings_window_instance = SettingsWindow()
         self.settings_window_instance.show()
+
+    def open_car_window(self):
+        if self.car_window_instance is None or not self.car_window_instance.isVisible():
+            self.car_window_instance = CarWindow()
+        self.car_window_instance.show()
 
     def login_window(self):
         self.login_window.show()
