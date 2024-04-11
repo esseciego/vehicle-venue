@@ -13,17 +13,7 @@ from helpers.EnvVariables import EnvVariables
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel
 from views.CarWindow import CarWindow
 
-class CarWindow(QWidget):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.initUI()
 
-    def initUI(self):
-        layout = QVBoxLayout()
-        label = QLabel("Car Management")
-        layout.addWidget(label)
-        self.setLayout(layout)
-        self.setWindowTitle("Car Management")
 
 
 class MainWindow(QWidget):
@@ -105,6 +95,7 @@ class MainWindow(QWidget):
         self.settings_window_instance.show()
 
     def open_car_window(self):
+        # This function opens the car management window
         if self.car_window_instance is None or not self.car_window_instance.isVisible():
             self.car_window_instance = CarWindow()
         self.car_window_instance.show()
