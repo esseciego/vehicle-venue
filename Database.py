@@ -25,6 +25,9 @@ class Database:
         self.cars_col = self.db.cars
         self.rentals_col = self.db.rentals
 
+    def get_client(self):
+        return self.client
+
 
 
 
