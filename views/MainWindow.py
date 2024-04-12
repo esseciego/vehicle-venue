@@ -11,6 +11,11 @@ from views.SettingsWindow import SettingsWindow
 from views.SignUpWindow import screen_size
 from models.Accounts import Accounts
 from helpers.EnvVariables import EnvVariables
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel
+from views.CarWindow import CarWindow
+
+
+
 
 
 class MainWindow(QWidget):
@@ -52,6 +57,12 @@ class MainWindow(QWidget):
                                            "font-size: 16px")
         self.layout.addWidget(self.user_name_label, 0, 0, 0, 0, Qt.AlignmentFlag.AlignTop)
 
+        self.car_window_button = QPushButton("Car Window")
+        self.car_window_button.clicked.connect(self.open_car_window)
+        self.layout.addWidget(self.car_window_button, 1, 0)
+
+        self.car_window_instance = None  # Keep a reference to the car window
+
         # "Sign Up" button
         sign_up_button = QPushButton("Sign Up")
         sign_up_button.clicked.connect(self.sign_up_window)
@@ -71,6 +82,7 @@ class MainWindow(QWidget):
         self.layout.addWidget(self.login_button, 0, 4)
 
         # "Log Out" button
+
         self.logout_button = QPushButton("Log Out")
         self.logout_button.clicked.connect(self.logout)
         self.logout_button.setStyleSheet("background-color: #a3e6b4;"
@@ -109,6 +121,12 @@ class MainWindow(QWidget):
         if self.settings_window_instance is None or not self.settings_window_instance.isVisible():
             self.settings_window_instance = SettingsWindow()
         self.settings_window_instance.show()
+
+    def open_car_window(self):
+        # This function opens the car management window
+        if self.car_window_instance is None or not self.car_window_instance.isVisible():
+            self.car_window_instance = CarWindow()
+        self.car_window_instance.show()
 
     def login_window(self):
         self.login_window.show()
