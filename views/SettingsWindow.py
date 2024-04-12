@@ -1,13 +1,12 @@
 import sys
 from PyQt6.QtWidgets import (
-    QWidget, QGridLayout, QLabel, QLineEdit, QPushButton, QApplication,QTableWidget, QTableWidgetItem
+    QWidget, QGridLayout, QLabel, QLineEdit, QPushButton, QApplication, QTableWidget, QTableWidgetItem
 )
 from PyQt6.QtCore import Qt
 from tests.test_Accounts import TestAccounts
 from PyQt6.QtWidgets import QTableWidget
 from models.Accounts import Accounts
 from bson.objectid import ObjectId
-
 
 
 class SettingsWindow(QWidget):
@@ -30,24 +29,41 @@ class SettingsWindow(QWidget):
         screen_size = screen.size()
         self.resize(int(screen_size.width() / 2), int(screen_size.height() / 2))
 
-    def initAdminLoginUI(self):
-        # Admin login UI elements
+        self.setStyleSheet("background-color: #ebfff0")
+
+    def initAdminLoginUI(self):  # Admin login UI elements
+        # "Admin Login" text
         self.title = QLabel("Admin Login")
+        self.title.setStyleSheet("color: black;"
+                                 "font-weight: bold;"
+                                 "font-family: Tahoma;"
+                                 "font-size: 32px")
         self.layout.addWidget(self.title, 0, 0, 1, 2, Qt.AlignmentFlag.AlignCenter)
 
+        # "Username:" text
         self.user_name_label = QLabel("Username:")
+        self.user_name_label.setStyleSheet("font-family: Tahoma;"
+                                           "font-size: 16px")
         self.layout.addWidget(self.user_name_label, 1, 0)
         self.username = QLineEdit()
         self.layout.addWidget(self.username, 1, 1)
 
+        # "Password:" text
         self.user_password_label = QLabel("Password:")
+        self.user_password_label.setStyleSheet("font-family: Tahoma;"
+                                               "font-size: 16px")
         self.layout.addWidget(self.user_password_label, 2, 0)
         self.password = QLineEdit()
         self.password.setEchoMode(QLineEdit.EchoMode.Password)
         self.layout.addWidget(self.password, 2, 1)
 
-        self.login_button = QPushButton("Login")
+        # "Log In" button
+        self.login_button = QPushButton("Log In")
         self.login_button.clicked.connect(self.authenticate_admin)
+        self.login_button.setStyleSheet("background-color: #a3e6b4;"
+                                        "color: black;"
+                                        "font-weight: bold;"
+                                        "font-family: Tahoma;")
         self.layout.addWidget(self.login_button, 3, 0, 1, 2)
 
         self.confirmation_label = QLabel("")

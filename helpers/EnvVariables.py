@@ -1,6 +1,7 @@
 from dotenv import load_dotenv, set_key
 import os
 
+
 class EnvVariables:
     def __init__(self):
         pass
