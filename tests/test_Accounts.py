@@ -4,8 +4,6 @@ from helpers.EnvVariables import EnvVariables
 
 # To run tests, type 'pytest' in terminal at root directory
 
-
-#update acc function should go here
 class TestAccounts:
     def setup_method(self):
         # Initialize the Accounts model and add dummy accounts for testing
@@ -33,11 +31,6 @@ class TestAccounts:
              'city': 'CityB'},
             # ... Include the rest of the dummy accounts ...
         ]
-
-
-    # FIXME: Make usernames for each test unique
-    # Prevents getting failed tests in error message. Sometimes, documents aren't deleted on MongoDB fast enough
-    # Use alphabetical names? -> "GoodApple", "GoodBanana", etc.
 
     def test_valid_new_acc(self):
         accounts = Accounts()
@@ -172,16 +165,19 @@ class TestAccounts:
         assert result_success == expected_success
 
         # Test environmental variable
-        envVariables = EnvVariables()
+        env_vars = EnvVariables()
 
-        result_user = envVariables.get_user()
-        result_role = envVariables.get_role()
+        result_user = env_vars.get_user()
+        result_role = env_vars.get_role()
+        result_city = env_vars.get_city()
 
         expected_user = "GoodUsername"
         expected_role = "admin"
+        expected_city = "Gainesville"
 
         assert result_user == expected_user
         assert result_role == expected_role
+        assert result_city == expected_city
 
         # Remove test account from database
         accounts.delete_account("GoodUsername")
@@ -208,18 +204,20 @@ class TestAccounts:
         assert result_success == expected_success
         assert result_log == expected_log
 
-
         # Test environmental variable
-        envVariables = EnvVariables()
+        env_vars = EnvVariables()
 
-        result_user = envVariables.get_user()
-        result_role = envVariables.get_role()
+        result_user = env_vars.get_user()
+        result_role = env_vars.get_role()
+        result_city = env_vars.get_city()
 
         expected_user = "NONE"
         expected_role = "NONE"
+        expected_city = "NONE"
 
         assert result_user == expected_user
         assert result_role == expected_role
+        assert result_city == expected_city
 
     def test_login_password_incorrect(self):
         # Test result log
@@ -240,16 +238,19 @@ class TestAccounts:
         assert result_success == expected_success
 
         # Test environmental variable
-        envVariables = EnvVariables()
+        env_vars = EnvVariables()
 
-        result_user = envVariables.get_user()
-        result_role = envVariables.get_role()
+        result_user = env_vars.get_user()
+        result_role = env_vars.get_role()
+        result_city = env_vars.get_city()
 
         expected_user = "NONE"
         expected_role = "NONE"
+        expected_city = "NONE"
 
         assert result_user == expected_user
         assert result_role == expected_role
+        assert result_city == expected_city
 
     def test_logout(self):
         accounts = Accounts()
@@ -260,20 +261,22 @@ class TestAccounts:
         accounts.logout()
 
         # Test environmental variable
-        envVariables = EnvVariables()
+        env_vars = EnvVariables()
 
-        result_user = envVariables.get_user()
-        result_role = envVariables.get_role()
+        result_user = env_vars.get_user()
+        result_role = env_vars.get_role()
+        result_city = env_vars.get_city()
 
         expected_user = "NONE"
         expected_role = "NONE"
+        expected_city = "NONE"
 
         assert result_user == expected_user
         assert result_role == expected_role
+        assert result_city == expected_city
 
         # Remove test account from database
         accounts.delete_account("GoodUsername")
-
 
 
 if __name__ == '__main__':
