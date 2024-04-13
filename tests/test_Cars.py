@@ -166,6 +166,50 @@ class TestCars:
         cars.delete_car("OF")
         cars.delete_car("TEARS")
 
+    def test_get_cars_by_location_none(self):
+        # Note: Using a sublist of licenses from show_all_cars() as a proxy for all data in car
+        # For implementation, can just use cars.show_all_cars()
+        cars = Cars()
+
+        cars.add_car("PANG", "<TYPE>", "BBBB", 1, 00.01, 00.01)
+
+        car_list = cars.get_cars_by_location("AAAA")
+
+        result_license_sublist = []
+        for car in car_list:
+            result_license_sublist.append(car["license_plate"])
+
+        expected_license_sublist = []
+
+        assert result_license_sublist == expected_license_sublist
+
+        # Removes test cars from database
+        cars.delete_car("PANG")
+
+    def test_get_cars_by_location_many(self):
+        # Note: Using a sublist of licenses from show_all_cars() as a proxy for all data in car
+        # For implementation, can just use cars.show_all_cars()
+        cars = Cars()
+
+        cars.add_car("CAROLINE", "<TYPE>", "AAAA", 1, 00.01, 00.01)
+        cars.add_car("SHUT", "<TYPE>", "BBBB", 1, 00.01, 00.01)
+        cars.add_car("UP", "<TYPE>", "BBBB", 1, 00.01, 00.01)
+
+        car_list = cars.get_cars_by_location("BBBB")
+
+        result_license_sublist = []
+        for car in car_list:
+            result_license_sublist.append(car["license_plate"])
+
+        expected_license_sublist = ["SHUT", "UP"]
+
+        assert result_license_sublist == expected_license_sublist
+
+        # Removes test cars from database
+        cars.delete_car("CAROLINE")
+        cars.delete_car("SHUT")
+        cars.delete_car("UP")
+
 
 if __name__ == '__main__':
     pytest.main()
