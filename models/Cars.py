@@ -77,6 +77,23 @@ class Cars:
 
         return
 
+    def get_cars_by_location(self, location):
+        # Returns a list of cars + all their car data from a city
+
+        database = Database()
+        cars = database.cars_col
+
+        try:
+            cars_from_location = {"curr_rental_location": location}
+            cursors = cars.find(cars_from_location)
+            result = list(cursors)
+            print(result)
+            return result
+        except ConnectionError:
+            print('Server unavailable.')
+
+        return
+
     def get_car_rental_dates(self, license_plate):
         # Returns a list of a car's rental dates
 
@@ -91,7 +108,7 @@ class Cars:
             print('Server unavailable.')
 
     def get_num_car_rental_dates(self, license_plate):
-        # Returns a list of a car's rental dates
+        # Returns a number of times a car is rented
 
         database = Database()
         cars = database.cars_col
