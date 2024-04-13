@@ -15,12 +15,18 @@ class EnvVariables:
         load_dotenv()
         return os.getenv('ROLE')
 
-    def set_user(self, username):
-        # Sets current user
+    def get_city(self):
+        # Returns current user's city
+        load_dotenv()
+        return os.getenv('CITY')
+
+    def set_user_data(self, username, role, city):
         os.environ['USER'] = username
+        os.environ['ROLE'] = role
+        os.environ['CITY'] = city
         return
 
-    def set_role(self, role):
-        # Sets current user's role
-        os.environ['ROLE'] = role
-        pass
+    def reset_user_data(self):
+        os.environ['USER'] = 'NONE'
+        os.environ['ROLE'] = 'NONE'
+        os.environ['CITY'] = 'NONE'

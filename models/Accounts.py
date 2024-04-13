@@ -116,18 +116,15 @@ class Accounts:
         accounts = database.accounts_col
 
         error_log = self.validate_login(username, password)
-        # FIXME: Error log won't process
         if self.operation_success(error_log) == True:
             env_vars = EnvVariables()
 
-            # Change USER .env variable
-            env_vars.set_user(username)
-
-            # Change ROLE .env variable
             account_to_find = {"username": username}
             result = accounts.find_one(account_to_find)
             role = result['role']
-            env_vars.set_role(role)
+            city = result['city']
+
+            env_vars.set_user_data(username, role, city)
 
         return error_log
 
@@ -135,9 +132,8 @@ class Accounts:
         # Logs out user
 
         env_vars = EnvVariables()
+        env_vars.reset_user_data()
 
-        env_vars.set_user('NONE')
-        env_vars.set_role('NONE')
         return
 
     def validate_login(self, username, password):
