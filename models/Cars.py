@@ -78,7 +78,7 @@ class Cars:
         return
 
     def get_cars_by_location(self, location):
-        # Returns a list of cars + all their car data from a city
+        # Returns a list of cars + all their car data from a rental location
 
         database = Database()
         cars = database.cars_col
