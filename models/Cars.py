@@ -23,7 +23,6 @@ class Cars:
         if self.operation_success(error_log) == True:
             try:
                 result = cars.insert_one(new_car.get_all_data()).inserted_id
-                print(result)
             except ConnectionError:
                 print('Server unavailable.')
 
@@ -56,7 +55,6 @@ class Cars:
         try:
             cursors = cars.find({})
             result = list(cursors)
-            print(result)
             return result
         except ConnectionError:
             print('Server unavailable.')
