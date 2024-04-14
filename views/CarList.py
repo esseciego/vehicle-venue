@@ -16,29 +16,34 @@ class CarList(QWidget):
 
         self.window_layout = SpecificCarWindow()
 
-        self.scroll = QScrollArea()  # Scroll Area which contains the widgets
-        self.car_list = QWidget()  # Widget that contains the collection of the cars
-        self.list_layout = QGridLayout() #Layout of the cars
+        # Scroll Area Properties
+        self.scroll = QScrollArea()
+        self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+        self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.scroll.setWidgetResizable(True) # Scroll Area which contains the widgets
+        self.scroll.setFixedSize(int(screen_size.width() * .6), int(screen_size.height() * .75))
 
         self.cars = Cars()
-
         self.list_of_cars = self.cars.get_all_cars()
 
-    def make_car_list(self):
-            for i in range(self.cars.get_num_cars()):
+    def make_car_list(self, rental_period=[]):
+        list_layout = QGridLayout()  # Layout of the cars
+        car_list = QWidget()  # Widget that contains the collection of the cars
+        for i in range(self.cars.get_num_cars()):
+            if self.check_available_cars(i, rental_period):
                 car_object = self.make_car_object(i)
-                self.list_layout.addWidget(car_object, int(i / 3), i % 3)
+                list_layout.addWidget(car_object, int(i / 3), i % 3)
 
-            self.car_list.setLayout(self.list_layout)
+        car_list.setLayout(list_layout)
+        self.scroll.setWidget(car_list)
 
-            # Scroll Area Properties
-            self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
-            self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-            self.scroll.setWidgetResizable(True)
-            self.scroll.setWidget(self.car_list)
-            self.scroll.setFixedSize(int(screen_size.width() * .6), int(screen_size.height() * .75))
+        return self.scroll
 
-            return self.scroll
+    def check_available_cars(self, i, rental_period):
+        for date in self.list_of_cars[i]['rental_dates']:
+            if date in rental_period:
+                return False
+        return True
 
     def make_car_object(self, i):
         car_button = QPushButton('')
