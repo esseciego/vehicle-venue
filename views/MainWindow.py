@@ -1,6 +1,6 @@
 import sys
 from PyQt6 import QtCore, QtGui, QtWidgets
-from PyQt6.QtCore import (Qt, pyqtSignal)
+from PyQt6.QtCore import (Qt, pyqtSignal, QDate)
 from PyQt6.QtWidgets import (
     QWidget, QPushButton, QApplication, QGridLayout,
     QLabel, QScrollArea, QCalendarWidget, QVBoxLayout)
@@ -21,9 +21,9 @@ class MainWindow(QWidget):
         self.layout = QGridLayout()
         self.layout.setRowMinimumHeight(0, int(screen_size.height() * .1))
         self.layout.setRowMinimumHeight(1, int(screen_size.height() * .75))
-        self.layout.setColumnMinimumWidth(0, int(screen_size.width() * .15))
+        self.layout.setColumnMinimumWidth(0, int(screen_size.width() * .14))
         self.layout.setColumnMinimumWidth(1, int(screen_size.width() * .6))
-        self.layout.setColumnMinimumWidth(2, int(screen_size.width() * .15))
+        self.layout.setColumnMinimumWidth(2, int(screen_size.width() * .22))
         self.layout.setSpacing(10)
         self.layout.setContentsMargins(25, 30, 25, 50)
 
@@ -39,7 +39,7 @@ class MainWindow(QWidget):
         #Car collection list
         self.cars = CarList()
         self.car_list = self.cars.make_car_list()
-        self.layout.addWidget(self.car_list, 1, 1, Qt.AlignmentFlag.AlignHCenter)
+        self.layout.addWidget(self.car_list, 1, 1, Qt.AlignmentFlag.AlignCenter)
         self.car_list.hide()
 
         # Welcomes to home page
@@ -53,7 +53,7 @@ class MainWindow(QWidget):
 
         self.user_name_label = QLabel("Guest")
         self.user_name_label.setProperty("class", "heading")
-        self.layout.addWidget(self.user_name_label, 0, 0, Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
+        self.layout.addWidget(self.user_name_label, 0, 0, Qt.AlignmentFlag.AlignTop)
 
         #Tab that goes to the car list
         self.collection_tab = QPushButton("Car Collection")
@@ -93,15 +93,28 @@ class MainWindow(QWidget):
 
         self.start_date_label = QLabel("Enter Start Date")
         self.calendar_layout.addWidget(self.start_date_label)
+        self.start_date_label.hide()
+
 
         self.start_date_calendar = QCalendarWidget()
+        self.start_date_calendar.setMinimumDate(QDate.currentDate())
+        self.start_date_calendar.clicked.connect(self.minimum_end_date)
         self.calendar_layout.addWidget(self.start_date_calendar)
+        self.start_date_calendar.hide()
 
         self.end_date_label = QLabel("Enter End Date")
         self.calendar_layout.addWidget(self.end_date_label)
+        self.end_date_label.hide()
 
         self.end_date_calendar = QCalendarWidget()
+        self.end_date_calendar.setMinimumDate(QDate.currentDate())
         self.calendar_layout.addWidget(self.end_date_calendar)
+        self.end_date_calendar.hide()
+
+        self.filter_button = QPushButton("Filter Cars")
+        self.filter_button.clicked.connect(self.filter)
+        self.calendar_layout.addWidget(self.filter_button)
+        self.filter_button.hide()
 
         self.layout.addLayout(self.calendar_layout, 1, 2)
 
@@ -138,10 +151,30 @@ class MainWindow(QWidget):
     def car_collection(self):
         self.welcome_label.hide()
         self.car_list.show()
+        self.start_date_label.show()
+        self.start_date_calendar.show()
+        self.end_date_label.show()
+        self.end_date_calendar.show()
+        self.filter_button.show()
 
     def home_page(self):
         self.car_list.hide()
+        self.start_date_label.hide()
+        self.start_date_calendar.hide()
+        self.end_date_label.hide()
+        self.end_date_calendar.hide()
+        self.filter_button.hide()
         self.welcome_label.show()
+
+    def minimum_end_date(self):
+        self.end_date_calendar.setMinimumDate(self.start_date_calendar.selectedDate())
+
+    def filter(self):
+        start_date = self.start_date_calendar.selectedDate()
+        end_date = self.end_date_calendar.selectedDate()
+        for i in range(start_date.daysTo(end_date) + 1):
+            print(start_date.toString(Qt.DateFormat.ISODate))
+            start_date = start_date.addDays(1)
 
 
 app = QApplication(sys.argv)
