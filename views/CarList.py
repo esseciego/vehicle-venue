@@ -22,7 +22,7 @@ class CarList(QWidget):
 
         self.cars = Cars()
 
-        self.list_of_cars = self.cars.show_all_cars()
+        self.list_of_cars = self.cars.get_all_cars()
 
     def make_car_list(self):
             for i in range(self.cars.get_num_cars()):
@@ -36,7 +36,7 @@ class CarList(QWidget):
             self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
             self.scroll.setWidgetResizable(True)
             self.scroll.setWidget(self.car_list)
-            self.scroll.setFixedSize(int(screen_size.width() / 3) * 2, int(screen_size.height() / 4) * 3)
+            self.scroll.setFixedSize(int(screen_size.width() * .6), int(screen_size.height() * .75))
 
             return self.scroll
 
