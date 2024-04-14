@@ -138,6 +138,64 @@ class TestRentals:
         cars.delete_car("LIQUID")
         rentals.delete_rental("Lush", "LIQUID", "04-13-2024", "04-14-2024")
 
+    def test_get_rentals_by_location_multi(self):
+        # Note: Using get_num_rentals_by_location() as a proxy for get_rentals_by_location()
+        # For implementation, can just use rentals.get_cars_by_location()
+        accounts = Accounts()
+        cars = Cars()
+        rentals = Rentals()
+
+        accounts.add_account("MakeoutCreek", "good_Password1!1", "goodemail@email.com", "admin", "Gainesville")
+        cars.add_car("FIRST", "<TYPE>", "XXXX", 1, 00.01, 00.01)
+        cars.add_car("LOVE", "<TYPE>", "XXXX", 1, 00.01, 00.01)
+        cars.add_car("LATE", "<TYPE>", "YYYY", 1, 00.01, 00.01)
+        cars.add_car("SPRING", "<TYPE>", "ZZZZ", 1, 00.01, 00.01)
+
+        rentals.create_rental("MakeoutCreek", "FIRST", "04-13-2024", "04-14-2024")
+        rentals.create_rental("MakeoutCreek", "LATE", "04-15-2024", "04-16-2024")
+        rentals.create_rental("MakeoutCreek", "SPRING", "04-17-2024", "04-18-2024")
+
+        result_num_rentals_by_location = rentals.get_num_rentals_by_location("XXXX")
+        expected_num_rentals_by_location = 1
+
+        assert result_num_rentals_by_location == expected_num_rentals_by_location
+
+        # Remove test data
+        accounts.delete_account("MakeoutCreek")
+        cars.delete_car("FIRST")
+        cars.delete_car("LOVE")
+        cars.delete_car("LATE")
+        cars.delete_car("SPRING")
+        rentals.delete_rental("MakeoutCreek", "FIRST", "04-13-2024", "04-14-2024")
+        rentals.delete_rental("MakeoutCreek", "LATE", "04-15-2024", "04-16-2024")
+        rentals.delete_rental("MakeoutCreek", "SPRING", "04-17-2024", "04-18-2024")
+
+    def test_get_cars_by_location_none(self):
+        # Note: Using get_num_rentals_by_location() as a proxy for get_rentals_by_location()
+        # For implementation, can just use rentals.get_cars_by_location()
+        accounts = Accounts()
+        cars = Cars()
+        rentals = Rentals()
+
+        accounts.add_account("Puberty2", "good_Password1!1", "goodemail@email.com", "admin", "Gainesville")
+        cars.add_car("LOSING", "<TYPE>", "MMMM", 1, 00.01, 00.01)
+        cars.add_car("DOGS", "<TYPE>", "LLLL", 1, 00.01, 00.01)
+
+        rentals.create_rental("Puberty2", "LOSING", "04-13-2024", "04-14-2024")
+        rentals.create_rental("Puberty2", "DOGS", "04-15-2024", "04-16-2024")
+
+        result_num_rentals_by_location = rentals.get_num_rentals_by_location("OOOO")
+        expected_num_rentals_by_location = 0
+
+        assert result_num_rentals_by_location == expected_num_rentals_by_location
+
+        # Remove test data
+        accounts.delete_account("Puberty2")
+        cars.delete_car("LOSING")
+        cars.delete_car("DOGS")
+        rentals.delete_rental("Puberty2", "LOSING", "04-13-2024", "04-14-2024")
+        rentals.delete_rental("Puberty2", "DOGS", "04-15-2024", "04-16-2024")
+
 
 if __name__ == '__main__':
     pytest.main()
