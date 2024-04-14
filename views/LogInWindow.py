@@ -11,6 +11,7 @@ from models.Accounts import Accounts
 class LogInWindow(QWidget):
     #signal that is sent to Mainwindow so it can check if the user is logged in
     window_closed = pyqtSignal()
+
     def __init__(self):
         super().__init__()
 
