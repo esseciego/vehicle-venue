@@ -55,7 +55,6 @@ class Cars:
         try:
             cursors = cars.find({})
             result = list(cursors)
-            print(result)
             return result
         except ConnectionError:
             print('Server unavailable.')

@@ -172,9 +172,15 @@ class MainWindow(QWidget):
     def filter(self):
         start_date = self.start_date_calendar.selectedDate()
         end_date = self.end_date_calendar.selectedDate()
+        rental_period = []
         for i in range(start_date.daysTo(end_date) + 1):
-            print(start_date.toString(Qt.DateFormat.ISODate))
+            rental_period.append(start_date.toString(Qt.DateFormat.ISODate))
             start_date = start_date.addDays(1)
+
+        self.car_list = self.cars.make_car_list(rental_period)
+
+
+
 
 
 app = QApplication(sys.argv)
