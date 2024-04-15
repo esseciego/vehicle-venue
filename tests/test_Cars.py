@@ -141,8 +141,8 @@ class TestCars:
         assert result_cars_added == expected_cars_added
 
     def test_get_all_cars_many(self):
-        # Note: Using a sublist of licenses from show_all_cars() as a proxy for all data in car
-        # For implementation, can just use cars.show_all_cars()
+        # Note: Using a sublist of licenses from get_all_cars() as a proxy for all data in car
+        # For implementation, can just use cars.get_all_cars()
         cars = Cars()
 
         cars.add_car("OCEAN", "<TYPE>", "<CURR_RENTAL_LOCATION>", 1, 00.01, 00.01)
@@ -167,8 +167,8 @@ class TestCars:
         cars.delete_car("TEARS")
 
     def test_get_cars_by_location_none(self):
-        # Note: Using a sublist of licenses from show_all_cars() as a proxy for all data in car
-        # For implementation, can just use cars.show_all_cars()
+        # Note: Using a sublist of licenses from get_all_cars() as a proxy for all data in car
+        # For implementation, can just use cars.get_all_cars()
         cars = Cars()
 
         cars.add_car("PANG", "<TYPE>", "BBBB", 1, 00.01, 00.01)
@@ -188,7 +188,7 @@ class TestCars:
 
     def test_get_cars_by_location_many(self):
         # Note: Using a sublist of licenses from show_all_cars() as a proxy for all data in car
-        # For implementation, can just use cars.show_all_cars()
+        # For implementation, can just use cars.get_all_cars()
         cars = Cars()
 
         cars.add_car("CAROLINE", "<TYPE>", "AAAA", 1, 00.01, 00.01)
@@ -209,6 +209,7 @@ class TestCars:
         cars.delete_car("CAROLINE")
         cars.delete_car("SHUT")
         cars.delete_car("UP")
+
 
 
 if __name__ == '__main__':
