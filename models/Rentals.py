@@ -54,16 +54,42 @@ class Rentals:
     def get_num_rentals(self):
         # Returns number of rentals + all their rental data
 
+        rentals = self.get_all_rentals()
+        return self.count_rentals(rentals)
+
+    def get_rentals_by_location(self, location):
+        # Returns a list of rentals + all their rental data from a rental location
+
         database = Database()
         rentals = database.rentals_col
+        cars = database.cars_col
 
         try:
-            result = rentals.count_documents({})
-            return result
+            # Get cars from a certain rental location
+            cars_from_location = {"curr_rental_location": location}
+            cursors = cars.find(cars_from_location)
+            car_list = list(cursors)
+
+            license_sublist = []
+            for car in car_list:
+                license_sublist.append(car['license_plate'])
+
+            # Get rentals of cars from a certain rental location
+            rental_sublist = []
+            for license in license_sublist:
+                rentals_with_license = {"license_plate": license}
+                cursors = rentals.find(rentals_with_license)
+                rental_sublist += list(cursors)
+
+            return rental_sublist
         except ConnectionError:
             print('Server unavailable.')
 
-        return
+    def get_num_rentals_by_location(self, location):
+        # Returns a number of rentals + all their rental data from a rental locaiton
+
+        rental_sublist = self.get_rentals_by_location(location)
+        return self.count_rentals(rental_sublist)
 
     def create_rental_callback(self, username, license_plate, start_rental_date, end_rental_date):
         # Defines sequence of operations for rental transaction
@@ -164,6 +190,12 @@ class Rentals:
                 return False
 
         return True
+
+    def count_rentals(self, rental_list):
+        if rental_list:
+            return len(rental_list)
+        else:
+            return 0
 
 
 
