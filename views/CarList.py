@@ -1,6 +1,6 @@
 import sys
 from PyQt6 import QtCore, QtGui, QtWidgets
-from PyQt6.QtCore import (Qt, pyqtSignal)
+from PyQt6.QtCore import (Qt, pyqtSignal, QDate)
 from PyQt6.QtWidgets import (
     QWidget, QPushButton, QApplication, QGridLayout,
     QLabel, QScrollArea)
@@ -21,12 +21,12 @@ class CarList(QWidget):
         self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.scroll.setWidgetResizable(True) # Scroll Area which contains the widgets
-        self.scroll.setFixedSize(int(screen_size.width() * .6), int(screen_size.height() * .75))
+        self.scroll.setFixedSize(int(screen_size.width() * .58), int(screen_size.height() * .75))
 
         self.cars = Cars()
         self.list_of_cars = self.cars.get_all_cars()
 
-    def make_car_list(self, rental_period=[]):
+    def make_car_list(self, start_date=QDate.currentDate(), end_date=QDate.currentDate().addDays(1), rental_period=[]):
         list_layout = QGridLayout()  # Layout of the cars
         car_list = QWidget()  # Widget that contains the collection of the cars
         for i in range(self.cars.get_num_cars()):
@@ -36,6 +36,7 @@ class CarList(QWidget):
 
         car_list.setLayout(list_layout)
         self.scroll.setWidget(car_list)
+        self.window_layout.set_dates(start_date, end_date)
 
         return self.scroll
 
@@ -63,12 +64,12 @@ class CarList(QWidget):
     def car_window(self, i):
         self.window_layout.set_pixmap(self.list_of_cars[i]['type'])
 
-        self.window_layout.license_plate_label.setText("License plate number: " + self.list_of_cars[i]['license_plate'])
-        self.window_layout.type_label.setText("Type: " + self.list_of_cars[i]['type'])
-        self.window_layout.curr_rental_location_label.setText("Location: " + self.list_of_cars[i]['curr_rental_location'])
-        self.window_layout.mileage_label.setText("Mileage: " + self.list_of_cars[i]['mileage'])
-        self.window_layout.cost_per_day_label.setText("Cost Per Day: " + self.list_of_cars[i]['cost_per_day'])
-        self.window_layout.cost_per_mile_label.setText("Cost Per Mile: " + self.list_of_cars[i]['cost_per_mile'])
+        self.window_layout.data_label.setText("License plate number: " + self.list_of_cars[i]['license_plate']
+                                                       + "\n\nType: " + self.list_of_cars[i]['type']
+                                                       + "\n\nLocation: " + self.list_of_cars[i]['curr_rental_location']
+                                                       + "\n\nMileage: " + self.list_of_cars[i]['mileage']
+                                                       + "\n\nCost Per Day: " + self.list_of_cars[i]['cost_per_day']
+                                                       + "\n\nCost Per Mile: " + self.list_of_cars[i]['cost_per_mile'])
 
         self.window_layout.show()
 
