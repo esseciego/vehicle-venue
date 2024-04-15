@@ -22,8 +22,8 @@ class MainWindow(QWidget):
         self.layout.setRowMinimumHeight(0, int(screen_size.height() * .1))
         self.layout.setRowMinimumHeight(1, int(screen_size.height() * .75))
         self.layout.setColumnMinimumWidth(0, int(screen_size.width() * .14))
-        self.layout.setColumnMinimumWidth(1, int(screen_size.width() * .6))
-        self.layout.setColumnMinimumWidth(2, int(screen_size.width() * .22))
+        self.layout.setColumnMinimumWidth(1, int(screen_size.width() * .58))
+        self.layout.setColumnMinimumWidth(2, int(screen_size.width() * .20))
         self.layout.setSpacing(10)
         self.layout.setContentsMargins(25, 30, 25, 50)
 
@@ -53,7 +53,7 @@ class MainWindow(QWidget):
 
         self.user_name_label = QLabel("Guest")
         self.user_name_label.setProperty("class", "heading")
-        self.layout.addWidget(self.user_name_label, 0, 0, Qt.AlignmentFlag.AlignTop)
+        self.layout.addWidget(self.user_name_label, 0, 0, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
         #Tab that goes to the car list
         self.collection_tab = QPushButton("Car Collection")
@@ -91,26 +91,37 @@ class MainWindow(QWidget):
         self.settings_button = QPushButton("Settings")
         self.layout.addWidget(self.settings_button, 0, 2, Qt.AlignmentFlag.AlignRight)
 
+        # Enter start date prompt
+        self.guide_label = QLabel("Choose a Start and End Dates of Desired Rental Period")
+        self.calendar_layout.addWidget(self.guide_label)
+        self.guide_label.hide()
+
+        #Enter start date prompt
         self.start_date_label = QLabel("Enter Start Date")
         self.calendar_layout.addWidget(self.start_date_label)
         self.start_date_label.hide()
 
-
+        #Calendar where user can enter start date
         self.start_date_calendar = QCalendarWidget()
         self.start_date_calendar.setMinimumDate(QDate.currentDate())
+        self.start_date_calendar.setSelectedDate(QDate.currentDate())
         self.start_date_calendar.clicked.connect(self.minimum_end_date)
         self.calendar_layout.addWidget(self.start_date_calendar)
         self.start_date_calendar.hide()
 
+        #End date prompt
         self.end_date_label = QLabel("Enter End Date")
         self.calendar_layout.addWidget(self.end_date_label)
         self.end_date_label.hide()
 
+        #Calendar where user can enter end date
         self.end_date_calendar = QCalendarWidget()
         self.end_date_calendar.setMinimumDate(QDate.currentDate())
+        self.end_date_calendar.setSelectedDate(QDate.currentDate().addDays(1))
         self.calendar_layout.addWidget(self.end_date_calendar)
         self.end_date_calendar.hide()
 
+        #Filter button to only show cars avialable for the start and end date
         self.filter_button = QPushButton("Filter Cars")
         self.filter_button.clicked.connect(self.filter)
         self.calendar_layout.addWidget(self.filter_button)
@@ -151,6 +162,7 @@ class MainWindow(QWidget):
     def car_collection(self):
         self.welcome_label.hide()
         self.car_list.show()
+        self.guide_label.show()
         self.start_date_label.show()
         self.start_date_calendar.show()
         self.end_date_label.show()
@@ -159,6 +171,7 @@ class MainWindow(QWidget):
 
     def home_page(self):
         self.car_list.hide()
+        self.guide_label.hide()
         self.start_date_label.hide()
         self.start_date_calendar.hide()
         self.end_date_label.hide()
@@ -167,20 +180,24 @@ class MainWindow(QWidget):
         self.welcome_label.show()
 
     def minimum_end_date(self):
-        self.end_date_calendar.setMinimumDate(self.start_date_calendar.selectedDate())
+        start_date = self.start_date_calendar.selectedDate()
+        end_date = self.end_date_calendar.selectedDate()
+        if start_date > end_date:
+            self.end_date_calendar.setSelectedDate(start_date.addDays(1))
+        self.end_date_calendar.setMinimumDate(start_date.addDays(1))
 
     def filter(self):
         start_date = self.start_date_calendar.selectedDate()
         end_date = self.end_date_calendar.selectedDate()
+        temp_date = self.start_date_calendar.selectedDate()
         rental_period = []
         for i in range(start_date.daysTo(end_date) + 1):
-            rental_period.append(start_date.toString(Qt.DateFormat.ISODate))
-            start_date = start_date.addDays(1)
+            rental_period.append(temp_date.toString(Qt.DateFormat.ISODate))
+            temp_date = temp_date.addDays(1)
 
-        self.car_list = self.cars.make_car_list(rental_period)
-
-
-
+        self.guide_label.setText("Showing Cars Available from " + start_date.toString()
+                                 + " to " + end_date.toString())
+        self.car_list = self.cars.make_car_list(start_date, end_date, rental_period)
 
 
 app = QApplication(sys.argv)
