@@ -24,7 +24,7 @@ class LogInWindow(QWidget):
         self.setLayout(self.layout)
         self.resize(screen_size / 2.0)
 
-        self.setStyleSheet("background-color: #ebfff0")
+        self.setStyleSheet("background-color: #ffe0c2")
 
         # "User Login" text
         title = QLabel("User Login")
@@ -55,14 +55,15 @@ class LogInWindow(QWidget):
         # "Enter Username and Password." text (also tells user if their info was VALID or INVALID)
         self.confirmation_label = QLabel("Please enter your Username and Password.")
         self.confirmation_label.setProperty("class", "heading")
-        self.confirmation_label.setStyleSheet("font-family: Tahoma;"
+        self.confirmation_label.setStyleSheet("color: #bd6106;"
+                                              "font-family: Tahoma;"
                                               "font-size: 14px")
         self.layout.addWidget(self.confirmation_label, 0, 0, 3, 0, Qt.AlignmentFlag.AlignCenter)
 
         # "Sign up" button - connected to SignUpWindow
         sign_up_button = QPushButton("Sign Up")
         sign_up_button.clicked.connect(self.sign_up_window)
-        sign_up_button.setStyleSheet("background-color: #a3e6b4;"
+        sign_up_button.setStyleSheet("background-color: #6eb6ff;"
                                      "color: black;"
                                      "font-weight: bold;"
                                      "font-family: Tahoma;")
@@ -71,7 +72,7 @@ class LogInWindow(QWidget):
         # "Log In" button - connected to LogInWindow
         login_button = QPushButton("Log In")
         login_button.clicked.connect(self.login)
-        login_button.setStyleSheet("background-color: #a3e6b4;"
+        login_button.setStyleSheet("background-color: #fa9352;"
                                    "color: black;"
                                    "font-weight: bold;"
                                    "font-family: Tahoma;")

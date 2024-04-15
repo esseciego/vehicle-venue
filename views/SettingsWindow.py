@@ -29,7 +29,7 @@ class SettingsWindow(QWidget):
         screen_size = screen.size()
         self.resize(int(screen_size.width() / 2), int(screen_size.height() / 2))
 
-        self.setStyleSheet("background-color: #ebfff0")
+        self.setStyleSheet("background-color: #ffe0c2")
 
     def initAdminLoginUI(self):  # Admin login UI elements
         # "Admin Login" text
@@ -60,11 +60,11 @@ class SettingsWindow(QWidget):
         # "Log In" button
         self.login_button = QPushButton("Log In")
         self.login_button.clicked.connect(self.authenticate_admin)
-        self.login_button.setStyleSheet("background-color: #a3e6b4;"
+        self.login_button.setStyleSheet("background-color: #fa9352;"
                                         "color: black;"
                                         "font-weight: bold;"
                                         "font-family: Tahoma;")
-        self.layout.addWidget(self.login_button, 3, 0, 1, 2)
+        self.layout.addWidget(self.login_button, 3, 0, 1, 2, Qt.AlignmentFlag.AlignCenter)
 
         self.confirmation_label = QLabel("")
         self.layout.addWidget(self.confirmation_label, 4, 0, 1, 2, Qt.AlignmentFlag.AlignCenter)

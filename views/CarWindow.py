@@ -34,7 +34,15 @@ class EditCarWindow(QDialog):
 
         buttonBox = QDialogButtonBox()
         save_button = buttonBox.addButton("Save Changes", QDialogButtonBox.ButtonRole.AcceptRole)
+        save_button.setStyleSheet("background-color: #6eb6ff;"
+                                  "color: black;"
+                                  "font-weight: bold;"
+                                  "font-family: Tahoma;")
         cancel_button = buttonBox.addButton(QDialogButtonBox.StandardButton.Cancel)
+        cancel_button.setStyleSheet("background-color: #fa9352;"
+                                    "color: black;"
+                                    "font-weight: bold;"
+                                    "font-family: Tahoma;")
 
         save_button.clicked.connect(self.accept)
         cancel_button.clicked.connect(self.reject)
@@ -70,14 +78,28 @@ class CarWindow(QWidget):
         # UI setup
         self.setWindowTitle("Car Management")
         self.layout = QVBoxLayout(self)
+
+        # "Table" widget
         self.table_widget = QTableWidget()
+        self.table_widget.setStyleSheet("background-color: #cce4fc")
         self.layout.addWidget(self.table_widget)
+
+        # "Populate Table" button
         self.populate_table_button = QPushButton("Car List")
         self.populate_table_button.clicked.connect(self.populate_table)
+        self.populate_table_button.setStyleSheet("background-color: #6eb6ff;"
+                                                 "color: black;"
+                                                 "font-weight: bold;"
+                                                 "font-family: Tahoma;")
         self.layout.addWidget(self.populate_table_button)
 
+        # "Back to Main Menu" button
         self.back_to_main_button = QPushButton("Back to Main Menu")
         self.back_to_main_button.clicked.connect(self.close)
+        self.back_to_main_button.setStyleSheet("background-color: #fa9352;"
+                                               "color: black;"
+                                               "font-weight: bold;"
+                                               "font-family: Tahoma;")
         self.layout.addWidget(self.back_to_main_button)
 
 
@@ -86,11 +108,14 @@ class CarWindow(QWidget):
         size = screen.size()
         self.resize(int(size.width() / 2), int(size.height() / 2))
 
+        self.setStyleSheet("background-color: #ffe0c2")
+
         self.table_widget.cellDoubleClicked.connect(self.on_cell_double_clicked)
 
 
     def populate_table(self):
-        client = MongoClient('mongodb+srv://tears_user:sobbing.emoji@carrental.fiinqnj.mongodb.net/?retryWrites=true&w=majority&appName=CarRental')
+        client = MongoClient('mongodb+srv://tears_user:sobbing.emoji@carrental.fiinqnj.mongodb.net/?retryWrites=true'
+                             '&w=majority&appName=CarRental')
         db = client['car_rental_data']
         cars_collection = db['cars']
 
@@ -110,12 +135,12 @@ class CarWindow(QWidget):
         # Populate the table rows with car data
         for row, car in enumerate(cars):
             self.table_widget.setItem(row, 0, QTableWidgetItem(car.get('license_plate', '')))
-            self.table_widget.setItem(row, 1, QTableWidgetItem(car.get('type', '')))
-            self.table_widget.setItem(row, 2, QTableWidgetItem(car.get('curr_rental_location', '')))
-            self.table_widget.setItem(row, 3, QTableWidgetItem(str(car.get('mileage', ''))))
-            self.table_widget.setItem(row, 4, QTableWidgetItem(str(car.get('cost_per_day', ''))))
-            self.table_widget.setItem(row, 5, QTableWidgetItem(str(car.get('cost_per_mile', ''))))
-            self.table_widget.setItem(row, 6, QTableWidgetItem(car.get('curr_car_status', '')))
+            self.table_widget.setItem(row, 1, QTableWidgetItem(car.get('type', 'MISSING')))
+            self.table_widget.setItem(row, 2, QTableWidgetItem(car.get('curr_rental_location', 'MISSING')))
+            self.table_widget.setItem(row, 3, QTableWidgetItem(car.get('mileage', '')))
+            self.table_widget.setItem(row, 4, QTableWidgetItem(car.get('cost_per_day', '')))
+            self.table_widget.setItem(row, 5, QTableWidgetItem(car.get('cost_per_mile', '')))
+            self.table_widget.setItem(row, 6, QTableWidgetItem(car.get('curr_car_status,', 'MISSING')))
 
     def on_cell_double_clicked(self, row, column):
         car_data = {}
@@ -136,6 +161,7 @@ class CarWindow(QWidget):
 
     def open_edit_car_window(self, car_data):
         edit_dialog = EditCarWindow(car_data, self)
+        edit_dialog.setStyleSheet("background-color: #ffe0c2")
         if edit_dialog.exec() == QDialog.DialogCode.Accepted:
             self.populate_table()  # Refresh the table after editing
 

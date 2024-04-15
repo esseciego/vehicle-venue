@@ -21,7 +21,7 @@ class SignUpWindow(QWidget):
         self.setLayout(self.layout)
         self.resize(screen_size / 2.0)
 
-        self.setStyleSheet("background-color: #ebfff0")
+        self.setStyleSheet("background-color: #ffe0c2")
 
         # "Please Enter..." text
         self.title = QLabel("Please enter your information below.")
@@ -61,7 +61,7 @@ class SignUpWindow(QWidget):
         # Sign up Button
         sign_up_button = QPushButton("Sign Up")
         sign_up_button.clicked.connect(self.sign_up)
-        sign_up_button.setStyleSheet("background-color: #a3e6b4;"
+        sign_up_button.setStyleSheet("background-color: #6eb6ff;"
                                      "color: black;"
                                      "font-weight: bold;"
                                      "font-family: Tahoma;")

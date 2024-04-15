@@ -36,7 +36,7 @@ class MainWindow(QWidget):
 
         self.resize(screen_size)
 
-        self.setStyleSheet("background-color: #ebfff0")
+        self.setStyleSheet("background-color: #cce4fc")
 
         self.account = Accounts()
 
@@ -52,34 +52,40 @@ class MainWindow(QWidget):
         # "Guest" text
         self.user_name_label = QLabel("Guest")
         self.user_name_label.setProperty("class", "heading")
-        self.user_name_label.setStyleSheet("font-weight: bold;"
+        self.user_name_label.setStyleSheet("color: blue;"
+                                           "font-weight: bold;"
                                            "font-family: Tahoma;"
                                            "font-size: 16px")
         self.layout.addWidget(self.user_name_label, 0, 0, 0, 0, Qt.AlignmentFlag.AlignTop)
 
+        # "Car Window" button
         self.car_window_button = QPushButton("Car Window")
         self.car_window_button.clicked.connect(self.open_car_window)
-        self.layout.addWidget(self.car_window_button, 1, 0)
+        self.car_window_button.setStyleSheet("background-color: #fa9352;"
+                                             "color: black;"
+                                             "font-weight: bold;"
+                                             "font-family: Tahoma;")
+        self.layout.addWidget(self.car_window_button, 4, 0, 1, 0, Qt.AlignmentFlag.AlignCenter)
 
         self.car_window_instance = None  # Keep a reference to the car window
 
         # "Sign Up" button
         sign_up_button = QPushButton("Sign Up")
         sign_up_button.clicked.connect(self.sign_up_window)
-        sign_up_button.setStyleSheet("background-color: #a3e6b4;"
+        sign_up_button.setStyleSheet("background-color: #6eb6ff;"
                                      "color: black;"
                                      "font-weight: bold;"
                                      "font-family: Tahoma;")
-        self.layout.addWidget(sign_up_button, 0, 3)
+        self.layout.addWidget(sign_up_button, 0, 3, 1, 1)
 
         # "Log In" button
         self.login_button = QPushButton("Log In")
         self.login_button.clicked.connect(self.login_window)
-        self.login_button.setStyleSheet("background-color: #a3e6b4;"
+        self.login_button.setStyleSheet("background-color: #fa9352;"
                                         "color: black;"
                                         "font-weight: bold;"
                                         "font-family: Tahoma;")
-        self.layout.addWidget(self.login_button, 0, 4)
+        self.layout.addWidget(self.login_button, 0, 4, 1, 1)
 
         # "Log Out" button
 
@@ -89,16 +95,16 @@ class MainWindow(QWidget):
                                          "color: black;"
                                          "font-weight: bold;"
                                          "font-family: Tahoma;")
-        self.layout.addWidget(self.logout_button, 0, 4)
+        self.layout.addWidget(self.logout_button, 0, 4, 1, 1)
 
         # "Settings" button
         settings_button = QPushButton("Settings")
         settings_button.clicked.connect(self.settings_window)
-        settings_button.setStyleSheet("background-color: #a3e6b4;"
+        settings_button.setStyleSheet("background-color: #6eb6ff;"
                                       "color: black;"
                                       "font-weight: bold;"
                                       "font-family: Tahoma;")
-        self.layout.addWidget(settings_button, 0, 5)
+        self.layout.addWidget(settings_button, 0, 5, 1, 1)
 
         self.settings_window_instance = None
 
