@@ -6,10 +6,14 @@ from PyQt6.QtWidgets import (
     QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QCalendarWidget)
 
 from views.SignUpWindow import screen_size
+from models.Rentals import Rentals
+from helpers.EnvVariables import EnvVariables
 
 class SpecificCarWindow(QWidget):
     def __init__(self):
         super().__init__()
+
+        self.rentals = Rentals()
 
         self.setWindowTitle("Reserve a Car")
 
@@ -28,6 +32,13 @@ class SpecificCarWindow(QWidget):
         self.layoutV.addWidget(self.data_label, Qt.AlignmentFlag.AlignHCenter)
 
         self.layout.addLayout(self.layoutV)
+
+        self.license_plate = ""
+        self.rental_dates = []
+
+        # Guide prompt
+        self.guide_label = QLabel("Choose a Start and End Dates of Desired Rental Period")
+        self.calendar_layout.addWidget(self.guide_label)
 
         # Enter start date prompt
         self.start_date_label = QLabel("Enter Start Date")
@@ -52,7 +63,7 @@ class SpecificCarWindow(QWidget):
 
         #
         self.reserve_button = QPushButton("Make Reservation")
-        #self.reserve_button.clicked.connect(self.filter)
+        self.reserve_button.clicked.connect(self.reserve)
         self.calendar_layout.addWidget(self.reserve_button)
 
         self.layout.addLayout(self.calendar_layout)
@@ -82,3 +93,35 @@ class SpecificCarWindow(QWidget):
         if start_date > end_date:
             self.end_date_calendar.setSelectedDate(start_date.addDays(1))
         self.end_date_calendar.setMinimumDate(start_date.addDays(1))
+
+    def reserve(self):
+        env_vars = EnvVariables()
+        start_date = self.start_date_calendar.selectedDate()
+        end_date = self.end_date_calendar.selectedDate()
+
+        if self.check_available(start_date, end_date):
+            print("reserve button pressed")
+            self.rentals.create_rental(env_vars.get_user(), self.license_plate,
+                                       start_date.toString(Qt.DateFormat.ISODate),
+                                       end_date.toString(Qt.DateFormat.ISODate))
+        else:
+            self.guide_label.setText("Car not available during those dates, please select another rental period")
+
+    def check_available(self, start_date, end_date):
+        for date in self.rental_dates:
+            start_rental_date = QDate.fromString(date[0], Qt.DateFormat.ISODate)
+            end_rental_date = QDate.fromString(date[1], Qt.DateFormat.ISODate)
+
+            if start_date <= start_rental_date <= end_date:
+                return False
+            if start_date <= end_rental_date <= end_date:
+                return False
+
+            if start_rental_date <= start_date <= end_rental_date:
+                return False
+            if start_rental_date <= end_date <= end_rental_date:
+                return False
+
+        return True
+
+
