@@ -20,7 +20,7 @@ class Accounts:
 
         new_account = Account(username, password, email, role, city)
 
-        error_log = self.validate(new_account)
+        error_log = self.validate_new_account(new_account)
 
         if self.operation_success(error_log) == True:
             try:
@@ -65,7 +65,7 @@ class Accounts:
         except ConnectionError:
             print('Server unavailable.')
 
-    def validate(self, account):
+    def validate_new_account(self, account):
         # FIXME: Change name to 'validate_new_account'
         # Validates user input
         # Returns an error-log
@@ -163,6 +163,34 @@ class Accounts:
             error_log['password-correct'] = False
 
         return error_log
+
+    def user_exists(self, username):
+        # Returns true if an account with the username exists
+        # Else, returns false
+
+        database = Database()
+        accounts = database.accounts_col
+
+        account_to_find = {"username": username}
+        account = accounts.find_one(account_to_find)
+        if account:
+            return True
+        else:
+            return False
+
+    def get_user_role(self, username):
+        # Returns the role of the account w/ the username
+        # If no account exists, returns "NONE"
+
+        database = Database()
+        accounts = database.accounts_col
+
+        account_to_find = {"username": username}
+        account = accounts.find_one(account_to_find)
+        if account:
+            return account['role']
+        else:
+            return "NONE"
 
     def operation_success(self, error_log):
         # Takes in error log from a CRUD operation

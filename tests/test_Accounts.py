@@ -278,6 +278,50 @@ class TestAccounts:
         # Remove test account from database
         accounts.delete_account("GoodUsername")
 
+    def test_user_exists_(self):
+        accounts = Accounts()
+
+        accounts.add_account("ShowYouOff", "good_Password1!1", "goodemail@email.com", "Admin", "Gainesville")
+
+        result1_bool = accounts.user_exists("ShowYouOff")
+        expected1_bool = True
+
+        assert result1_bool == expected1_bool
+
+        result2_bool = accounts.user_exists("HideMeOn")
+        expected2_bool = False
+
+        assert result2_bool == expected2_bool
+
+        # Remove test accounts
+        accounts.delete_account("ShowYouOff")
+
+    def test_get_user_role(self):
+        # FIXME: get_user returns 'NONE' if user is a client
+        accounts = Accounts()
+
+        accounts.add_account("Polymorphing", "good_Password1!1", "goodemail@email.com", "Admin", "Gainesville")
+        accounts.add_account("Crying", "good_Password1!1", "goodemail@email.com", "Client", "Gainesville")
+
+        result1_role = accounts.get_user_role("Polymorphing")
+        expected1_role = "Admin"
+
+        assert result1_role == expected1_role
+
+        result2_role = accounts.get_user_role("Crying")
+        expected2_role = "Client"
+
+        assert result2_role == expected2_role
+
+        result3_role = accounts.get_user_role("Juliet")
+        expected3_role = "NONE"
+
+        assert result3_role == expected3_role
+
+        # Remove test accounts
+        accounts.delete_account("Polymorphing")
+        accounts.delete_account("Crying")
+
 
 if __name__ == '__main__':
     test_accounts = TestAccounts()
