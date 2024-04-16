@@ -189,11 +189,7 @@ class MainWindow(QWidget):
     def filter(self):
         start_date = self.start_date_calendar.selectedDate()
         end_date = self.end_date_calendar.selectedDate()
-        temp_date = self.start_date_calendar.selectedDate()
-        rental_period = []
-        for i in range(start_date.daysTo(end_date) + 1):
-            rental_period.append(temp_date.toString(Qt.DateFormat.ISODate))
-            temp_date = temp_date.addDays(1)
+        rental_period = [start_date, end_date]
 
         self.guide_label.setText("Showing Cars Available from " + start_date.toString()
                                  + " to " + end_date.toString())

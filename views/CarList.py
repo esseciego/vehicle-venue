@@ -41,9 +41,21 @@ class CarList(QWidget):
         return self.scroll
 
     def check_available_cars(self, i, rental_period):
-        for date in self.list_of_cars[i]['rental_dates']:
-            if date in rental_period:
-                return False
+        if rental_period:
+            for date in self.list_of_cars[i]['rental_dates']:
+                start_date = QDate.fromString(date[0], Qt.DateFormat.ISODate)
+                end_date = QDate.fromString(date[1], Qt.DateFormat.ISODate)
+
+                if rental_period[0] <= start_date <= rental_period[1]:
+                    return False
+                if rental_period[0] <= end_date <= rental_period[1]:
+                    return False
+
+                if start_date <= rental_period[0] <= end_date:
+                    return False
+                if start_date <= rental_period[1] <= end_date:
+                    return False
+
         return True
 
     def make_car_object(self, i):
@@ -64,6 +76,8 @@ class CarList(QWidget):
     def car_window(self, i):
         self.window_layout.set_pixmap(self.list_of_cars[i]['type'])
 
+        self.window_layout.license_plate = self.list_of_cars[i]['license_plate']
+        self.window_layout.rental_dates = self.list_of_cars[i]['rental_dates']
         self.window_layout.data_label.setText("License plate number: " + self.list_of_cars[i]['license_plate']
                                                        + "\n\nType: " + self.list_of_cars[i]['type']
                                                        + "\n\nLocation: " + self.list_of_cars[i]['curr_rental_location']
