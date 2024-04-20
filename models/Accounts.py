@@ -20,13 +20,13 @@ class Accounts:
 
         new_account = Account(username, password, email, role, city)
 
-        error_log = self.validate(new_account)
+        error_log = self.validate_new_account(new_account)
 
         if self.operation_success(error_log) == True:
             try:
                 new_account.encrypt_password()
                 result = accounts.insert_one(new_account.get_all_data()).inserted_id
-                print(result)
+                print(f"Added account with _id: {result}")
             except ConnectionError:
                 print('Server unavailable.')
 
@@ -41,10 +41,8 @@ class Accounts:
 
         try:
             account_to_delete = {"username": username}
-            result = accounts.delete_one(account_to_delete)
-            print(result)
-            return True if result else False
-
+            accounts.delete_one(account_to_delete)
+            print(f"Deleted account")
         except ConnectionError:
             print('Server unavailable.')
 
@@ -65,7 +63,7 @@ class Accounts:
         except ConnectionError:
             print('Server unavailable.')
 
-    def validate(self, account):
+    def validate_new_account(self, account):
         # FIXME: Change name to 'validate_new_account'
         # Validates user input
         # Returns an error-log
@@ -163,6 +161,34 @@ class Accounts:
             error_log['password-correct'] = False
 
         return error_log
+
+    def user_exists(self, username):
+        # Returns true if an account with the username exists
+        # Else, returns false
+
+        database = Database()
+        accounts = database.accounts_col
+
+        account_to_find = {"username": username}
+        account = accounts.find_one(account_to_find)
+        if account:
+            return True
+        else:
+            return False
+
+    def get_user_role(self, username):
+        # Returns the role of the account w/ the username
+        # If no account exists, returns "NONE"
+
+        database = Database()
+        accounts = database.accounts_col
+
+        account_to_find = {"username": username}
+        account = accounts.find_one(account_to_find)
+        if account:
+            return account['role']
+        else:
+            return "NONE"
 
     def operation_success(self, error_log):
         # Takes in error log from a CRUD operation

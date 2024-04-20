@@ -104,7 +104,7 @@ class Rentals:
         # Operation 1: Add rental to rentals database
         try:
             result = rentals.insert_one(rental.get_all_data()).inserted_id
-            print(result)
+            print(f"Added rental with _id: {result}")
         except ConnectionError:
             print('Server unavailable.')
             return
@@ -114,7 +114,6 @@ class Rentals:
             car_to_update = {"license_plate": license_plate}
             rental_dates_to_add = [start_rental_date, end_rental_date]
             update_operation = {"$push": {"rental_dates": rental_dates_to_add}}
-
             cars.update_one(car_to_update, update_operation)
         except ConnectionError:
             print('Server unavailable.')
@@ -127,8 +126,6 @@ class Rentals:
         # Assumes that all parameters are valid
 
         database = Database()
-
-        database = Database()
         cars = database.cars_col
         rentals = database.rentals_col
 
@@ -136,8 +133,9 @@ class Rentals:
         try:
             rental_to_delete = {"username": username, "license_plate": license_plate,
                                 "start_rental_date": start_rental_date, "end_rental_date": end_rental_date}
-            result = rentals.delete_one(rental_to_delete)
-            print(result)
+            rentals.delete_one(rental_to_delete)
+            print("Deleted rental")
+
         except ConnectionError:
             print('Server unavailable.')
 
