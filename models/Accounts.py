@@ -26,7 +26,7 @@ class Accounts:
             try:
                 new_account.encrypt_password()
                 result = accounts.insert_one(new_account.get_all_data()).inserted_id
-                print(result)
+                print(f"Added account with _id: {result}")
             except ConnectionError:
                 print('Server unavailable.')
 
@@ -41,10 +41,8 @@ class Accounts:
 
         try:
             account_to_delete = {"username": username}
-            result = accounts.delete_one(account_to_delete)
-            print(result)
-            return True if result else False
-
+            accounts.delete_one(account_to_delete)
+            print(f"Deleted account")
         except ConnectionError:
             print('Server unavailable.')
 
