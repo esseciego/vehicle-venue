@@ -1,9 +1,11 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, QPushButton
+from PyQt6.QtWidgets import (
+    QApplication, QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, QPushButton,
+    QDialog, QLineEdit, QFormLayout, QDialogButtonBox
+)
+from PyQt6.QtCore import Qt
 from pymongo import MongoClient
 from bson import ObjectId
-from PyQt6.QtWidgets import QDialog, QLineEdit, QFormLayout, QDialogButtonBox
-from PyQt6.QtCore import Qt
 
 class EditCarWindow(QDialog):
     def __init__(self, car_data, parent=None):
@@ -116,6 +118,8 @@ class CarWindow(QWidget):
             self.table_widget.setItem(row, 4, QTableWidgetItem(str(car.get('cost_per_day', ''))))
             self.table_widget.setItem(row, 5, QTableWidgetItem(str(car.get('cost_per_mile', ''))))
             self.table_widget.setItem(row, 6, QTableWidgetItem(car.get('curr_car_status', '')))
+            # Store the MongoDB document ID in the first column's hidden data
+            self.table_widget.item(row, 0).setData(Qt.ItemDataRole.UserRole, str(car['_id']))
 
     def on_cell_double_clicked(self, row, column):
         car_data = {}
@@ -124,21 +128,15 @@ class CarWindow(QWidget):
             header = self.table_widget.horizontalHeaderItem(col).text()
             key = header.lower().replace(" ", "_")
             car_data[key] = item.text() if item else ''
-            print(f"Column: {header}, Data: {car_data[key]}")  # Debug statement
 
-        # Assume '_id' is stored in the first column and needs special handling
         _id_item = self.table_widget.item(row, 0)
-        if _id_item:
-            car_data['_id'] = _id_item.data(Qt.ItemDataRole.UserRole)
-
-        print(f"Car data to pass to edit window: {car_data}")  # Debug statement
+        car_data['_id'] = _id_item.data(Qt.ItemDataRole.UserRole)
         self.open_edit_car_window(car_data)
 
     def open_edit_car_window(self, car_data):
         edit_dialog = EditCarWindow(car_data, self)
         if edit_dialog.exec() == QDialog.DialogCode.Accepted:
-            self.populate_table()  # Refresh the table after editing
-
+            self.populate_table()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
