@@ -21,9 +21,9 @@ class MainWindow(QWidget):
         self.layout = QGridLayout()
         self.layout.setRowMinimumHeight(0, int(screen_size.height() * .1))
         self.layout.setRowMinimumHeight(1, int(screen_size.height() * .75))
-        self.layout.setColumnMinimumWidth(0, int(screen_size.width() * .14))
+        self.layout.setColumnMinimumWidth(0, int(screen_size.width() * .15))
         self.layout.setColumnMinimumWidth(1, int(screen_size.width() * .58))
-        self.layout.setColumnMinimumWidth(2, int(screen_size.width() * .20))
+        self.layout.setColumnMinimumWidth(2, int(screen_size.width() * .23))
         self.layout.setSpacing(10)
         self.layout.setContentsMargins(25, 30, 25, 50)
 
@@ -40,6 +40,7 @@ class MainWindow(QWidget):
         self.cars = CarList()
         self.car_list = self.cars.make_car_list()
         self.layout.addWidget(self.car_list, 1, 1, Qt.AlignmentFlag.AlignCenter)
+        self.cars.username_signal.connect(self.login_check)
         self.car_list.hide()
 
         # Welcomes to home page
@@ -128,10 +129,6 @@ class MainWindow(QWidget):
         self.filter_button.hide()
 
         self.layout.addLayout(self.calendar_layout, 1, 2)
-
-    def log_in_window(self):
-        self.log_in_window = LogInWindow()
-        self.log_in_window.show()
 
     def sign_up_window(self):
         self.setDisabled(True)
