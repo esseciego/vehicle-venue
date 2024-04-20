@@ -98,7 +98,7 @@ class SettingsWindow(QWidget):
             # Debug print: Output each account to the console
             print(f"Inserting account into row {row}: {account}")
             self.table_widget.setItem(row, 0, QTableWidgetItem(account['username']))
-            # It is not good practice to show passwords, but here is how you'd add it for debugging
+
             self.table_widget.setItem(row, 1, QTableWidgetItem("******"))
             self.table_widget.setItem(row, 2, QTableWidgetItem(account['email']))
             self.table_widget.setItem(row, 3, QTableWidgetItem(account['role']))
@@ -122,58 +122,75 @@ class SettingsWindow(QWidget):
         self.layout.addWidget(self.back_button, 3, 0)
 
     def populate_table(self, account_list):
+        self.table_widget.setColumnCount(6)  # Add a new column for _id
+        self.table_widget.setHorizontalHeaderLabels(["Username", "Password", "Email", "Role", "City", "_id"])
+        self.table_widget.hideColumn(5)  # Hide the _id column
+
         self.table_widget.setRowCount(len(account_list))
         for row, account in enumerate(account_list):
-            # Create the table items with account data
-            username_item = QTableWidgetItem(account['username'])
-            email_item = QTableWidgetItem(account['email'])
-            role_item = QTableWidgetItem(account['role'])
-            city_item = QTableWidgetItem(account.get('city', 'None'))
+            # Add account data to the table
+            self.table_widget.setItem(row, 0, QTableWidgetItem(account['username']))
+            self.table_widget.setItem(row, 1, QTableWidgetItem("******"))
+            self.table_widget.setItem(row, 2, QTableWidgetItem(account['email']))
+            self.table_widget.setItem(row, 3, QTableWidgetItem(account['role']))
+            self.table_widget.setItem(row, 4, QTableWidgetItem(account.get('city', 'None')))
 
-            # Set the _id as data associated with the username_item
-            # Convert ObjectId to string because QTableWidgetItem can only store strings as data
-            username_item.setData(Qt.ItemDataRole.UserRole, str(account['_id']))
-
-            print(f"Row {row}: Storing _id {account['_id']}")
-
-            # Add items to the table
-            self.table_widget.setItem(row, 0, username_item)
-            self.table_widget.setItem(row, 2, email_item)
-            self.table_widget.setItem(row, 3, role_item)
-            self.table_widget.setItem(row, 4, city_item)
+            # Store the _id in the hidden column
+            id_item = QTableWidgetItem(str(account['_id']))
+            self.table_widget.setItem(row, 5, id_item)
 
     def on_cell_changed(self, row, column):
         print(f"Cell changed - Row: {row}, Column: {column}")
 
-        # Assuming the _id is stored in the first column's user data
-        account_id_str = self.table_widget.item(row, 0).data(Qt.ItemDataRole.UserRole)
-        print(f"Retrieved _id string for update: {account_id_str}")
+        # Check if the item is not None before getting text
+        id_item = self.table_widget.item(row, 5)
+        if id_item is not None:
+            account_id_str = id_item.text()
+            print(f"Retrieved _id string for update: {account_id_str}")
 
-        if account_id_str:
-            account_id = ObjectId(account_id_str)
-            new_value = self.table_widget.item(row, column).text()
+            if account_id_str:
+                account_id = ObjectId(account_id_str)
+                new_value = self.table_widget.item(row, column).text()
 
-            fields = ["username", "password", "email", "role", "city"]
-            if column < len(fields):
-                field = fields[column]
-                accounts_model = Accounts()
-                success = accounts_model.update_account(account_id, field, new_value)
-                if success:
-                    print(f"Successfully updated account with id {account_id}")
+                fields = ["username", "password", "email", "role", "city"]
+                if column < len(fields):
+                    field = fields[column]
+                    accounts_model = Accounts()
+                    success = accounts_model.update_account(account_id, field, new_value)
+                    if success:
+                        print(f"Successfully updated account with id {account_id}")
+                    else:
+                        print(f"Failed to update account with id {account_id}")
                 else:
-                    print(f"Failed to update account with id {account_id}")
+                    print("Column index out of range for updates.")
             else:
-                print(f"Column index {column} out of range")
+                print("No _id string found for this row, update aborted.")
         else:
-            print("No _id found for this row, update aborted.")
+            print(f"No item found in row {row}, column 5.")
 
     def populate_table(self, account_list):
+        # Assuming self.table_widget is a QTableWidget
         self.table_widget.setRowCount(len(account_list))
+
+        # Column headers should match the keys from the account dict
+        headers = ['Username', 'Password', 'Email', 'Role', 'City']
+        self.table_widget.setColumnCount(len(headers))
+        self.table_widget.setHorizontalHeaderLabels(headers)
+
+        # Loop over the account list and populate the table
         for row, account in enumerate(account_list):
             for col, key in enumerate(['username', 'password', 'email', 'role', 'city']):
+                # Create a new QTableWidgetItem with the data
                 item = QTableWidgetItem(str(account[key]))
-                item.setData(Qt.ItemDataRole.UserRole, str(account['_id']))
+
+                # Special handling for the username item to store the ObjectId
+                if key == 'username':
+                    # Set the ObjectId as data associated with the item, using the UserRole data role
+                    item.setData(Qt.ItemDataRole.UserRole, str(account['_id']))
+
+                # Set the item at the proper location in the table
                 self.table_widget.setItem(row, col, item)
+
             print(f"Inserted account into row {row}: {account}")
 
 
