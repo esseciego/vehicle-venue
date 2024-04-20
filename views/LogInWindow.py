@@ -10,71 +10,54 @@ from models.Accounts import Accounts
 
 
 class LogInWindow(QWidget):
-    # signal that is sent to Mainwindow so it can check if the user is logged in
+    # Signal that is sent to MainWindow to check if the user is logged in
     window_closed = pyqtSignal()
 
     def __init__(self):
         super().__init__()
 
         self.layout = QGridLayout()
-        self.layout.setContentsMargins(50, 50, 50, 50)
-        self.layout.setSpacing(100)
+        self.layout.setRowMinimumHeight(2, 100)
+        self.layout.setRowMinimumHeight(3, 50)
+        self.layout.setRowMinimumHeight(4, 100)
 
         self.setWindowTitle("Log In")
         self.setLayout(self.layout)
         self.resize(screen_size / 2.0)
 
-        self.setStyleSheet("background-color: #ebfff0")
-
-        # "User Login" text
+        # User login label
         title = QLabel("User Login")
-        title.setProperty("class", "heading")
-        title.setStyleSheet("font-weight: bold;"
-                            "font-family: Tahoma;"
-                            "font-size: 32px")
-        self.layout.addWidget(title, 0, 0, 1, 0, Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignCenter)
+        self.layout.addWidget(title, 0, 1, Qt.AlignmentFlag.AlignHCenter)
 
-        # "Username:" text
+        # Confirmation label
+        # Informs user if login was successful
+        self.confirmation_label = QLabel("Enter Username and Password")
+        self.layout.addWidget(self.confirmation_label, 0, 1, Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignBottom)
+
+        # Username label
         user_name = QLabel("Username:")
         user_name.setProperty("class", "normal")
-        user_name.setStyleSheet("font-family: Tahoma;"
-                                "font-size: 14px")
-        self.layout.addWidget(user_name, 1, 0)
-        self.username = QLineEdit()
-        self.layout.addWidget(self.username, 1, 1, 1, 2)
+        self.layout.addWidget(user_name, 2, 0, Qt.AlignmentFlag.AlignLeft)
 
-        # "Password:" text
+        self.username = QLineEdit()
+        self.layout.addWidget(self.username, 2, 1, 1, 2,)
+
+        # Password label
         user_password = QLabel("Password:")
         user_password.setProperty("class", "normal")
-        user_password.setStyleSheet("font-family: Tahoma;"
-                                    "font-size: 14px")
-        self.layout.addWidget(user_password, 2, 0)
+        self.layout.addWidget(user_password, 3, 0, Qt.AlignmentFlag.AlignLeft)
+
         self.password = QLineEdit()
-        self.layout.addWidget(self.password, 2, 1, 1, 2)
+        self.layout.addWidget(self.password, 3, 1, 1, 2)
 
-        # "Enter Username and Password." text (also tells user if their info was VALID or INVALID)
-        self.confirmation_label = QLabel("Please enter your Username and Password.")
-        self.confirmation_label.setProperty("class", "heading")
-        self.confirmation_label.setStyleSheet("font-family: Tahoma;"
-                                              "font-size: 14px")
-        self.layout.addWidget(self.confirmation_label, 0, 0, 3, 0, Qt.AlignmentFlag.AlignCenter)
-
-        # "Sign up" button - connected to SignUpWindow
+        # SignUp button - connected to SignUpWindow
         sign_up_button = QPushButton("Sign Up")
         sign_up_button.clicked.connect(self.sign_up_window)
-        sign_up_button.setStyleSheet("background-color: #a3e6b4;"
-                                     "color: black;"
-                                     "font-weight: bold;"
-                                     "font-family: Tahoma;")
         self.layout.addWidget(sign_up_button, 4, 0)
 
-        # "Log In" button - connected to LogInWindow
-        login_button = QPushButton("Log In")
+        # Login button - connected to LogInWindow
+        login_button = QPushButton("Login")
         login_button.clicked.connect(self.login)
-        login_button.setStyleSheet("background-color: #a3e6b4;"
-                                   "color: black;"
-                                   "font-weight: bold;"
-                                   "font-family: Tahoma;")
         self.layout.addWidget(login_button, 4, 2)
 
     def sign_up_window(self):

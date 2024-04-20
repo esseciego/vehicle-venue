@@ -29,29 +29,19 @@ class SettingsWindow(QWidget):
         screen_size = screen.size()
         self.resize(int(screen_size.width() / 2), int(screen_size.height() / 2))
 
-        self.setStyleSheet("background-color: #ebfff0")
-
     def initAdminLoginUI(self):  # Admin login UI elements
         # "Admin Login" text
         self.title = QLabel("Admin Login")
-        self.title.setStyleSheet("color: black;"
-                                 "font-weight: bold;"
-                                 "font-family: Tahoma;"
-                                 "font-size: 32px")
         self.layout.addWidget(self.title, 0, 0, 1, 2, Qt.AlignmentFlag.AlignCenter)
 
         # "Username:" text
         self.user_name_label = QLabel("Username:")
-        self.user_name_label.setStyleSheet("font-family: Tahoma;"
-                                           "font-size: 16px")
         self.layout.addWidget(self.user_name_label, 1, 0)
         self.username = QLineEdit()
         self.layout.addWidget(self.username, 1, 1)
 
         # "Password:" text
         self.user_password_label = QLabel("Password:")
-        self.user_password_label.setStyleSheet("font-family: Tahoma;"
-                                               "font-size: 16px")
         self.layout.addWidget(self.user_password_label, 2, 0)
         self.password = QLineEdit()
         self.password.setEchoMode(QLineEdit.EchoMode.Password)
@@ -60,10 +50,6 @@ class SettingsWindow(QWidget):
         # "Log In" button
         self.login_button = QPushButton("Log In")
         self.login_button.clicked.connect(self.authenticate_admin)
-        self.login_button.setStyleSheet("background-color: #a3e6b4;"
-                                        "color: black;"
-                                        "font-weight: bold;"
-                                        "font-family: Tahoma;")
         self.layout.addWidget(self.login_button, 3, 0, 1, 2)
 
         self.confirmation_label = QLabel("")
@@ -91,7 +77,6 @@ class SettingsWindow(QWidget):
         # Show settings UI
         self.settings_label.show()
         self.layout.addWidget(self.settings_label, 0, 0, 1, 0, Qt.AlignmentFlag.AlignCenter)
-        # Here, you would add your settings controls
 
         self.account_list_button = QPushButton("Account List")
         self.account_list_button.clicked.connect(self.show_account_list)

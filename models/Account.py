@@ -26,6 +26,7 @@ class Account:
         self.password = crypt.encrypt(self.password)
 
     def get_decrypt_password(self):
+        # Decrypts password
         crypt = Crypt()
         decrypt_password = crypt.decrypt(self.password)
         return decrypt_password

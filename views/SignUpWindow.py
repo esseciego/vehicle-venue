@@ -21,39 +21,29 @@ class SignUpWindow(QWidget):
         self.setLayout(self.layout)
         self.resize(screen_size / 2.0)
 
-        self.setStyleSheet("background-color: #ebfff0")
-
-        # "Please Enter..." text
+        # Prompt text
         self.title = QLabel("Please enter your information below.")
         self.title.setProperty("class", "heading")
-        self.title.setStyleSheet("font-weight: bold;"
-                                 "font-family: Tahoma;"
-                                 "font-size: 32px")
         self.layout.addWidget(self.title, 0, 0, 1, 0, Qt.AlignmentFlag.AlignCenter)
 
-        # "Username" text
+        # Username label
         user_email = QLabel("Username:")
         user_email.setProperty("class", "normal")
-        user_email.setStyleSheet("font-family: Tahoma;"
-                                 "font-size: 16px")
         self.layout.addWidget(user_email, 1, 0)
         self.username = QLineEdit()
         self.layout.addWidget(self.username, 1, 1, 1, 2)
 
-        # "Password" text
+        # Password label
         user_password = QLabel("Password:")
         user_password.setProperty("class", "normal")
-        user_password.setStyleSheet("font-family: Tahoma;"
-                                    "font-size: 16px")
         self.layout.addWidget(user_password, 2, 0)
+
         self.password = QLineEdit()
         self.layout.addWidget(self.password, 2, 1, 1, 2)
 
-        # "Email" text
+        # Email text
         user_email = QLabel("Email Address:")
         user_email.setProperty("class", "normal")
-        user_email.setStyleSheet("font-family: Tahoma;"
-                                 "font-size: 16px")
         self.layout.addWidget(user_email, 3, 0)
         self.email = QLineEdit()
         self.layout.addWidget(self.email, 3, 1, 1, 2)
@@ -61,11 +51,7 @@ class SignUpWindow(QWidget):
         # Sign up Button
         sign_up_button = QPushButton("Sign Up")
         sign_up_button.clicked.connect(self.sign_up)
-        sign_up_button.setStyleSheet("background-color: #a3e6b4;"
-                                     "color: black;"
-                                     "font-weight: bold;"
-                                     "font-family: Tahoma;")
-        self.layout.addWidget(sign_up_button, 4, 0, 1, 0, Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignCenter)
+        self.layout.addWidget(sign_up_button, 4, 0)
 
     def sign_up(self):
         # Checks if account information is valid to make account
