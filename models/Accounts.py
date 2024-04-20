@@ -1,7 +1,7 @@
 from Database import Database
 from helpers.EnvVariables import EnvVariables
 from models.Account import Account
-
+from bson.objectid import ObjectId
 #database manager for accounts
 
 
@@ -9,7 +9,8 @@ class Accounts:
     # Model that represents all user accounts in system
 
     def __init__(self):
-        pass
+        database = Database()  # Ensure this class is correctly importing and initializing MongoDB connection
+        self.accounts_col = database.accounts_col
 
     def add_account(self, username, password, email, role = "Client", city = "None"):
         # Inserts new_account document into accounts collection if user input is valid. Doesn't insert if invalid
@@ -200,3 +201,29 @@ class Accounts:
 
         return True
 
+    def get_all_accounts(self):
+        # Retrieves all accounts from the accounts collection
+        try:
+            return list(self.accounts_col.find({}))
+        except Exception as e:
+            print(f"An error occurred while fetching accounts: {e}")
+            return []
+
+    def update_account(self, account_id, field, new_value):
+        print(f"Updating account with ID: {account_id}, Field: {field}, New Value: {new_value}")
+
+        try:
+            if not isinstance(account_id, ObjectId):
+                account_id = ObjectId(account_id)
+
+            update_result = self.accounts_col.update_one(
+                {'_id': account_id},
+                {'$set': {field: new_value}}
+            )
+
+            success = update_result.modified_count > 0
+            print(f"Update success: {success}, Modified count: {update_result.modified_count}")
+            return success
+        except Exception as e:
+            print(f"An error occurred while updating the account: {e}")
+            return False

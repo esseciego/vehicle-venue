@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 import os
 
+
 class EnvVariables:
     def __init__(self):
         pass
@@ -30,3 +31,4 @@ class EnvVariables:
         os.environ['USER'] = 'NONE'
         os.environ['ROLE'] = 'NONE'
         os.environ['CITY'] = 'NONE'
+        return
