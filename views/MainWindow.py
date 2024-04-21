@@ -24,9 +24,9 @@ class MainWindow(QWidget):
         self.layout = QGridLayout()
         self.layout.setRowMinimumHeight(0, int(screen_size.height() * .1))
         self.layout.setRowMinimumHeight(1, int(screen_size.height() * .75))
-        self.layout.setColumnMinimumWidth(0, int(screen_size.width() * .14))
+        self.layout.setColumnMinimumWidth(0, int(screen_size.width() * .16))
         self.layout.setColumnMinimumWidth(1, int(screen_size.width() * .58))
-        self.layout.setColumnMinimumWidth(2, int(screen_size.width() * .20))
+        self.layout.setColumnMinimumWidth(2, int(screen_size.width() * .22))
         self.layout.setSpacing(10)
         self.layout.setContentsMargins(25, 30, 25, 50)
 
@@ -56,14 +56,13 @@ class MainWindow(QWidget):
 
         # Guest text
         self.user_name_label = QLabel("Guest")
-        self.user_name_label.setProperty("class", "heading")
         self.layout.addWidget(self.user_name_label, 0, 0, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
-        # Manage Cars button
-        self.car_mgmt_window_instance = None  # Keep a reference to the car window
-        self.car_mgmt_window_button = QPushButton("Manage Cars")
-        self.car_mgmt_window_button.clicked.connect(self.car_mgmt_window)
-        self.layout.addWidget(self.car_mgmt_window_button, 1, 0)
+        # Manage Account button
+        self.account_mgmt_button = QPushButton("Manage Account")
+        self.account_mgmt_button.clicked.connect(self.account_mgmt_window)
+        self.layout.addWidget(self.account_mgmt_button, 0, 0, Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop)
+        self.account_mgmt_window_instance = None
 
         # Car List tab
         self.collection_tab = QPushButton("Car Collection")
@@ -80,28 +79,28 @@ class MainWindow(QWidget):
         # Sign Up button
         sign_up_button = QPushButton("Sign Up")
         sign_up_button.clicked.connect(self.sign_up_window)
-        self.layout.addWidget(sign_up_button, 0, 2, Qt.AlignmentFlag.AlignLeft)
+        self.layout.addWidget(sign_up_button, 0, 2,  Qt.AlignmentFlag.AlignHCenter| Qt.AlignmentFlag.AlignTop)
         self.sign_up_window = SignUpWindow()
         self.sign_up_window.window_closed.connect(self.login_check)
 
         # Log In button
         self.login_button = QPushButton("Log In")
         self.login_button.clicked.connect(self.login_window)
-        self.layout.addWidget(self.login_button, 0, 2, Qt.AlignmentFlag.AlignHCenter)
+        self.layout.addWidget(self.login_button, 0, 2, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTop)
         self.login_window = LogInWindow()
         self.login_window.window_closed.connect(self.login_check)
 
         # Log Out button
         self.logout_button = QPushButton("Log Out")
         self.logout_button.clicked.connect(self.logout)
-        self.layout.addWidget(self.logout_button, 0, 2, Qt.AlignmentFlag.AlignHCenter)
+        self.layout.addWidget(self.logout_button, 0, 2, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTop)
         self.logout_button.hide()
 
-        #  Manage Account button
-        self.account_mgmt_button = QPushButton("Manage Account")
-        self.account_mgmt_button.clicked.connect(self.account_mgmt_window)
-        self.layout.addWidget(self.account_mgmt_button, 0, 2, Qt.AlignmentFlag.AlignRight)
-        self.account_mgmt_window_instance = None
+        # Manage Cars button
+        self.car_mgmt_window_instance = None  # Keep a reference to the car window
+        self.car_mgmt_window_button = QPushButton("Manage Cars")
+        self.car_mgmt_window_button.clicked.connect(self.car_mgmt_window)
+        self.layout.addWidget(self.car_mgmt_window_button, 0, 2,  Qt.AlignmentFlag.AlignRight)
 
         # Guide text
         self.guide_label = QLabel("Choose a Start and End Dates of Desired Rental Period")
