@@ -25,8 +25,8 @@ class MainWindow(QWidget):
         self.layout.setRowMinimumHeight(0, int(screen_size.height() * .1))
         self.layout.setRowMinimumHeight(1, int(screen_size.height() * .75))
         self.layout.setColumnMinimumWidth(0, int(screen_size.width() * .15))
-        self.layout.setColumnMinimumWidth(1, int(screen_size.width() * .58))
-        self.layout.setColumnMinimumWidth(2, int(screen_size.width() * .23))
+        self.layout.setColumnMinimumWidth(1, int(screen_size.width() * .61))
+        self.layout.setColumnMinimumWidth(2, int(screen_size.width() * .2))
         self.layout.setSpacing(10)
         self.layout.setContentsMargins(25, 30, 25, 50)
 
@@ -39,9 +39,11 @@ class MainWindow(QWidget):
 
         self.account = Accounts()
 
+        self.user_location = ""
+
         # Car collection list
         self.cars = CarList()
-        self.car_list = self.cars.make_car_list()
+        self.car_list = self.cars.make_car_list(self.user_location)
         self.layout.addWidget(self.car_list, 1, 1, Qt.AlignmentFlag.AlignCenter)
         self.cars.username_signal.connect(self.login_check)
         self.car_list.hide()
@@ -60,17 +62,11 @@ class MainWindow(QWidget):
         self.user_name_label.setProperty("class", "heading")
         self.layout.addWidget(self.user_name_label, 0, 0, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
-        # Manage Cars button
-        self.car_mgmt_window_instance = None  # Keep a reference to the car window
-        self.car_mgmt_window_button = QPushButton("Manage Cars")
-        self.car_mgmt_window_button.clicked.connect(self.car_mgmt_window)
-        self.layout.addWidget(self.car_mgmt_window_button, 1, 0)
-
         # Car List tab
         self.collection_tab = QPushButton("Car Collection")
         self.collection_tab.setFlat(True)
         self.collection_tab.clicked.connect(self.car_collection)
-        self.layout.addWidget(self.collection_tab, 0, 0, Qt.AlignmentFlag.AlignHCenter)
+        self.layout.addWidget(self.collection_tab, 0, 0, Qt.AlignmentFlag.AlignRight)
 
         # Home Page tab
         self.home_tab = QPushButton("Home")
@@ -78,31 +74,39 @@ class MainWindow(QWidget):
         self.home_tab.clicked.connect(self.home_page)
         self.layout.addWidget(self.home_tab, 0, 0, Qt.AlignmentFlag.AlignLeft)
 
+        #  Manage Accounts button
+        self.accounts_mgmt_button = QPushButton("Manage Accounts")
+        self.accounts_mgmt_button.setFlat(True)
+        self.accounts_mgmt_button.clicked.connect(self.account_mgmt_window)
+        self.layout.addWidget(self.accounts_mgmt_button, 0, 0, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignBottom)
+        self.account_mgmt_window_instance = None
+
+        # Manage Cars button
+        self.car_mgmt_window_button = QPushButton("Manage Cars")
+        self.car_mgmt_window_button.setFlat(True)
+        self.car_mgmt_window_button.clicked.connect(self.car_mgmt_window)
+        self.layout.addWidget(self.car_mgmt_window_button, 0, 0, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom)
+        self.car_mgmt_window_instance = None  # Keep a reference to the car window
+
         # Sign Up button
         sign_up_button = QPushButton("Sign Up")
         sign_up_button.clicked.connect(self.sign_up_window)
-        self.layout.addWidget(sign_up_button, 0, 2, Qt.AlignmentFlag.AlignLeft)
+        self.layout.addWidget(sign_up_button, 0, 2, Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop)
         self.sign_up_window = SignUpWindow()
         self.sign_up_window.window_closed.connect(self.login_check)
 
         # Log In button
         self.login_button = QPushButton("Log In")
         self.login_button.clicked.connect(self.login_window)
-        self.layout.addWidget(self.login_button, 0, 2, Qt.AlignmentFlag.AlignHCenter)
+        self.layout.addWidget(self.login_button, 0, 2, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTop)
         self.login_window = LogInWindow()
         self.login_window.window_closed.connect(self.login_check)
 
         # Log Out button
         self.logout_button = QPushButton("Log Out")
         self.logout_button.clicked.connect(self.logout)
-        self.layout.addWidget(self.logout_button, 0, 2, Qt.AlignmentFlag.AlignHCenter)
+        self.layout.addWidget(self.logout_button, 0, 2, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTop)
         self.logout_button.hide()
-
-        #  Manage Account button
-        self.account_mgmt_button = QPushButton("Manage Account")
-        self.account_mgmt_button.clicked.connect(self.account_mgmt_window)
-        self.layout.addWidget(self.account_mgmt_button, 0, 2, Qt.AlignmentFlag.AlignRight)
-        self.account_mgmt_window_instance = None
 
         # Guide text
         self.guide_label = QLabel("Choose a Start and End Dates of Desired Rental Period")
@@ -142,29 +146,37 @@ class MainWindow(QWidget):
 
         self.layout.addLayout(self.calendar_layout, 1, 2)
 
-    def sign_up_window(self):
-        self.setDisabled(True)
-        self.sign_up_window.show()
-
+    #open up the account edit window
     def account_mgmt_window(self):
         if self.account_mgmt_window_instance is None or not self.account_mgmt_window_instance.isVisible():
             self.account_mgmt_window_instance = AccountMgmtWindow()
         self.account_mgmt_window_instance.show()
 
+    #open up the car edit window
     def car_mgmt_window(self):
         if self.car_mgmt_window_instance is None or not self.car_window_instance.isVisible():
             self.car_mgmt_window_instance = CarMgmtWindow()
         self.car_mgmt_window_instance.show()
 
+    #open up the sign up window
+    def sign_up_window(self):
+        self.setDisabled(True)
+        self.sign_up_window.show()
+
+    #open up the login window
     def login_window(self):
         self.setDisabled(True)
         self.login_window.show()
 
+    #logs user out
     def logout(self):
         self.account.logout()
         self.login_check()
         self.user_name_label.setText("Guest")
 
+    #checks if the user has logged in
+    #If yes as a client, replaces login button with log out button
+    #If yes as an employee or admin, grants access and updates cars to only those at the location that they work at
     def login_check(self):
         # checks if a user is logged in
         # if a user is not logged in the User = NONE
@@ -172,12 +184,20 @@ class MainWindow(QWidget):
         if env_vars.get_user() == "NONE":
             self.login_button.show()
             self.logout_button.hide()
+            self.user_location = ""
+            self.update_car_list()
         else:
+            if env_vars.get_role() == "Employee" or env_vars.get_role() == "Admin":
+                self.user_location = env_vars.get_city()
+                self.update_car_list()
+            else:
+                self.user_location = ""
             self.logout_button.show()
             self.login_button.hide()
             self.user_name_label.setText(env_vars.get_user())
         self.setDisabled(False)
 
+    #shows the car list and calendars
     def car_collection(self):
         self.welcome_label.hide()
         self.car_list.show()
@@ -188,6 +208,7 @@ class MainWindow(QWidget):
         self.end_date_calendar.show()
         self.filter_button.show()
 
+    #Removes the car list and calendars
     def home_page(self):
         self.car_list.hide()
         self.guide_label.hide()
@@ -198,6 +219,7 @@ class MainWindow(QWidget):
         self.filter_button.hide()
         self.welcome_label.show()
 
+    #When a start date is selected, set the minumum end date to that date plus 1
     def minimum_end_date(self):
         start_date = self.start_date_calendar.selectedDate()
         end_date = self.end_date_calendar.selectedDate()
@@ -205,6 +227,8 @@ class MainWindow(QWidget):
             self.end_date_calendar.setSelectedDate(start_date.addDays(1))
         self.end_date_calendar.setMinimumDate(start_date.addDays(1))
 
+    #When the filter button is pressed, it gets the dates selected from the calendars and sends them to CarList
+    #where the car list is then made only with cars that are available during the rental period
     def filter(self):
         start_date = self.start_date_calendar.selectedDate()
         end_date = self.end_date_calendar.selectedDate()
@@ -212,7 +236,13 @@ class MainWindow(QWidget):
 
         self.guide_label.setText("Showing Cars Available from " + start_date.toString()
                                  + " to " + end_date.toString())
-        self.car_list = self.cars.make_car_list(start_date, end_date, rental_period)
+
+        self.update_car_list(start_date, end_date, rental_period)
+
+    #updates car list with the new paramaters
+    def update_car_list(self, start_date=QDate.currentDate(), end_date=QDate.currentDate().addDays(1), rental_period=[]):
+        self.car_list = self.cars.make_car_list(self.user_location, start_date, end_date, rental_period)
+
 
 
 app = QApplication(sys.argv)
