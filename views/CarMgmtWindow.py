@@ -84,7 +84,11 @@ class CarMgmtWindow(QWidget):
         client = MongoClient('mongodb+srv://tears_user:sobbing.emoji@carrental.fiinqnj.mongodb.net/?retryWrites=true&w=majority&appName=CarRental')
         db = client['car_rental_data']
         cars_collection = db['cars']
-        cars = list(cars_collection.find({"curr_rental_location": current_city}))  # Filter by city
+        if current_city:  # Check if the city is not empty or None
+            cars = list(cars_collection.find({"curr_rental_location": current_city}))  # Filter by city
+        else:
+            cars = list(cars_collection.find())  # No city filter, get all cars
+
         self.table_widget.setRowCount(len(cars))
         self.table_widget.setColumnCount(7)
         self.table_widget.setHorizontalHeaderLabels([
