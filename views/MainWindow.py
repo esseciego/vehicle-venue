@@ -45,7 +45,7 @@ class MainWindow(QWidget):
         self.layout.addWidget(self.car_list, 1, 1, Qt.AlignmentFlag.AlignCenter)
         self.car_list.hide()
 
-        # Welcomes to home page
+        # Welcome text
         self.welcome_label = QLabel("Welcome to the VehicleVenue\n\n"
                                     "Project Manager: Esse Ciego\n"
                                     "Scrum Master: Truman Moore\n"
@@ -59,7 +59,7 @@ class MainWindow(QWidget):
         self.user_name_label.setProperty("class", "heading")
         self.layout.addWidget(self.user_name_label, 0, 0, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
-        # TODO: Align "Manage Cars" button to be adjacent to other buttons
+        # Manage Cars button
         self.car_mgmt_window_instance = None  # Keep a reference to the car window
         self.car_mgmt_window_button = QPushButton("Manage Cars")
         self.car_mgmt_window_button.clicked.connect(self.car_mgmt_window)
@@ -96,10 +96,6 @@ class MainWindow(QWidget):
         self.logout_button.clicked.connect(self.logout)
         self.layout.addWidget(self.logout_button, 0, 2, Qt.AlignmentFlag.AlignHCenter)
         self.logout_button.hide()
-
-        # FIXME: Make sure comments on each widget are consistent (check different windows too)
-        # FIXME: Make sure widget styles are consistent
-            # Might need to force Truman's changes?
 
         # Settings button
         self.settings_button = QPushButton("Settings")
@@ -153,17 +149,15 @@ class MainWindow(QWidget):
         self.setDisabled(True)
         self.sign_up_window.show()
 
-    # TODO: See if you can refactor settings_window() and car_mgmt_window() into something simpler
-    # Function might be similar to log_in_window or sign_up window above
     def settings_window(self):
         if self.settings_window_instance is None or not self.settings_window_instance.isVisible():
             self.settings_window_instance = SettingsWindow()
         self.settings_window_instance.show()
 
     def car_mgmt_window(self):
-        if self.car_window_instance is None or not self.car_window_instance.isVisible():
-            self.car_window_instance = CarWindow()
-        self.car_window_instance.show()
+        if self.car_mgmt_window_instance is None or not self.car_window_instance.isVisible():
+            self.car_mgmt_window_instance = CarWindow()
+        self.car_mgmt_window_instance.show()
 
     def login_window(self):
         self.setDisabled(True)

@@ -2,7 +2,6 @@ from Database import Database
 from helpers.EnvVariables import EnvVariables
 from models.Account import Account
 from bson.objectid import ObjectId
-#database manager for accounts
 
 
 class Accounts:
