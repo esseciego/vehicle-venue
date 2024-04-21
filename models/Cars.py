@@ -23,7 +23,8 @@ class Cars:
         if self.operation_success(error_log) == True:
             try:
                 result = cars.insert_one(new_car.get_all_data()).inserted_id
-                print(result)
+                print(f"Added car with _id: {result}")
+
             except ConnectionError:
                 print('Server unavailable.')
 
@@ -38,16 +39,15 @@ class Cars:
 
         try:
             car_to_delete = {"license_plate": license_plate}
-            result = cars.delete_one(car_to_delete)
-            print(result)
-            return True if result else False
+            cars.delete_one(car_to_delete)
+            print(f"Deleted car")
 
         except ConnectionError:
             print('Server unavailable.')
 
         return
 
-    def show_all_cars(self):
+    def get_all_cars(self):
         # Returns a list of all cars + all their car data
 
         database = Database()
@@ -56,9 +56,7 @@ class Cars:
         try:
             cursors = cars.find({})
             result = list(cursors)
-            print(result)
             return result
-
         except ConnectionError:
             print('Server unavailable.')
 
@@ -78,6 +76,52 @@ class Cars:
 
         return
 
+    def get_cars_by_location(self, location):
+        # Returns a list of cars + all their car data from a rental location
+
+        database = Database()
+        cars = database.cars_col
+
+        try:
+            cars_from_location = {"curr_rental_location": location}
+            cursors = cars.find(cars_from_location)
+            result = list(cursors)
+            print(result)
+            return result
+        except ConnectionError:
+            print('Server unavailable.')
+
+        return
+
+    def get_car_rental_dates(self, license_plate):
+        # Returns a list of a car's rental dates
+
+        database = Database()
+        cars = database.cars_col
+
+        try:
+            car_to_retrieve = {"license_plate": license_plate}
+            retrieved_car = cars.find_one(car_to_retrieve)
+            return list(retrieved_car["rental_dates"])
+        except ConnectionError:
+            print('Server unavailable.')
+
+    def get_num_car_rental_dates(self, license_plate):
+        # Returns a number of times a car is rented
+
+        database = Database()
+        cars = database.cars_col
+
+        try:
+            car_to_retrieve = {"license_plate": license_plate}
+            retrieved_car = cars.find_one(car_to_retrieve)
+            if retrieved_car:
+                retrieved_car_date_list = list(retrieved_car["rental_dates"])
+                return len(retrieved_car_date_list)
+            else:
+                return 0
+        except ConnectionError:
+            print('Server unavailable.')
 
 
     def validate_new_car(self, car):

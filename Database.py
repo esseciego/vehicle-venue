@@ -13,7 +13,6 @@ class Database:
         # Send a ping to confirm a successful connection
         try:
             self.client.admin.command('ping')
-            print("Pinged your deployment. You successfully connected to MongoDB!")
         except Exception as e:
             print(e)
             exit()
@@ -24,6 +23,9 @@ class Database:
         self.accounts_col = self.db.accounts
         self.cars_col = self.db.cars
         self.rentals_col = self.db.rentals
+
+    def get_client(self):
+        return self.client
 
 
 

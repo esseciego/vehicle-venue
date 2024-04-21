@@ -1,15 +1,15 @@
 from Database import Database
 from helpers.EnvVariables import EnvVariables
 from models.Account import Account
-
-#database manager for accounts
+from bson.objectid import ObjectId
 
 
 class Accounts:
     # Model that represents all user accounts in system
 
     def __init__(self):
-        pass
+        database = Database()  # Ensure this class is correctly importing and initializing MongoDB connection
+        self.accounts_col = database.accounts_col
 
     def add_account(self, username, password, email, role = "Client", city = "None"):
         # Inserts new_account document into accounts collection if user input is valid. Doesn't insert if invalid
@@ -20,13 +20,13 @@ class Accounts:
 
         new_account = Account(username, password, email, role, city)
 
-        error_log = self.validate(new_account)
+        error_log = self.validate_new_account(new_account)
 
         if self.operation_success(error_log) == True:
             try:
                 new_account.encrypt_password()
                 result = accounts.insert_one(new_account.get_all_data()).inserted_id
-                print(result)
+                print(f"Added account with _id: {result}")
             except ConnectionError:
                 print('Server unavailable.')
 
@@ -41,10 +41,8 @@ class Accounts:
 
         try:
             account_to_delete = {"username": username}
-            result = accounts.delete_one(account_to_delete)
-            print(result)
-            return True if result else False
-
+            accounts.delete_one(account_to_delete)
+            print(f"Deleted account")
         except ConnectionError:
             print('Server unavailable.')
 
@@ -65,7 +63,7 @@ class Accounts:
         except ConnectionError:
             print('Server unavailable.')
 
-    def validate(self, account):
+    def validate_new_account(self, account):
         # FIXME: Change name to 'validate_new_account'
         # Validates user input
         # Returns an error-log
@@ -116,18 +114,15 @@ class Accounts:
         accounts = database.accounts_col
 
         error_log = self.validate_login(username, password)
-        # FIXME: Error log won't process
         if self.operation_success(error_log) == True:
             env_vars = EnvVariables()
 
-            # Change USER .env variable
-            env_vars.set_user(username)
-
-            # Change ROLE .env variable
             account_to_find = {"username": username}
             result = accounts.find_one(account_to_find)
             role = result['role']
-            env_vars.set_role(role)
+            city = result['city']
+
+            env_vars.set_user_data(username, role, city)
 
         return error_log
 
@@ -135,9 +130,8 @@ class Accounts:
         # Logs out user
 
         env_vars = EnvVariables()
+        env_vars.reset_user_data()
 
-        env_vars.set_user('NONE')
-        env_vars.set_role('NONE')
         return
 
     def validate_login(self, username, password):
@@ -168,6 +162,34 @@ class Accounts:
 
         return error_log
 
+    def user_exists(self, username):
+        # Returns true if an account with the username exists
+        # Else, returns false
+
+        database = Database()
+        accounts = database.accounts_col
+
+        account_to_find = {"username": username}
+        account = accounts.find_one(account_to_find)
+        if account:
+            return True
+        else:
+            return False
+
+    def get_user_role(self, username):
+        # Returns the role of the account w/ the username
+        # If no account exists, returns "NONE"
+
+        database = Database()
+        accounts = database.accounts_col
+
+        account_to_find = {"username": username}
+        account = accounts.find_one(account_to_find)
+        if account:
+            return account['role']
+        else:
+            return "NONE"
+
     def operation_success(self, error_log):
         # Takes in error log from a CRUD operation
         # If an error was reported, return false. Else, return true
@@ -178,3 +200,29 @@ class Accounts:
 
         return True
 
+    def get_all_accounts(self):
+        # Retrieves all accounts from the accounts collection
+        try:
+            return list(self.accounts_col.find({}))
+        except Exception as e:
+            print(f"An error occurred while fetching accounts: {e}")
+            return []
+
+    def update_account(self, account_id, field, new_value):
+        print(f"Updating account with ID: {account_id}, Field: {field}, New Value: {new_value}")
+
+        try:
+            if not isinstance(account_id, ObjectId):
+                account_id = ObjectId(account_id)
+
+            update_result = self.accounts_col.update_one(
+                {'_id': account_id},
+                {'$set': {field: new_value}}
+            )
+
+            success = update_result.modified_count > 0
+            print(f"Update success: {success}, Modified count: {update_result.modified_count}")
+            return success
+        except Exception as e:
+            print(f"An error occurred while updating the account: {e}")
+            return False
