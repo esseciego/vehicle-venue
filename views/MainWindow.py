@@ -9,9 +9,9 @@ from PyQt6.QtWidgets import (
 from views.LogInWindow import LogInWindow
 from views.SignUpWindow import SignUpWindow
 from views.SignUpWindow import screen_size
-from views.CarWindow import CarWindow
+from views.CarMgmtWindow import CarMgmtWindow
 from views.CarList import CarList
-from views.SettingsWindow import SettingsWindow
+from views.AccountMgmtWindow import AccountMgmtWindow
 from models.Accounts import Accounts
 from helpers.EnvVariables import EnvVariables
 
@@ -45,7 +45,7 @@ class MainWindow(QWidget):
         self.layout.addWidget(self.car_list, 1, 1, Qt.AlignmentFlag.AlignCenter)
         self.car_list.hide()
 
-        # Welcomes to home page
+        # Welcome text
         self.welcome_label = QLabel("Welcome to the VehicleVenue\n\n"
                                     "Project Manager: Esse Ciego\n"
                                     "Scrum Master: Truman Moore\n"
@@ -59,53 +59,49 @@ class MainWindow(QWidget):
         self.user_name_label.setProperty("class", "heading")
         self.layout.addWidget(self.user_name_label, 0, 0, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
-        # TODO: Align "Manage Cars" button to be adjacent to other buttons
+        # Manage Cars button
         self.car_mgmt_window_instance = None  # Keep a reference to the car window
         self.car_mgmt_window_button = QPushButton("Manage Cars")
         self.car_mgmt_window_button.clicked.connect(self.car_mgmt_window)
         self.layout.addWidget(self.car_mgmt_window_button, 1, 0)
 
-        # CarList tab
+        # Car List tab
         self.collection_tab = QPushButton("Car Collection")
         self.collection_tab.setFlat(True)
         self.collection_tab.clicked.connect(self.car_collection)
         self.layout.addWidget(self.collection_tab, 0, 0, Qt.AlignmentFlag.AlignHCenter)
 
-        # HomePage tab
+        # Home Page tab
         self.home_tab = QPushButton("Home")
         self.home_tab.setFlat(True)
         self.home_tab.clicked.connect(self.home_page)
         self.layout.addWidget(self.home_tab, 0, 0, Qt.AlignmentFlag.AlignLeft)
 
-        # SignUp button
+        # Sign Up button
         sign_up_button = QPushButton("Sign Up")
         sign_up_button.clicked.connect(self.sign_up_window)
         self.layout.addWidget(sign_up_button, 0, 2, Qt.AlignmentFlag.AlignLeft)
         self.sign_up_window = SignUpWindow()
         self.sign_up_window.window_closed.connect(self.login_check)
 
-        # LogIn button
+        # Log In button
         self.login_button = QPushButton("Log In")
         self.login_button.clicked.connect(self.login_window)
         self.layout.addWidget(self.login_button, 0, 2, Qt.AlignmentFlag.AlignHCenter)
         self.login_window = LogInWindow()
         self.login_window.window_closed.connect(self.login_check)
 
-        # LogOut button
+        # Log Out button
         self.logout_button = QPushButton("Log Out")
         self.logout_button.clicked.connect(self.logout)
         self.layout.addWidget(self.logout_button, 0, 2, Qt.AlignmentFlag.AlignHCenter)
         self.logout_button.hide()
 
-        # FIXME: Make sure comments on each widget are consistent (check different windows too)
-        # FIXME: Make sure widget styles are consistent
-            # Might need to force Truman's changes?
-
-        # Settings button
-        self.settings_button = QPushButton("Settings")
-        self.settings_button.clicked.connect(self.settings_window)
-        self.layout.addWidget(self.settings_button, 0, 2, Qt.AlignmentFlag.AlignRight)
-        self.settings_window_instance = None
+        #  Manage Account button
+        self.account_mgmt_button = QPushButton("Manage Account")
+        self.account_mgmt_button.clicked.connect(self.account_mgmt_window)
+        self.layout.addWidget(self.account_mgmt_button, 0, 2, Qt.AlignmentFlag.AlignRight)
+        self.account_mgmt_window_instance = None
 
         # Guide text
         self.guide_label = QLabel("Choose a Start and End Dates of Desired Rental Period")
@@ -153,17 +149,15 @@ class MainWindow(QWidget):
         self.setDisabled(True)
         self.sign_up_window.show()
 
-    # TODO: See if you can refactor settings_window() and car_mgmt_window() into something simpler
-    # Function might be similar to log_in_window or sign_up window above
-    def settings_window(self):
-        if self.settings_window_instance is None or not self.settings_window_instance.isVisible():
-            self.settings_window_instance = SettingsWindow()
-        self.settings_window_instance.show()
+    def account_mgmt_window(self):
+        if self.account_mgmt_window_instance is None or not self.account_mgmt_window_instance.isVisible():
+            self.account_mgmt_window_instance = AccountMgmtWindow()
+        self.account_mgmt_window_instance.show()
 
     def car_mgmt_window(self):
-        if self.car_window_instance is None or not self.car_window_instance.isVisible():
-            self.car_window_instance = CarWindow()
-        self.car_window_instance.show()
+        if self.car_mgmt_window_instance is None or not self.car_window_instance.isVisible():
+            self.car_mgmt_window_instance = CarMgmtWindow()
+        self.car_mgmt_window_instance.show()
 
     def login_window(self):
         self.setDisabled(True)
