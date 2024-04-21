@@ -35,13 +35,15 @@ class EditCarWindow(QDialog):
         layout.addRow("Status:", self.status_edit)
 
         buttonBox = QDialogButtonBox()
-        save_button = buttonBox.addButton("Save Changes", QDialogButtonBox.ButtonRole.AcceptRole)
-        cancel_button = buttonBox.addButton(QDialogButtonBox.StandardButton.Cancel)
-
-        save_button.clicked.connect(self.accept)
-        cancel_button.clicked.connect(self.reject)
-
         layout.addRow(buttonBox)
+
+        # Save Changes button
+        save_button = buttonBox.addButton("Save Changes", QDialogButtonBox.ButtonRole.AcceptRole)
+        save_button.clicked.connect(self.accept)
+
+        # Cancel button
+        cancel_button = buttonBox.addButton(QDialogButtonBox.StandardButton.Cancel)
+        cancel_button.clicked.connect(self.reject)
 
     def accept(self):
         # Update the car data in MongoDB
@@ -63,13 +65,12 @@ class EditCarWindow(QDialog):
 
         super().accept()
 
-class CarWindow(QWidget):
+class CarMgmtWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
 
     def initUI(self):
-        # UI setup
         self.setWindowTitle("Car Management")
         self.layout = QVBoxLayout(self)
         self.table_widget = QTableWidget()

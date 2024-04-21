@@ -9,7 +9,7 @@ from models.Accounts import Accounts
 from bson.objectid import ObjectId
 
 
-class SettingsWindow(QWidget):
+class AccountMgmtWindow(QWidget):
     def __init__(self):
         super().__init__()
 
@@ -20,7 +20,7 @@ class SettingsWindow(QWidget):
         self.layout = QGridLayout(self)
         self.layout.setContentsMargins(100, 100, 100, 100)
         self.layout.setSpacing(10)
-        self.setWindowTitle("Settings")
+        self.setWindowTitle("Account Management")
         app = QApplication.instance()
         screen = app.primaryScreen()
         screen_size = screen.size()
@@ -55,8 +55,8 @@ class SettingsWindow(QWidget):
         self.confirmation_label = QLabel("")
         self.layout.addWidget(self.confirmation_label, 4, 0, 1, 2, Qt.AlignmentFlag.AlignCenter)
 
-        # Settings label
-        self.settings_label = QLabel("Settings")
+        # Manage Accounts label
+        self.settings_label = QLabel("Manage Accounts")
         self.settings_label.hide()
 
         # SaveChanges button
