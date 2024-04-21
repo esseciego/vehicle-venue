@@ -6,10 +6,13 @@ from PyQt6.QtWidgets import (
     QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QCalendarWidget)
 
 from views.SignUpWindow import screen_size
+from views.LogInWindow import LogInWindow
 from models.Rentals import Rentals
 from helpers.EnvVariables import EnvVariables
 
 class SpecificCarWindow(QWidget):
+    username_signal = pyqtSignal()
+
     def __init__(self):
         super().__init__()
 
@@ -32,6 +35,9 @@ class SpecificCarWindow(QWidget):
         self.layoutV.addWidget(self.data_label, Qt.AlignmentFlag.AlignHCenter)
 
         self.layout.addLayout(self.layoutV)
+
+        self.login_window = LogInWindow()
+        self.login_window.window_closed.connect(self.login_check)
 
         self.license_plate = ""
         self.rental_dates = []
@@ -96,12 +102,21 @@ class SpecificCarWindow(QWidget):
 
     def reserve(self):
         env_vars = EnvVariables()
+
+        if env_vars.get_user() == "NONE":
+            self.login_window.confirmation_label.setText("You must sign into an account to make a reservation")
+            self.login_window.show()
+            self.setDisabled(True)
+        else:
+            self.make_reservation(env_vars.get_user())
+
+
+    def make_reservation(self, username):
         start_date = self.start_date_calendar.selectedDate()
         end_date = self.end_date_calendar.selectedDate()
-
         if self.check_available(start_date, end_date):
-            print("reserve button pressed")
-            self.rentals.create_rental(env_vars.get_user(), self.license_plate,
+            self.guide_label.setText("Reservation Created Successfully!")
+            self.rentals.create_rental(username, self.license_plate,
                                        start_date.toString(Qt.DateFormat.ISODate),
                                        end_date.toString(Qt.DateFormat.ISODate))
         else:
@@ -124,4 +139,13 @@ class SpecificCarWindow(QWidget):
 
         return True
 
-
+    def login_check(self):
+        # checks if a user is logged in
+        # if a user is not logged in the User = NONE
+        self.setDisabled(False)
+        env_vars = EnvVariables()
+        if env_vars.get_user() == "NONE":
+            return
+        else:
+            self.username_signal.emit()
+            self.make_reservation(env_vars.get_user())
