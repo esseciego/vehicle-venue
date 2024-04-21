@@ -11,10 +11,13 @@ from models.Cars import Cars
 from models.Car import Car
 
 class CarList(QWidget):
+    username_signal = pyqtSignal()
+
     def __init__(self):
         super().__init__()
 
         self.window_layout = SpecificCarWindow()
+        self.window_layout.username_signal.connect(self.username_check)
 
         # Scroll Area Properties
         self.scroll = QScrollArea()
@@ -86,4 +89,7 @@ class CarList(QWidget):
                                                        + "\n\nCost Per Mile: " + self.list_of_cars[i]['cost_per_mile'])
 
         self.window_layout.show()
+
+    def username_check(self):
+        self.username_signal.emit()
 

@@ -6,10 +6,13 @@ from PyQt6.QtWidgets import (
     QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QCalendarWidget)
 
 from views.SignUpWindow import screen_size
+from views.LogInWindow import LogInWindow
 from models.Rentals import Rentals
 from helpers.EnvVariables import EnvVariables
 
 class SpecificCarWindow(QWidget):
+    username_signal = pyqtSignal()
+
     def __init__(self):
         super().__init__()
 
@@ -32,6 +35,9 @@ class SpecificCarWindow(QWidget):
         self.layoutV.addWidget(self.data_label, Qt.AlignmentFlag.AlignHCenter)
 
         self.layout.addLayout(self.layoutV)
+
+        self.login_window = LogInWindow()
+        self.login_window.window_closed.connect(self.login_check)
 
         self.license_plate = ""
         self.rental_dates = []
@@ -96,16 +102,20 @@ class SpecificCarWindow(QWidget):
 
     def reserve(self):
         env_vars = EnvVariables()
-        start_date = self.start_date_calendar.selectedDate()
-        end_date = self.end_date_calendar.selectedDate()
 
-        if self.check_available(start_date, end_date):
-            print("reserve button pressed")
-            self.rentals.create_rental(env_vars.get_user(), self.license_plate,
-                                       start_date.toString(Qt.DateFormat.ISODate),
-                                       end_date.toString(Qt.DateFormat.ISODate))
+        if env_vars.get_user() == "NONE":
+            self.login_window.show()
+            self.setDisabled(True)
         else:
-            self.guide_label.setText("Car not available during those dates, please select another rental period")
+            start_date = self.start_date_calendar.selectedDate()
+            end_date = self.end_date_calendar.selectedDate()
+            if self.check_available(start_date, end_date):
+                self.guide_label.setText("Reservation Created Successfully!")
+                self.rentals.create_rental(env_vars.get_user(), self.license_plate,
+                                           start_date.toString(Qt.DateFormat.ISODate),
+                                           end_date.toString(Qt.DateFormat.ISODate))
+            else:
+                self.guide_label.setText("Car not available during those dates, please select another rental period")
 
     def check_available(self, start_date, end_date):
         for date in self.rental_dates:
@@ -123,5 +133,27 @@ class SpecificCarWindow(QWidget):
                 return False
 
         return True
+
+    def login_check(self):
+        # checks if a user is logged in
+        # if a user is not logged in the User = NONE
+        env_vars = EnvVariables()
+        if env_vars.get_user() == "NONE":
+            return
+        else:
+            self.username_signal.emit()
+            start_date = self.start_date_calendar.selectedDate()
+            end_date = self.end_date_calendar.selectedDate()
+            if self.check_available(start_date, end_date):
+                self.guide_label.setText("Reservation Created Successfully!")
+                self.rentals.create_rental(env_vars.get_user(), self.license_plate,
+                                           start_date.toString(Qt.DateFormat.ISODate),
+                                           end_date.toString(Qt.DateFormat.ISODate))
+            else:
+                self.guide_label.setText("Car not available during those dates, please select another rental period")
+        self.setDisabled(False)
+
+
+
 
 
