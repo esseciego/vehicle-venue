@@ -4,8 +4,6 @@ from helpers.EnvVariables import EnvVariables
 
 # To run tests, type 'pytest' in terminal at root directory
 
-
-#update acc function should go here
 class TestAccounts:
     def setup_method(self):
         # Initialize the Accounts model and add dummy accounts for testing
@@ -33,11 +31,6 @@ class TestAccounts:
              'city': 'CityB'},
             # ... Include the rest of the dummy accounts ...
         ]
-
-
-    # FIXME: Make usernames for each test unique
-    # Prevents getting failed tests in error message. Sometimes, documents aren't deleted on MongoDB fast enough
-    # Use alphabetical names? -> "GoodApple", "GoodBanana", etc.
 
     def test_valid_new_acc(self):
         accounts = Accounts()
@@ -172,16 +165,19 @@ class TestAccounts:
         assert result_success == expected_success
 
         # Test environmental variable
-        envVariables = EnvVariables()
+        env_vars = EnvVariables()
 
-        result_user = envVariables.get_user()
-        result_role = envVariables.get_role()
+        result_user = env_vars.get_user()
+        result_role = env_vars.get_role()
+        result_city = env_vars.get_city()
 
         expected_user = "GoodUsername"
         expected_role = "admin"
+        expected_city = "Gainesville"
 
         assert result_user == expected_user
         assert result_role == expected_role
+        assert result_city == expected_city
 
         # Remove test account from database
         accounts.delete_account("GoodUsername")
@@ -208,18 +204,20 @@ class TestAccounts:
         assert result_success == expected_success
         assert result_log == expected_log
 
-
         # Test environmental variable
-        envVariables = EnvVariables()
+        env_vars = EnvVariables()
 
-        result_user = envVariables.get_user()
-        result_role = envVariables.get_role()
+        result_user = env_vars.get_user()
+        result_role = env_vars.get_role()
+        result_city = env_vars.get_city()
 
         expected_user = "NONE"
         expected_role = "NONE"
+        expected_city = "NONE"
 
         assert result_user == expected_user
         assert result_role == expected_role
+        assert result_city == expected_city
 
     def test_login_password_incorrect(self):
         # Test result log
@@ -240,16 +238,19 @@ class TestAccounts:
         assert result_success == expected_success
 
         # Test environmental variable
-        envVariables = EnvVariables()
+        env_vars = EnvVariables()
 
-        result_user = envVariables.get_user()
-        result_role = envVariables.get_role()
+        result_user = env_vars.get_user()
+        result_role = env_vars.get_role()
+        result_city = env_vars.get_city()
 
         expected_user = "NONE"
         expected_role = "NONE"
+        expected_city = "NONE"
 
         assert result_user == expected_user
         assert result_role == expected_role
+        assert result_city == expected_city
 
     def test_logout(self):
         accounts = Accounts()
@@ -260,20 +261,66 @@ class TestAccounts:
         accounts.logout()
 
         # Test environmental variable
-        envVariables = EnvVariables()
+        env_vars = EnvVariables()
 
-        result_user = envVariables.get_user()
-        result_role = envVariables.get_role()
+        result_user = env_vars.get_user()
+        result_role = env_vars.get_role()
+        result_city = env_vars.get_city()
 
         expected_user = "NONE"
         expected_role = "NONE"
+        expected_city = "NONE"
 
         assert result_user == expected_user
         assert result_role == expected_role
+        assert result_city == expected_city
 
         # Remove test account from database
         accounts.delete_account("GoodUsername")
 
+    def test_user_exists_(self):
+        accounts = Accounts()
+
+        accounts.add_account("ShowYouOff", "good_Password1!1", "goodemail@email.com", "Admin", "Gainesville")
+
+        result1_bool = accounts.user_exists("ShowYouOff")
+        expected1_bool = True
+
+        assert result1_bool == expected1_bool
+
+        result2_bool = accounts.user_exists("HideMeOn")
+        expected2_bool = False
+
+        assert result2_bool == expected2_bool
+
+        # Remove test accounts
+        accounts.delete_account("ShowYouOff")
+
+    def test_get_user_role(self):
+        # FIXME: get_user returns 'NONE' if user is a client
+        accounts = Accounts()
+
+        accounts.add_account("Polymorphing", "good_Password1!1", "goodemail@email.com", "Admin", "Gainesville")
+        accounts.add_account("Crying", "good_Password1!1", "goodemail@email.com", "Client", "Gainesville")
+
+        result1_role = accounts.get_user_role("Polymorphing")
+        expected1_role = "Admin"
+
+        assert result1_role == expected1_role
+
+        result2_role = accounts.get_user_role("Crying")
+        expected2_role = "Client"
+
+        assert result2_role == expected2_role
+
+        result3_role = accounts.get_user_role("Juliet")
+        expected3_role = "NONE"
+
+        assert result3_role == expected3_role
+
+        # Remove test accounts
+        accounts.delete_account("Polymorphing")
+        accounts.delete_account("Crying")
 
 
 if __name__ == '__main__':
