@@ -154,8 +154,7 @@ class MainWindow(QWidget):
 
     #open up the car edit window
     def car_mgmt_window(self):
-        if self.car_mgmt_window_instance is None or not self.car_window_instance.isVisible():
-            self.car_mgmt_window_instance = CarMgmtWindow()
+        self.car_mgmt_window_instance = CarMgmtWindow()
         self.car_mgmt_window_instance.show()
 
     #open up the sign up window
