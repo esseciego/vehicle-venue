@@ -81,20 +81,28 @@ class CarMgmtWindow(QWidget):
 
     def populate_table(self):
         current_city = self.env_vars.get_city()  # Get the city from the environment variables
-        client = MongoClient('mongodb+srv://tears_user:sobbing.emoji@carrental.fiinqnj.mongodb.net/?retryWrites=true&w=majority&appName=CarRental')
-        db = client['car_rental_data']
-        cars_collection = db['cars']
-        if current_city:  # Check if the city is not empty or None
-            cars = list(cars_collection.find({"curr_rental_location": current_city}))  # Filter by city
-        else:
-            cars = list(cars_collection.find())  # No city filter, get all cars
+        try:
+            client = MongoClient('mongodb+srv://tears_user:sobbing.emoji@carrental.fiinqnj.mongodb.net/?retryWrites=true&w=majority&appName=CarRental')
+            db = client['car_rental_data']
+            cars_collection = db['cars']
 
-        self.table_widget.setRowCount(len(cars))
-        self.table_widget.setColumnCount(7)
-        self.table_widget.setHorizontalHeaderLabels([
+            if current_city:
+                query = {"curr_rental_location": current_city}
+            else:
+                query = {}  # An empty query will match all documents
+
+            cars = list(cars_collection.find(query))
+
+            self.table_widget.setRowCount(len(cars))
+            self.table_widget.setColumnCount(7)
+            self.table_widget.setHorizontalHeaderLabels([
             "License Plate", "Type", "Current Rental Location",
             "Mileage", "Cost Per Day", "Cost Per Mile", "Current Car Status"
-        ])
+            ])
+
+        except Exception as e:
+            print(f"An error occurred while fetching the car data: {e}")
+
         for row, car in enumerate(cars):
             self.table_widget.setItem(row, 0, QTableWidgetItem(car['license_plate']))
             self.table_widget.setItem(row, 1, QTableWidgetItem(car['type']))
@@ -104,6 +112,10 @@ class CarMgmtWindow(QWidget):
             self.table_widget.setItem(row, 5, QTableWidgetItem(str(car['cost_per_mile'])))
             self.table_widget.setItem(row, 6, QTableWidgetItem(car['curr_car_status']))
             self.table_widget.item(row, 0).setData(Qt.ItemDataRole.UserRole, str(car['_id']))
+
+
+
+
 
     def on_cell_double_clicked(self, row, column):
         car_data = {self.table_widget.horizontalHeaderItem(i).text().lower().replace(" ", "_"): self.table_widget.item(row, i).text() for i in range(self.table_widget.columnCount())}
