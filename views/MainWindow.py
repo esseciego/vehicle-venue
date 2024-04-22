@@ -24,9 +24,9 @@ class MainWindow(QWidget):
         self.layout = QGridLayout()
         self.layout.setRowMinimumHeight(0, int(screen_size.height() * .1))
         self.layout.setRowMinimumHeight(1, int(screen_size.height() * .75))
-        self.layout.setColumnMinimumWidth(0, int(screen_size.width() * .15))
-        self.layout.setColumnMinimumWidth(1, int(screen_size.width() * .61))
-        self.layout.setColumnMinimumWidth(2, int(screen_size.width() * .2))
+        self.layout.setColumnMinimumWidth(0, int(screen_size.width() * .14))
+        self.layout.setColumnMinimumWidth(1, int(screen_size.width() * .58))
+        self.layout.setColumnMinimumWidth(2, int(screen_size.width() * .24))
         self.layout.setSpacing(10)
         self.layout.setContentsMargins(25, 30, 25, 50)
 
@@ -80,6 +80,7 @@ class MainWindow(QWidget):
         self.accounts_mgmt_button.clicked.connect(self.account_mgmt_window)
         self.layout.addWidget(self.accounts_mgmt_button, 0, 0, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignBottom)
         self.account_mgmt_window_instance = None
+        self.accounts_mgmt_button.hide()
 
         # Manage Cars button
         self.car_mgmt_window_button = QPushButton("Manage Cars")
@@ -87,6 +88,7 @@ class MainWindow(QWidget):
         self.car_mgmt_window_button.clicked.connect(self.car_mgmt_window)
         self.layout.addWidget(self.car_mgmt_window_button, 0, 0, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom)
         self.car_mgmt_window_instance = None  # Keep a reference to the car window
+        self.car_mgmt_window_button.hide()
 
         # Sign Up button
         sign_up_button = QPushButton("Sign Up")
@@ -184,10 +186,14 @@ class MainWindow(QWidget):
         if env_vars.get_user() == "NONE":
             self.login_button.show()
             self.logout_button.hide()
+            self.accounts_mgmt_button.hide()
+            self.car_mgmt_window_button.hide()
             self.user_location = ""
             self.update_car_list()
         else:
             if env_vars.get_role() == "Employee" or env_vars.get_role() == "Admin":
+                self.accounts_mgmt_button.show()
+                self.car_mgmt_window_button.show()
                 self.user_location = env_vars.get_city()
                 self.update_car_list()
             else:
@@ -242,10 +248,3 @@ class MainWindow(QWidget):
     #updates car list with the new paramaters
     def update_car_list(self, start_date=QDate.currentDate(), end_date=QDate.currentDate().addDays(1), rental_period=[]):
         self.car_list = self.cars.make_car_list(self.user_location, start_date, end_date, rental_period)
-
-
-
-app = QApplication(sys.argv)
-window = MainWindow()
-window.show()
-sys.exit(app.exec())

@@ -24,7 +24,7 @@ class CarList(QWidget):
         self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.scroll.setWidgetResizable(True) # Scroll Area which contains the widgets
-        self.scroll.setFixedSize(int(screen_size.width() * .6), int(screen_size.height() * .75))
+        self.scroll.setFixedSize(int(screen_size.width() * .56), int(screen_size.height() * .75))
 
         self.cars = Cars()
 
@@ -94,9 +94,7 @@ class CarList(QWidget):
                                                        + "\n\nMileage: " + str(self.list_of_cars[i]['mileage'])
                                                        + "\n\nCost Per Day: " + str(self.list_of_cars[i]['cost_per_day'])
                                                        + "\n\nCost Per Mile: " + str(self.list_of_cars[i]['cost_per_mile']))
-
         self.window_layout.show()
 
     def username_check(self):
         self.username_signal.emit()
-

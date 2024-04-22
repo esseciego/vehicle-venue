@@ -6,6 +6,7 @@ from PyQt6.QtWidgets import (
     QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QCalendarWidget)
 
 from views.SignUpWindow import screen_size
+from views.ClientLogInWindow import ClientLogInWindow
 from views.LogInWindow import LogInWindow
 from models.Rentals import Rentals
 from helpers.EnvVariables import EnvVariables
@@ -38,6 +39,9 @@ class SpecificCarWindow(QWidget):
 
         self.login_window = LogInWindow()
         self.login_window.window_closed.connect(self.login_check)
+
+        self.client_login_window = ClientLogInWindow()
+        self.client_login_window.window_closed.connect(self.login_check)
 
         self.license_plate = ""
         self.rental_dates = []
@@ -102,23 +106,27 @@ class SpecificCarWindow(QWidget):
 
     def reserve(self):
         env_vars = EnvVariables()
-
         if env_vars.get_user() == "NONE":
             self.login_window.confirmation_label.setText("You must sign into an account to make a reservation")
             self.login_window.show()
             self.setDisabled(True)
+        elif env_vars.get_role() == "Employee" or env_vars.get_role() == "Admin":
+            self.client_login_window.show()
+            self.setDisabled(True)
         else:
             self.make_reservation(env_vars.get_user())
-
 
     def make_reservation(self, username):
         start_date = self.start_date_calendar.selectedDate()
         end_date = self.end_date_calendar.selectedDate()
         if self.check_available(start_date, end_date):
-            self.guide_label.setText("Reservation Created Successfully!")
-            self.rentals.create_rental(username, self.license_plate,
+            error_log = self.rentals.create_rental(username, self.license_plate,
                                        start_date.toString(Qt.DateFormat.ISODate),
                                        end_date.toString(Qt.DateFormat.ISODate))
+            if self.rentals.operation_success(error_log):
+                self.guide_label.setText("Reservation Created Successfully!")
+            else:
+                self.guide_label.setText("Something went wrong")
         else:
             self.guide_label.setText("Car not available during those dates, please select another rental period")
 
@@ -146,6 +154,9 @@ class SpecificCarWindow(QWidget):
         env_vars = EnvVariables()
         if env_vars.get_user() == "NONE":
             return
+        elif env_vars.get_role() == "Employee" or env_vars.get_role() == "Admin":
+            print(self.client_login_window.client_username)
+            self.make_reservation(self.client_login_window.client_username)
         else:
             self.username_signal.emit()
             self.make_reservation(env_vars.get_user())
