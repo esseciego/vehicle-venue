@@ -23,6 +23,8 @@ class Cars:
         if self.operation_success(error_log) == True:
             try:
                 result = cars.insert_one(new_car.get_all_data()).inserted_id
+                print(f"Added car with _id: {result}")
+
             except ConnectionError:
                 print('Server unavailable.')
 
@@ -37,9 +39,8 @@ class Cars:
 
         try:
             car_to_delete = {"license_plate": license_plate}
-            result = cars.delete_one(car_to_delete)
-            print(result)
-            return True if result else False
+            cars.delete_one(car_to_delete)
+            print(f"Deleted car")
 
         except ConnectionError:
             print('Server unavailable.')

@@ -7,5 +7,4 @@ root = QApplication(sys.argv)
 
 app = MainWindow()
 app.show()
-
 sys.exit(root.exec())

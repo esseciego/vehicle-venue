@@ -5,32 +5,7 @@ from helpers.EnvVariables import EnvVariables
 # To run tests, type 'pytest' in terminal at root directory
 
 class TestAccounts:
-    def setup_method(self):
-        # Initialize the Accounts model and add dummy accounts for testing
-        self.accounts = Accounts()
-        self.create_dummy_accounts()
-
-    def create_dummy_accounts(self):
-        # Add dummy accounts here
-        self.accounts.add_account("admin1", "adminpass", "admin1@example.com", "admin", "CityA")
-        self.accounts.add_account("user1", "userpass", "user1@example.com", "user", "CityB")
-        # ... Add more dummy accounts as needed ...
-
-    def teardown_method(self):
-        # Clean up / delete dummy accounts after tests run
-        self.accounts.delete_account("admin1")
-        self.accounts.delete_account("user1")
-        # ... Add more cleanup as needed ...
-
-    def get_dummy_accounts(self):
-        # Method to retrieve dummy accounts for other uses such as GUI display
-        return [
-            {'username': 'admin1', 'password': 'adminpass', 'email': 'admin1@example.com', 'role': 'admin',
-             'city': 'CityA'},
-            {'username': 'user1', 'password': 'userpass', 'email': 'user1@example.com', 'role': 'user',
-             'city': 'CityB'},
-            # ... Include the rest of the dummy accounts ...
-        ]
+    # Test suite for accounts model
 
     def test_valid_new_acc(self):
         accounts = Accounts()
@@ -277,6 +252,50 @@ class TestAccounts:
 
         # Remove test account from database
         accounts.delete_account("GoodUsername")
+
+    def test_user_exists_(self):
+        accounts = Accounts()
+
+        accounts.add_account("ShowYouOff", "good_Password1!1", "goodemail@email.com", "Admin", "Gainesville")
+
+        result1_bool = accounts.user_exists("ShowYouOff")
+        expected1_bool = True
+
+        assert result1_bool == expected1_bool
+
+        result2_bool = accounts.user_exists("HideMeOn")
+        expected2_bool = False
+
+        assert result2_bool == expected2_bool
+
+        # Remove test accounts
+        accounts.delete_account("ShowYouOff")
+
+    def test_get_user_role(self):
+        # FIXME: get_user returns 'NONE' if user is a client
+        accounts = Accounts()
+
+        accounts.add_account("Polymorphing", "good_Password1!1", "goodemail@email.com", "Admin", "Gainesville")
+        accounts.add_account("Crying", "good_Password1!1", "goodemail@email.com", "Client", "Gainesville")
+
+        result1_role = accounts.get_user_role("Polymorphing")
+        expected1_role = "Admin"
+
+        assert result1_role == expected1_role
+
+        result2_role = accounts.get_user_role("Crying")
+        expected2_role = "Client"
+
+        assert result2_role == expected2_role
+
+        result3_role = accounts.get_user_role("Juliet")
+        expected3_role = "NONE"
+
+        assert result3_role == expected3_role
+
+        # Remove test accounts
+        accounts.delete_account("Polymorphing")
+        accounts.delete_account("Crying")
 
 
 if __name__ == '__main__':
