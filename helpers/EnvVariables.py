@@ -1,9 +1,10 @@
 from dotenv import load_dotenv
 import os
 
+
 class EnvVariables:
     def __init__(self):
-        pass
+        load_dotenv()
 
     def get_user(self):
         # Returns current user's role
@@ -30,3 +31,4 @@ class EnvVariables:
         os.environ['USER'] = 'NONE'
         os.environ['ROLE'] = 'NONE'
         os.environ['CITY'] = 'NONE'
+        return

@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import (
 from models.Accounts import Accounts
 
 
-class SignUpWindow(QWidget):
+class ClientSignUpWindow(QWidget):
     # signal that is sent to Mainwindow so it can check if the user is logged in
     window_closed = pyqtSignal()
 
@@ -19,10 +19,12 @@ class SignUpWindow(QWidget):
 
         self.setWindowTitle("Sign Up")
         self.setLayout(self.layout)
-        self.setFixedSize(screen_size / 2.0)
+        self.resize(screen_size / 2.0)
+
+        self.client_username = ""
 
         # Prompt text
-        self.title = QLabel("Please enter your information below.")
+        self.title = QLabel("Please enter the Clients information.")
         self.title.setProperty("class", "heading")
         self.layout.addWidget(self.title, 0, 0, 1, 0, Qt.AlignmentFlag.AlignCenter)
 
@@ -37,6 +39,7 @@ class SignUpWindow(QWidget):
         user_password = QLabel("Password:")
         user_password.setProperty("class", "normal")
         self.layout.addWidget(user_password, 2, 0)
+
         self.password = QLineEdit()
         self.layout.addWidget(self.password, 2, 1, 1, 2)
 
@@ -52,14 +55,14 @@ class SignUpWindow(QWidget):
         sign_up_button.clicked.connect(self.sign_up)
         self.layout.addWidget(sign_up_button, 4, 0)
 
-    # Checks if account information is valid to make account
-    # If not then it updates the title to show the user what went wrong
     def sign_up(self):
+        # Checks if account information is valid to make account
+        # If not then it updates the title to show the user what went wrong
         account = Accounts()
         error_log = account.add_account(self.username.text(), self.password.text(), self.email.text())
         if (account.operation_success(error_log)):
+            self.client_username = self.username.text()
             self.title.setText("Account Created Successfully")
-            error_log = account.login(self.username.text(), self.password.text())
         else:
             if error_log['username-valid'] == False:
                 self.title.setText("Username must be between 6-16 characters AND only uses alphanumeric characters")
@@ -73,9 +76,9 @@ class SignUpWindow(QWidget):
             elif error_log['email-entered'] == False:
                 self.title.setText("Please enter a valid Email")
 
-    # When window is closed, main window will check if user is logged in
-    # Will replace login button with logout button
     def closeEvent(self, event):
+        # when window is closed, main window will check if user is logged in
+        # will replace login button with logout button
         self.password.clear()
         self.username.clear()
         self.email.clear()
