@@ -24,7 +24,7 @@ class LogInWindow(QWidget):
         self.setLayout(self.layout)
         self.setFixedSize(screen_size / 2.0)
 
-        # Background color
+        # Background Color
         self.setStyleSheet("background-color: #ffe0c2")
 
         # Sign up window instance

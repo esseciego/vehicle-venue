@@ -98,7 +98,7 @@ class CarMgmtWindow(QWidget):
         screen = app.primaryScreen()
         self.resize(int(screen.size().width() / 2), int(screen.size().height() / 2))
 
-        # Background color
+        # Background Color
         self.setStyleSheet("background-color: #ffe0c2")
 
         self.table_widget.cellDoubleClicked.connect(self.on_cell_double_clicked)

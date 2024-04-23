@@ -21,7 +21,7 @@ class SignUpWindow(QWidget):
         self.setLayout(self.layout)
         self.setFixedSize(screen_size / 1.75)
 
-        # Background color
+        # Background Color
         self.setStyleSheet("background-color: #ffe0c2")
 
         # "Please Enter..." text

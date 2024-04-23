@@ -29,7 +29,6 @@ class ClientLogInWindow(QWidget):
 
         self.client_sign_up_window = ClientSignUpWindow()
         self.client_sign_up_window.window_closed.connect(self.close_check)
-
         self.client_username = ""
 
         title = QLabel("Client Login")

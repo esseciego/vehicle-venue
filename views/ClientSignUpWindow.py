@@ -60,7 +60,7 @@ class ClientSignUpWindow(QWidget):
         user_email = QLabel("Email Address:")
         user_email.setProperty("class", "normal")
         user_email.setStyleSheet("font-family: Tahoma;"
-                                    "font-size: 14px")
+                                 "font-size: 14px")
         self.layout.addWidget(user_email, 3, 0)
 
         self.email = QLineEdit()

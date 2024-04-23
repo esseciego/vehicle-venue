@@ -25,7 +25,7 @@ class AccountMgmtWindow(QWidget):
         screen_size = screen.size()
         self.resize(int(screen_size.width() / 2), int(screen_size.height() / 2))
 
-        # Background color
+        # Background Color
         self.setStyleSheet("background-color: #ffe0c2")
 
         # "Manage..." text

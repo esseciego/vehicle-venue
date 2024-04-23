@@ -30,7 +30,6 @@ class MainWindow(QWidget):
 
         # Layout for the Calendars to be placed on top of each other
         self.calendar_layout = QVBoxLayout()
-
         self.setWindowTitle("Home Page")
         self.setLayout(self.layout)
 
