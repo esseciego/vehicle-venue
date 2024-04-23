@@ -84,15 +84,15 @@ class AccountMgmtWindow(QWidget):
         self.layout.addWidget(self.email, 3, 1, 1, 2)
         self.email.hide()
 
-        # Location label + text
-        self.user_location = QLabel("Location:")
-        self.user_location.setProperty("class", "normal")
-        self.layout.addWidget(self.user_location, 4, 0)
-        self.user_location.hide()
+        # City label + text
+        self.user_city = QLabel("City:")
+        self.user_city.setProperty("class","normal")
+        self.layout.addWidget(self.user_city, 4, 0)
+        self.user_city.hide()
 
-        self.location = QLineEdit()
-        self.layout.addWidget(self.location, 4, 1, 1, 2)
-        self.location.hide()
+        self.city = QLineEdit()
+        self.layout.addWidget(self.city, 4, 1, 1, 2)
+        self.city.hide()
 
         # Roles label + list
         self.user_role = QLabel("Role: ")
@@ -173,8 +173,8 @@ class AccountMgmtWindow(QWidget):
         self.password.show()
         self.user_email.show()
         self.email.show()
-        self.user_location.show()
-        self.location.show()
+        self.user_city.show()
+        self.city.show()
         self.user_role.show()
         self.role.show()
         self.sign_up_button.show()
@@ -182,7 +182,7 @@ class AccountMgmtWindow(QWidget):
     def sign_up(self):
         # Checks if account information is valid to make
         accounts_model = Accounts()
-        error_log = accounts_model.add_account(self.username.text(), self.password.text(), self.email.text(), self.role.currentText(), self.location.text())
+        error_log = accounts_model.add_account(self.username.text(), self.password.text(), self.email.text(), self.role.currentText(), self.city.text())
 
         if (accounts_model.operation_success(error_log)):
             self.create_accounts_title.setText("Account Created Successfully")
@@ -201,7 +201,6 @@ class AccountMgmtWindow(QWidget):
 
             elif error_log['city-entered'] == False:
                 self.create_accounts_title.setText("Please enter a valid city")
-
 
 
     def save_all_changes(self):

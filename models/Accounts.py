@@ -6,12 +6,13 @@ from bson.objectid import ObjectId
 
 class Accounts:
     # Model that represents all user accounts in system
+    # FIXME: Make usernames unique for each test
 
     def __init__(self):
         database = Database()  # Ensure this class is correctly importing and initializing MongoDB connection
         self.accounts_col = database.accounts_col
 
-    def add_account(self, username, password, email, role = "Client", city = "None"):
+    def add_account(self, username, password, email, role, city):
         # Inserts new_account document into accounts collection if user input is valid. Doesn't insert if invalid
         # Returns error log
 
