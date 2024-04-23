@@ -7,8 +7,9 @@ from views.ClientSignUpWindow import ClientSignUpWindow
 from views.SignUpWindow import screen_size
 from models.Accounts import Accounts
 
+
 class ClientLogInWindow(QWidget):
-    #signal that is sent to Mainwindow so it can check if the user is logged in
+    # signal that is sent to MainWindow so it can check if the user is logged in
     window_closed = pyqtSignal()
 
     def __init__(self):
@@ -23,57 +24,81 @@ class ClientLogInWindow(QWidget):
         self.setLayout(self.layout)
         self.resize(screen_size / 2.0)
 
+        # Background Color
+        self.setStyleSheet("background-color: #cce4fc")
+
         self.client_sign_up_window = ClientSignUpWindow()
         self.client_sign_up_window.window_closed.connect(self.close_check)
 
         self.client_username = ""
 
         title = QLabel("Client Login")
+        title.setStyleSheet("font-weight: bold;"
+                            "font-family: Tahoma;"
+                            "font-size: 32px")
         self.layout.addWidget(title, 0, 1, Qt.AlignmentFlag.AlignHCenter)
 
-        # Label that instructs user if login was successful
-        self.confirmation_label = QLabel("Enter the Clients Information in order to complete the reservation")
-        self.layout.addWidget(self.confirmation_label, 0, 1, Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignBottom)
+        # "Enter the..." (Also lets employee/admin know if it was successful)
+        self.confirmation_label = QLabel("Enter the Client's Details below:")
+        self.confirmation_label.setStyleSheet("color: #bd6106;"
+                                              "font-family: Tahoma;"
+                                              "font-size: 14px")
+        self.layout.addWidget(self.confirmation_label, 0, 1,
+                              Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignBottom)
 
-        # Username label
+        # "Username:" text
         user_name = QLabel("Username:")
         user_name.setProperty("class", "normal")
+        user_name.setStyleSheet("font-family: Tahoma;"
+                                "font-size: 14px")
         self.layout.addWidget(user_name, 2, 0, Qt.AlignmentFlag.AlignLeft)
 
         self.username = QLineEdit()
-        self.layout.addWidget(self.username, 2, 1, 1, 2,)
+        self.username.setStyleSheet("background-color: white")
+        self.layout.addWidget(self.username, 2, 1, 1, 2, )
 
-        # Password Label
+        # "Password:" text
         user_password = QLabel("Password:")
         user_password.setProperty("class", "normal")
+        user_password.setStyleSheet("font-family: Tahoma;"
+                                    "font-size: 14px")
         self.layout.addWidget(user_password, 3, 0, Qt.AlignmentFlag.AlignLeft)
 
         self.password = QLineEdit()
+        self.password.setStyleSheet("background-color: white")
         self.layout.addWidget(self.password, 3, 1, 1, 2)
 
-        # Sign up Button - connected to SignUpWindow
+        # "Sign Up" button (connected to SignUpWindow)
         sign_up_button = QPushButton("Sign Up")
         sign_up_button.clicked.connect(self.sign_up)
+        sign_up_button.setStyleSheet("background-color: #fa9352;"
+                                     "color: black;"
+                                     "font-weight: bold;"
+                                     "font-family: Tahoma;")
         self.layout.addWidget(sign_up_button, 4, 0)
 
-        # Login Button - connected to LogInWindow
+        # "Login" Button (connected to LogInWindow)
         login_button = QPushButton("Login")
         login_button.clicked.connect(self.login)
         login_button.setDefault(True)
+        login_button.setStyleSheet("background-color: #6eb6ff;"
+                                   "color: black;"
+                                   "font-weight: bold;"
+                                   "font-family: Tahoma;")
         self.layout.addWidget(login_button, 4, 2)
 
     def sign_up(self):
-        #When sign up Button Pressed, send user to Sign Up window
+        # When sign up Button Pressed, send user to Sign Up window
         self.client_sign_up_window.show()
         self.password.clear()
         self.username.clear()
         self.hide()
 
     def login(self):
-        #Checks with the database whether account exists and user can sign in
+        # Checks with the database whether account exists and user can sign in
         account = Accounts()
         error_log = account.validate_login(self.username.text(), self.password.text())
-        if(account.operation_success(error_log)):
+        if (account.operation_success(error_log)):
             self.confirmation_label.setText("Login Successful")
             self.client_sign_up_window.client_username = self.username.text()
         else:
@@ -83,8 +108,8 @@ class ClientLogInWindow(QWidget):
         self.close()
 
     def closeEvent(self, event):
-        #when window is closed, main window will check if user is logged in
-        #will replace login button with logout button
+        # when window is closed, main window will check if user is logged in
+        # will replace login button with logout button
         self.client_username = self.client_sign_up_window.client_username
         self.password.clear()
         self.username.clear()

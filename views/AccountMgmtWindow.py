@@ -25,89 +25,133 @@ class AccountMgmtWindow(QWidget):
         screen_size = screen.size()
         self.resize(int(screen_size.width() / 2), int(screen_size.height() / 2))
 
-        # Manage Accounts label
+        # Background color
+        self.setStyleSheet("background-color: #ffe0c2")
+
+        # "Manage..." text
         self.manage_accounts_label = QLabel("Manage Employee and Admin Accounts")
         self.manage_accounts_label.show()
+        self.manage_accounts_label.setStyleSheet("font-weight: bold;"
+                                                 "font-family: Tahoma;"
+                                                 "font-size: 28px")
         self.layout.addWidget(self.manage_accounts_label, 0, 0, 1, 0, Qt.AlignmentFlag.AlignCenter)
 
         # Save Changes button
         self.save_changes_button = QPushButton("Save Changes")
+        self.save_changes_button.setStyleSheet("background-color: #6eb6ff;"
+                                               "color: black;"
+                                               "font-weight: bold;"
+                                               "font-family: Tahoma;")
         self.save_changes_button.clicked.connect(self.save_all_changes)
 
         # Back To Main button
         self.back_button = QPushButton("Back to Main")
+        self.back_button.setStyleSheet("background-color: #fa9352;"
+                                       "color: black;"
+                                       "font-weight: bold;"
+                                       "font-family: Tahoma;")
         self.back_button.clicked.connect(self.close)
 
         # FIXME: Edit accounts & create accounts button are to the left of the accounts button...?
         self.edit_accounts_button = QPushButton("Edit Accounts")
         self.edit_accounts_button.clicked.connect(self.show_account_list)
+        self.edit_accounts_button.setStyleSheet("background-color: #6eb6ff;"
+                                                "color: black;"
+                                                "font-weight: bold;"
+                                                "font-family: Tahoma;")
         self.layout.addWidget(self.edit_accounts_button, 1, 0)
 
         # Create Accounts button
         self.create_accounts_button = QPushButton("Create Accounts")
         self.create_accounts_button.clicked.connect(self.show_sign_up_page)
+        self.create_accounts_button.setStyleSheet("background-color: #fa9352;"
+                                                  "color: black;"
+                                                  "font-weight: bold;"
+                                                  "font-family: Tahoma;")
         self.layout.addWidget(self.create_accounts_button, 2, 0)
 
-        # Create Accounts Title label
+        # "Please enter..." text
         self.create_accounts_title = QLabel("Please enter the user's information below.")
         self.create_accounts_title.setProperty("class", "heading")
+        self.create_accounts_title.setStyleSheet("font-weight: bold;"
+                                                 "font-family: Tahoma;"
+                                                 "font-size: 28px")
         self.layout.addWidget(self.create_accounts_title, 0, 0, 1, 0, Qt.AlignmentFlag.AlignCenter)
         self.create_accounts_title.hide()
 
         # Username label + text
         self.user_username = QLabel("Username:")
         self.user_username.setProperty("class", "normal")
+        self.user_username.setStyleSheet("font-family: Tahoma;"
+                                         "font-size: 14px")
         self.layout.addWidget(self.user_username, 1, 0)
         self.user_username.hide()
 
         self.username = QLineEdit()
+        self.username.setStyleSheet("background-color: white")
         self.layout.addWidget(self.username, 1, 1, 1, 2)
         self.username.hide()
 
         # Password label + text
         self.user_password = QLabel("Password:")
         self.user_password.setProperty("class", "normal")
+        self.user_password.setStyleSheet("font-family: Tahoma;"
+                                         "font-size: 14px")
         self.layout.addWidget(self.user_password, 2, 0)
         self.user_password.hide()
 
         self.password = QLineEdit()
+        self.password.setStyleSheet("background-color: white")
         self.layout.addWidget(self.password, 2, 1, 1, 2)
         self.password.hide()
 
         # Email label + text
         self.user_email = QLabel("Email Address:")
         self.user_email.setProperty("class", "normal")
+        self.user_email.setStyleSheet("font-family: Tahoma;"
+                                      "font-size: 14px")
         self.layout.addWidget(self.user_email, 3, 0)
         self.user_email.hide()
 
         self.email = QLineEdit()
+        self.email.setStyleSheet("background-color: white")
         self.layout.addWidget(self.email, 3, 1, 1, 2)
         self.email.hide()
 
         # City label + text
         self.user_city = QLabel("City:")
-        self.user_city.setProperty("class","normal")
+        self.user_city.setProperty("class", "normal")
+        self.user_city.setStyleSheet("font-family: Tahoma;"
+                                     "font-size: 14px")
         self.layout.addWidget(self.user_city, 4, 0)
         self.user_city.hide()
 
         self.city = QLineEdit()
+        self.city.setStyleSheet("background-color: white")
         self.layout.addWidget(self.city, 4, 1, 1, 2)
         self.city.hide()
 
         # Roles label + list
         self.user_role = QLabel("Role: ")
         self.user_role.setProperty("class", "normal")
+        self.user_role.setStyleSheet("font-family: Tahoma;"
+                                     "font-size: 14px")
         self.layout.addWidget(self.user_role, 5, 0)
         self.user_role.hide()
 
         self.role = QComboBox()
         self.role.addItems(["Employee", "Admin"])
+        self.role.setStyleSheet("background-color: white")
         self.layout.addWidget(self.role, 5, 1, 1, 2)
         self.role.hide()
 
         # Sign up Button
         self.sign_up_button = QPushButton("Sign Up")
         self.sign_up_button.clicked.connect(self.sign_up)
+        self.sign_up_button.setStyleSheet("background-color: #6eb6ff;"
+                                          "color: black;"
+                                          "font-weight: bold;"
+                                          "font-family: Tahoma;")
         self.layout.addWidget(self.sign_up_button, 6, 0)
         self.sign_up_button.hide()
 
@@ -117,7 +161,8 @@ class AccountMgmtWindow(QWidget):
 
         self.table_widget = QTableWidget(len(account_list), 6)
         self.table_widget.setHorizontalHeaderLabels(["Username", "Password", "Email", "Role", "City"])
-        self.table_widget.hideColumn(5)   # Hide the _id column
+        self.table_widget.hideColumn(5)  # Hide the _id column
+        self.table_widget.setStyleSheet("background-color: #d9e5ff")
 
         for row, account in enumerate(account_list):
             self.table_widget.setItem(row, 0, QTableWidgetItem(account['username']))
@@ -182,26 +227,28 @@ class AccountMgmtWindow(QWidget):
     def sign_up(self):
         # Checks if account information is valid to make
         accounts_model = Accounts()
-        error_log = accounts_model.add_account(self.username.text(), self.password.text(), self.email.text(), self.role.currentText(), self.city.text())
+        error_log = accounts_model.add_account(self.username.text(), self.password.text(), self.email.text(),
+                                               self.role.currentText(), self.city.text())
 
-        if (accounts_model.operation_success(error_log)):
+        if accounts_model.operation_success(error_log):
             self.create_accounts_title.setText("Account Created Successfully")
         else:
-            if error_log['username-valid'] == False:
-                self.create_accounts_title.setText("Username must be between 6-16 characters AND only uses alphanumeric characters")
+            if not error_log['username-valid']:
+                self.create_accounts_title.setText(
+                    "Username must be between 6-16 characters AND only uses alphanumeric characters")
 
-            elif error_log['username-unique'] == False:
+            elif not error_log['username-unique']:
                 self.create_accounts_title.setText("Username is already taken")
 
-            elif error_log['password-valid'] == False:
-                self.create_accounts_title.setText("Password must be between 8-32 characters AND contains at least 1 number")
+            elif not error_log['password-valid']:
+                self.create_accounts_title.setText(
+                    "Password must be between 8-32 characters AND contains at least 1 number")
 
-            elif error_log['email-entered'] == False:
+            elif not error_log['email-entered']:
                 self.create_accounts_title.setText("Please enter a valid email")
 
-            elif error_log['city-entered'] == False:
+            elif not error_log['city-entered']:
                 self.create_accounts_title.setText("Please enter a valid city")
-
 
     def save_all_changes(self):
         print("All changes have been saved.")

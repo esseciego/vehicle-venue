@@ -7,7 +7,7 @@ from models.Accounts import Accounts
 
 
 class ClientSignUpWindow(QWidget):
-    # signal that is sent to Mainwindow so it can check if the user is logged in
+    # signal that is sent to MainWindow so it can check if the user is logged in
     window_closed = pyqtSignal()
 
     def __init__(self):
@@ -21,38 +21,59 @@ class ClientSignUpWindow(QWidget):
         self.setLayout(self.layout)
         self.resize(screen_size / 2.0)
 
+        # Background Color
+        self.setStyleSheet("background-color: #cce4fc")
+
         self.client_username = ""
 
-        # Prompt text
-        self.title = QLabel("Please enter the Clients information.")
+        # "Enter the..." text
+        self.title = QLabel("Enter the Client's Details below:")
         self.title.setProperty("class", "heading")
+        self.title.setStyleSheet("font-weight: bold;"
+                                 "font-family: Tahoma;"
+                                 "font-size: 32px")
         self.layout.addWidget(self.title, 0, 0, 1, 0, Qt.AlignmentFlag.AlignCenter)
 
-        # Username label
+        # "Username:" text
         user_email = QLabel("Username:")
         user_email.setProperty("class", "normal")
+        user_email.setStyleSheet("font-family: Tahoma;"
+                                 "font-size: 14px")
         self.layout.addWidget(user_email, 1, 0)
+
         self.username = QLineEdit()
+        self.username.setStyleSheet("background-color: white")
         self.layout.addWidget(self.username, 1, 1, 1, 2)
 
-        # Password label
+        # "Password:" text
         user_password = QLabel("Password:")
         user_password.setProperty("class", "normal")
+        user_password.setStyleSheet("font-family: Tahoma;"
+                                    "font-size: 14px")
         self.layout.addWidget(user_password, 2, 0)
 
         self.password = QLineEdit()
+        self.password.setStyleSheet("background-color: white")
         self.layout.addWidget(self.password, 2, 1, 1, 2)
 
-        # Email text
+        # "Email..." text
         user_email = QLabel("Email Address:")
         user_email.setProperty("class", "normal")
+        user_email.setStyleSheet("font-family: Tahoma;"
+                                    "font-size: 14px")
         self.layout.addWidget(user_email, 3, 0)
+
         self.email = QLineEdit()
+        self.email.setStyleSheet("background-color: white")
         self.layout.addWidget(self.email, 3, 1, 1, 2)
 
-        # Sign up Button
+        # "Sign Up" button
         sign_up_button = QPushButton("Sign Up")
         sign_up_button.clicked.connect(self.sign_up)
+        sign_up_button.setStyleSheet("background-color: #6eb6ff;"
+                                     "color: black;"
+                                     "font-weight: bold;"
+                                     "font-family: Tahoma;")
         self.layout.addWidget(sign_up_button, 4, 0)
 
     def sign_up(self):
