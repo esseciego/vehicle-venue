@@ -27,9 +27,9 @@ class SignUpWindow(QWidget):
         self.layout.addWidget(self.title, 0, 0, 1, 0, Qt.AlignmentFlag.AlignCenter)
 
         # Username label
-        user_email = QLabel("Username:")
-        user_email.setProperty("class", "normal")
-        self.layout.addWidget(user_email, 1, 0)
+        user_username = QLabel("Username:")
+        user_username.setProperty("class", "normal")
+        self.layout.addWidget(user_username, 1, 0)
         self.username = QLineEdit()
         self.layout.addWidget(self.username, 1, 1, 1, 2)
 

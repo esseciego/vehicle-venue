@@ -148,14 +148,12 @@ class MainWindow(QWidget):
 
     #open up the account edit window
     def account_mgmt_window(self):
-        if self.account_mgmt_window_instance is None or not self.account_mgmt_window_instance.isVisible():
-            self.account_mgmt_window_instance = AccountMgmtWindow()
+        self.account_mgmt_window_instance = AccountMgmtWindow()
         self.account_mgmt_window_instance.show()
 
     #open up the car edit window
     def car_mgmt_window(self):
-        if self.car_mgmt_window_instance is None or not self.car_mgmt_window_instance.isVisible():
-            self.car_mgmt_window_instance = CarMgmtWindow()
+        self.car_mgmt_window_instance = CarMgmtWindow()
         self.car_mgmt_window_instance.show()
 
     #open up the sign up window
