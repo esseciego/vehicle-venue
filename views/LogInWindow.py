@@ -1,8 +1,7 @@
-import sys
 from PyQt6.QtCore import (Qt, pyqtSignal)
-from PyQt6.QtWidgets import (
-    QWidget, QPushButton, QApplication, QGridLayout,
-    QLabel, QLineEdit)
+from PyQt6.QtWidgets import (QWidget, QPushButton,
+                             QGridLayout, QLabel,
+                             QLineEdit, QApplication)
 
 from views.SignUpWindow import SignUpWindow
 from views.SignUpWindow import screen_size
@@ -22,8 +21,9 @@ class LogInWindow(QWidget):
 
         self.setWindowTitle("Log In")
         self.setLayout(self.layout)
-        self.resize(screen_size / 2.0)
+        self.setFixedSize(screen_size / 2.0)
 
+        # Sign up window instance
         self.sign_up_window = SignUpWindow()
         self.sign_up_window.window_closed.connect(self.close_check)
 
@@ -38,7 +38,6 @@ class LogInWindow(QWidget):
         user_name = QLabel("Username:")
         user_name.setProperty("class", "normal")
         self.layout.addWidget(user_name, 2, 0, Qt.AlignmentFlag.AlignLeft)
-
         self.username = QLineEdit()
         self.layout.addWidget(self.username, 2, 1, 1, 2,)
 
@@ -46,7 +45,6 @@ class LogInWindow(QWidget):
         user_password = QLabel("Password:")
         user_password.setProperty("class", "normal")
         self.layout.addWidget(user_password, 3, 0, Qt.AlignmentFlag.AlignLeft)
-
         self.password = QLineEdit()
         self.layout.addWidget(self.password, 3, 1, 1, 2)
 
@@ -61,6 +59,7 @@ class LogInWindow(QWidget):
         login_button.setDefault(True)
         self.layout.addWidget(login_button, 4, 2)
 
+    # Shows the sign up window, hides the login window
     def sign_up(self):
         #When sign up Button Pressed, send user to Sign Up window
         self.sign_up_window.show()
@@ -68,6 +67,8 @@ class LogInWindow(QWidget):
         self.username.clear()
         self.hide()
 
+    # Connects to the accounts backend, checks if login information is valid,
+    # if so logs them in, if not say it was invalid
     def login(self):
         #Checks with the database whether account exists and user can sign in
         account = Accounts()
@@ -77,12 +78,13 @@ class LogInWindow(QWidget):
         else:
             self.confirmation_label.setText("Invalid Username or Password. Please try again")
 
+    # When signup window is closed it sends a signal to here to close login window
     def close_check(self):
         self.close()
 
+    # when window is closed, main window will check if user is logged in
+    # will replace login button with logout button
     def closeEvent(self, event):
-        #when window is closed, main window will check if user is logged in
-        #will replace login button with logout button
         self.password.clear()
         self.username.clear()
         self.window_closed.emit()

@@ -1,16 +1,15 @@
-import sys
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtCore import (Qt, pyqtSignal, QDate)
-from PyQt6.QtWidgets import (
-    QWidget, QPushButton, QApplication, QGridLayout,
-    QLabel, QScrollArea)
+from PyQt6.QtWidgets import (QWidget, QPushButton,
+                             QGridLayout, QScrollArea)
 
 from views.SignUpWindow import screen_size
 from views.SpecificCarWindow import SpecificCarWindow
 from models.Cars import Cars
-from models.Car import Car
 
 class CarList(QWidget):
+    # Signal that is sent to Mainwindow for when a user is logged in or creates an account in the car window
+    # MainWindow will update the users username
     username_signal = pyqtSignal()
 
     def __init__(self):
@@ -24,23 +23,24 @@ class CarList(QWidget):
         self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.scroll.setWidgetResizable(True) # Scroll Area which contains the widgets
-        self.scroll.setFixedSize(int(screen_size.width() * .56), int(screen_size.height() * .75))
+        self.scroll.setFixedSize(int(screen_size.width() * .50), int(screen_size.height() * .75))
 
         self.cars = Cars()
 
+    #Populate the scroll area with the car objects
     def make_car_list(self, location, start_date=QDate.currentDate(), end_date=QDate.currentDate().addDays(1), rental_period=[]):
         list_layout = QGridLayout()  # Layout of the cars
         car_list = QWidget()  # Widget that contains the collection of the cars
         if location != "":
             self.list_of_cars = self.cars.get_cars_by_location(location)
             for i in range(len(self.list_of_cars)):
-                if self.check_available_cars(i, rental_period):
+                if self.check_available_car(i, rental_period):
                     car_object = self.make_car_object(i)
                     list_layout.addWidget(car_object, int(i / 3), i % 3)
         else:
             for i in range(self.cars.get_num_cars()):
                 self.list_of_cars = self.cars.get_all_cars()
-                if self.check_available_cars(i, rental_period):
+                if self.check_available_car(i, rental_period):
                     car_object = self.make_car_object(i)
                     list_layout.addWidget(car_object, int(i / 3), i % 3)
 
@@ -50,7 +50,8 @@ class CarList(QWidget):
 
         return self.scroll
 
-    def check_available_cars(self, i, rental_period):
+    # Checks if a cars is available during a certain rental period
+    def check_available_car(self, i, rental_period):
         if rental_period:
             for date in self.list_of_cars[i]['rental_dates']:
                 start_date = QDate.fromString(date[0], Qt.DateFormat.ISODate)
@@ -68,6 +69,7 @@ class CarList(QWidget):
 
         return True
 
+    # Makes the button with the car image based on what type of car it is
     def make_car_object(self, i):
         car_button = QPushButton('')
         if self.list_of_cars[i]['type'] == "SUV":
@@ -83,6 +85,7 @@ class CarList(QWidget):
 
         return car_button
 
+    # Sets the car window when a button is clicked for a certain car
     def car_window(self, i):
         self.window_layout.set_pixmap(self.list_of_cars[i]['type'])
 
@@ -96,5 +99,6 @@ class CarList(QWidget):
                                                        + "\n\nCost Per Mile: " + str(self.list_of_cars[i]['cost_per_mile']))
         self.window_layout.show()
 
+    # when a user logs in in the car window, send a signal to mainwindow
     def username_check(self):
         self.username_signal.emit()

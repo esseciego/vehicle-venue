@@ -1,8 +1,7 @@
-import sys
 from PyQt6.QtCore import (Qt, pyqtSignal)
-from PyQt6.QtWidgets import (
-    QWidget, QPushButton, QApplication, QGridLayout,
-    QLabel, QLineEdit)
+from PyQt6.QtWidgets import (QWidget, QPushButton,
+                             QGridLayout, QLabel,
+                             QLineEdit)
 
 from views.ClientSignUpWindow import ClientSignUpWindow
 from views.SignUpWindow import screen_size
@@ -76,13 +75,11 @@ class ClientLogInWindow(QWidget):
         error_log = account.validate_login(self.username.text(), self.password.text())
         if(account.operation_success(error_log)):
             self.confirmation_label.setText("Login Successful")
-            print(self.username.text())
             self.client_sign_up_window.client_username = self.username.text()
         else:
             self.confirmation_label.setText("Invalid Username or Password. Please try again")
 
     def close_check(self):
-        self.client_username = self.client_sign_up_window.client_username
         self.close()
 
     def closeEvent(self, event):

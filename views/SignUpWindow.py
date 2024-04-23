@@ -19,7 +19,7 @@ class SignUpWindow(QWidget):
 
         self.setWindowTitle("Sign Up")
         self.setLayout(self.layout)
-        self.resize(screen_size / 2.0)
+        self.setFixedSize(screen_size / 2.0)
 
         # Prompt text
         self.title = QLabel("Please enter your information below.")
@@ -37,7 +37,6 @@ class SignUpWindow(QWidget):
         user_password = QLabel("Password:")
         user_password.setProperty("class", "normal")
         self.layout.addWidget(user_password, 2, 0)
-
         self.password = QLineEdit()
         self.layout.addWidget(self.password, 2, 1, 1, 2)
 
@@ -53,9 +52,9 @@ class SignUpWindow(QWidget):
         sign_up_button.clicked.connect(self.sign_up)
         self.layout.addWidget(sign_up_button, 4, 0)
 
+    # Checks if account information is valid to make account
+    # If not then it updates the title to show the user what went wrong
     def sign_up(self):
-        # Checks if account information is valid to make account
-        # If not then it updates the title to show the user what went wrong
         account = Accounts()
         error_log = account.add_account(self.username.text(), self.password.text(), self.email.text())
         if (account.operation_success(error_log)):
@@ -74,9 +73,9 @@ class SignUpWindow(QWidget):
             elif error_log['email-entered'] == False:
                 self.title.setText("Please enter a valid Email")
 
+    # When window is closed, main window will check if user is logged in
+    # Will replace login button with logout button
     def closeEvent(self, event):
-        # when window is closed, main window will check if user is logged in
-        # will replace login button with logout button
         self.password.clear()
         self.username.clear()
         self.email.clear()
