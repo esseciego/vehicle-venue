@@ -4,7 +4,7 @@ import os
 
 class EnvVariables:
     def __init__(self):
-        pass
+        load_dotenv()
 
     def get_user(self):
         # Returns current user's role

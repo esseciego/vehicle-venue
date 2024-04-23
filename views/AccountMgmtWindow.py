@@ -14,7 +14,6 @@ class AccountMgmtWindow(QWidget):
         super().__init__()
 
         self.initUI()
-        self.initAdminLoginUI()
 
     def initUI(self):
         self.layout = QGridLayout(self)
@@ -26,70 +25,27 @@ class AccountMgmtWindow(QWidget):
         screen_size = screen.size()
         self.resize(int(screen_size.width() / 2), int(screen_size.height() / 2))
 
-    def initAdminLoginUI(self):  # Admin login UI elements
-        # AdminLogin text
-        self.title = QLabel("Admin Login")
-        self.layout.addWidget(self.title, 0, 0, 1, 2, Qt.AlignmentFlag.AlignCenter)
-
-        # Username text
-        self.user_name_label = QLabel("Username:")
-        self.layout.addWidget(self.user_name_label, 1, 0)
-
-        self.username = QLineEdit()
-        self.layout.addWidget(self.username, 1, 1)
-
-        # Password text
-        self.user_password_label = QLabel("Password:")
-        self.layout.addWidget(self.user_password_label, 2, 0)
-
-        self.password = QLineEdit()
-        self.password.setEchoMode(QLineEdit.EchoMode.Password)
-        self.layout.addWidget(self.password, 2, 1)
-
-        # LogIn button
-        self.login_button = QPushButton("Login")
-        self.login_button.clicked.connect(self.authenticate_admin)
-        self.layout.addWidget(self.login_button, 3, 0, 1, 2)
-
-        # Confirmation label
-        self.confirmation_label = QLabel("")
-        self.layout.addWidget(self.confirmation_label, 4, 0, 1, 2, Qt.AlignmentFlag.AlignCenter)
-
         # Manage Accounts label
-        self.settings_label = QLabel("Manage Accounts")
-        self.settings_label.hide()
-
-        # SaveChanges button
-        self.save_changes_button = QPushButton("Save Changes")
-        self.save_changes_button.clicked.connect(self.save_all_changes)
-        self.save_changes_button.hide()  # Hide initially
-
-        # BackToMain button
-        self.back_button = QPushButton("Back to Main")
-        self.back_button.clicked.connect(self.close)
-
-    def authenticate_admin(self):
-        self.confirmation_label.setText("Login Successful")
-        self.show_settings()
-
-    def show_settings(self):
-        self.title.hide()
-        self.user_name_label.hide()
-        self.username.hide()
-        self.user_password_label.hide()
-        self.password.hide()
-        self.login_button.hide()
-        self.confirmation_label.hide()
+        self.settings_label = QLabel("Manage Employee and Admin Accounts")
         self.settings_label.show()
         self.layout.addWidget(self.settings_label, 0, 0, 1, 0, Qt.AlignmentFlag.AlignCenter)
 
-        self.account_list_button = QPushButton("Account List")
-        self.account_list_button.clicked.connect(self.show_account_list)
-        self.layout.addWidget(self.account_list_button, 1, 0)
+        # Save Changes button
+        self.save_changes_button = QPushButton("Save Changes")
+        self.save_changes_button.clicked.connect(self.save_all_changes)
+
+        # Back To Main button
+        self.back_button = QPushButton("Back to Main")
+        self.back_button.clicked.connect(self.close)
+
+        # Edit Accounts button
+        self.edit_accounts_button = QPushButton("Edit Accounts")
+        self.edit_accounts_button.clicked.connect(self.show_account_list)
+        self.layout.addWidget(self.edit_accounts_button, 1, 0)
 
     def show_account_list(self):
         accounts_model = Accounts()
-        account_list = accounts_model.get_all_accounts()
+        account_list = accounts_model.get_accounts_by_role("Employee")
 
         self.table_widget = QTableWidget(len(account_list), 6)
         self.table_widget.setHorizontalHeaderLabels(["Username", "Password", "Email", "Role", "City"])

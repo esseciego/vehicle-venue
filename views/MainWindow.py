@@ -154,8 +154,7 @@ class MainWindow(QWidget):
 
     #open up the car edit window
     def car_mgmt_window(self):
-        if self.car_mgmt_window_instance is None or not self.car_mgmt_window_instance.isVisible():
-            self.car_mgmt_window_instance = CarMgmtWindow()
+        self.car_mgmt_window_instance = CarMgmtWindow()
         self.car_mgmt_window_instance.show()
 
     #open up the sign up window
@@ -240,7 +239,9 @@ class MainWindow(QWidget):
         self.update_car_list(start_date, end_date, rental_period)
 
     #updates car list with the new paramaters
-    def update_car_list(self, start_date=QDate.currentDate(), end_date=QDate.currentDate().addDays(1), rental_period=[]):
+    def update_car_list(self, start_date=QDate.currentDate(), end_date=QDate.currentDate().addDays(1), rental_period=None):
+        if rental_period is NOne:
+            rental_period = []
         self.car_list = self.cars.make_car_list(self.user_location, start_date, end_date, rental_period)
 
 
