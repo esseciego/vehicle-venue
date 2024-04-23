@@ -1,7 +1,7 @@
 import sys
 from PyQt6.QtWidgets import (
     QApplication, QWidget, QGridLayout, QLabel, QLineEdit,
-    QPushButton, QTableWidget, QTableWidgetItem
+    QPushButton, QTableWidget, QTableWidgetItem, QComboBox
 )
 
 from PyQt6.QtCore import Qt
@@ -14,7 +14,6 @@ class AccountMgmtWindow(QWidget):
         super().__init__()
 
         self.initUI()
-        self.initAdminLoginUI()
 
     def initUI(self):
         self.layout = QGridLayout(self)
@@ -26,74 +25,144 @@ class AccountMgmtWindow(QWidget):
         screen_size = screen.size()
         self.resize(int(screen_size.width() / 2), int(screen_size.height() / 2))
 
-    def initAdminLoginUI(self):  # Admin login UI elements
-        # AdminLogin text
-        self.title = QLabel("Admin Login")
-        self.layout.addWidget(self.title, 0, 0, 1, 2, Qt.AlignmentFlag.AlignCenter)
+        # Background Color
+        self.setStyleSheet("background-color: #ffe0c2")
 
-        # Username text
-        self.user_name_label = QLabel("Username:")
-        self.layout.addWidget(self.user_name_label, 1, 0)
+        # "Manage..." text
+        self.manage_accounts_label = QLabel("Manage Employee and Admin Accounts")
+        self.manage_accounts_label.show()
+        self.manage_accounts_label.setStyleSheet("font-weight: bold;"
+                                                 "font-family: Tahoma;"
+                                                 "font-size: 28px")
+        self.layout.addWidget(self.manage_accounts_label, 0, 0, 1, 0, Qt.AlignmentFlag.AlignCenter)
 
-        self.username = QLineEdit()
-        self.layout.addWidget(self.username, 1, 1)
-
-        # Password text
-        self.user_password_label = QLabel("Password:")
-        self.layout.addWidget(self.user_password_label, 2, 0)
-
-        self.password = QLineEdit()
-        self.password.setEchoMode(QLineEdit.EchoMode.Password)
-        self.layout.addWidget(self.password, 2, 1)
-
-        # LogIn button
-        self.login_button = QPushButton("Login")
-        self.login_button.clicked.connect(self.authenticate_admin)
-        self.layout.addWidget(self.login_button, 3, 0, 1, 2)
-
-        # Confirmation label
-        self.confirmation_label = QLabel("")
-        self.layout.addWidget(self.confirmation_label, 4, 0, 1, 2, Qt.AlignmentFlag.AlignCenter)
-
-        # Manage Accounts label
-        self.settings_label = QLabel("Manage Accounts")
-        self.settings_label.hide()
-
-        # SaveChanges button
+        # Save Changes button
         self.save_changes_button = QPushButton("Save Changes")
+        self.save_changes_button.setStyleSheet("background-color: #6eb6ff;"
+                                               "color: black;"
+                                               "font-weight: bold;"
+                                               "font-family: Tahoma;")
         self.save_changes_button.clicked.connect(self.save_all_changes)
-        self.save_changes_button.hide()  # Hide initially
 
-        # BackToMain button
+        # Back To Main button
         self.back_button = QPushButton("Back to Main")
+        self.back_button.setStyleSheet("background-color: #fa9352;"
+                                       "color: black;"
+                                       "font-weight: bold;"
+                                       "font-family: Tahoma;")
         self.back_button.clicked.connect(self.close)
 
-    def authenticate_admin(self):
-        self.confirmation_label.setText("Login Successful")
-        self.show_settings()
+        # FIXME: Edit accounts & create accounts button are to the left of the accounts button...?
+        self.edit_accounts_button = QPushButton("Edit Accounts")
+        self.edit_accounts_button.clicked.connect(self.show_account_list)
+        self.edit_accounts_button.setStyleSheet("background-color: #6eb6ff;"
+                                                "color: black;"
+                                                "font-weight: bold;"
+                                                "font-family: Tahoma;")
+        self.layout.addWidget(self.edit_accounts_button, 1, 0)
 
-    def show_settings(self):
-        self.title.hide()
-        self.user_name_label.hide()
+        # Create Accounts button
+        self.create_accounts_button = QPushButton("Create Accounts")
+        self.create_accounts_button.clicked.connect(self.show_sign_up_page)
+        self.create_accounts_button.setStyleSheet("background-color: #fa9352;"
+                                                  "color: black;"
+                                                  "font-weight: bold;"
+                                                  "font-family: Tahoma;")
+        self.layout.addWidget(self.create_accounts_button, 2, 0)
+
+        # "Please enter..." text
+        self.create_accounts_title = QLabel("Please enter the user's information below.")
+        self.create_accounts_title.setProperty("class", "heading")
+        self.create_accounts_title.setStyleSheet("font-weight: bold;"
+                                                 "font-family: Tahoma;"
+                                                 "font-size: 28px")
+        self.layout.addWidget(self.create_accounts_title, 0, 0, 1, 0, Qt.AlignmentFlag.AlignCenter)
+        self.create_accounts_title.hide()
+
+        # Username label + text
+        self.user_username = QLabel("Username:")
+        self.user_username.setProperty("class", "normal")
+        self.user_username.setStyleSheet("font-family: Tahoma;"
+                                         "font-size: 14px")
+        self.layout.addWidget(self.user_username, 1, 0)
+        self.user_username.hide()
+
+        self.username = QLineEdit()
+        self.username.setStyleSheet("background-color: white")
+        self.layout.addWidget(self.username, 1, 1, 1, 2)
         self.username.hide()
-        self.user_password_label.hide()
-        self.password.hide()
-        self.login_button.hide()
-        self.confirmation_label.hide()
-        self.settings_label.show()
-        self.layout.addWidget(self.settings_label, 0, 0, 1, 0, Qt.AlignmentFlag.AlignCenter)
 
-        self.account_list_button = QPushButton("Account List")
-        self.account_list_button.clicked.connect(self.show_account_list)
-        self.layout.addWidget(self.account_list_button, 1, 0)
+        # Password label + text
+        self.user_password = QLabel("Password:")
+        self.user_password.setProperty("class", "normal")
+        self.user_password.setStyleSheet("font-family: Tahoma;"
+                                         "font-size: 14px")
+        self.layout.addWidget(self.user_password, 2, 0)
+        self.user_password.hide()
+
+        self.password = QLineEdit()
+        self.password.setStyleSheet("background-color: white")
+        self.layout.addWidget(self.password, 2, 1, 1, 2)
+        self.password.hide()
+
+        # Email label + text
+        self.user_email = QLabel("Email Address:")
+        self.user_email.setProperty("class", "normal")
+        self.user_email.setStyleSheet("font-family: Tahoma;"
+                                      "font-size: 14px")
+        self.layout.addWidget(self.user_email, 3, 0)
+        self.user_email.hide()
+
+        self.email = QLineEdit()
+        self.email.setStyleSheet("background-color: white")
+        self.layout.addWidget(self.email, 3, 1, 1, 2)
+        self.email.hide()
+
+        # City label + text
+        self.user_city = QLabel("City:")
+        self.user_city.setProperty("class", "normal")
+        self.user_city.setStyleSheet("font-family: Tahoma;"
+                                     "font-size: 14px")
+        self.layout.addWidget(self.user_city, 4, 0)
+        self.user_city.hide()
+
+        self.city = QLineEdit()
+        self.city.setStyleSheet("background-color: white")
+        self.layout.addWidget(self.city, 4, 1, 1, 2)
+        self.city.hide()
+
+        # Roles label + list
+        self.user_role = QLabel("Role: ")
+        self.user_role.setProperty("class", "normal")
+        self.user_role.setStyleSheet("font-family: Tahoma;"
+                                     "font-size: 14px")
+        self.layout.addWidget(self.user_role, 5, 0)
+        self.user_role.hide()
+
+        self.role = QComboBox()
+        self.role.addItems(["Employee", "Admin"])
+        self.role.setStyleSheet("background-color: white")
+        self.layout.addWidget(self.role, 5, 1, 1, 2)
+        self.role.hide()
+
+        # Sign up Button
+        self.sign_up_button = QPushButton("Sign Up")
+        self.sign_up_button.clicked.connect(self.sign_up)
+        self.sign_up_button.setStyleSheet("background-color: #6eb6ff;"
+                                          "color: black;"
+                                          "font-weight: bold;"
+                                          "font-family: Tahoma;")
+        self.layout.addWidget(self.sign_up_button, 6, 0)
+        self.sign_up_button.hide()
 
     def show_account_list(self):
         accounts_model = Accounts()
-        account_list = accounts_model.get_all_accounts()
+        account_list = accounts_model.get_accounts_by_role("Employee")
 
         self.table_widget = QTableWidget(len(account_list), 6)
         self.table_widget.setHorizontalHeaderLabels(["Username", "Password", "Email", "Role", "City"])
-        self.table_widget.hideColumn(5)   # Hide the _id column
+        self.table_widget.hideColumn(5)  # Hide the _id column
+        self.table_widget.setStyleSheet("background-color: #d9e5ff")
 
         for row, account in enumerate(account_list):
             self.table_widget.setItem(row, 0, QTableWidgetItem(account['username']))
@@ -109,6 +178,9 @@ class AccountMgmtWindow(QWidget):
         self.layout.addWidget(self.save_changes_button, 3, 0)
         self.save_changes_button.show()
         self.layout.addWidget(self.back_button, 4, 0)
+
+        self.create_accounts_button.hide()
+        self.edit_accounts_button.move(1, 0)
 
     def on_cell_changed(self, row, column):
         id_item = self.table_widget.item(row, 5)
@@ -130,6 +202,53 @@ class AccountMgmtWindow(QWidget):
                 print("Column index out of range for updates.")
         else:
             print("No ID found, update aborted.")
+
+    def show_sign_up_page(self):
+        # Displays sign up form
+        # Hide widgets from initial display
+        self.manage_accounts_label.hide()
+        self.edit_accounts_button.hide()
+        self.create_accounts_button.hide()
+        self.back_button.hide()
+
+        self.create_accounts_title.show()
+        self.user_username.show()
+        self.username.show()
+        self.user_password.show()
+        self.password.show()
+        self.user_email.show()
+        self.email.show()
+        self.user_city.show()
+        self.city.show()
+        self.user_role.show()
+        self.role.show()
+        self.sign_up_button.show()
+
+    def sign_up(self):
+        # Checks if account information is valid to make
+        accounts_model = Accounts()
+        error_log = accounts_model.add_account(self.username.text(), self.password.text(), self.email.text(),
+                                               self.role.currentText(), self.city.text())
+
+        if accounts_model.operation_success(error_log):
+            self.create_accounts_title.setText("Account Created Successfully")
+        else:
+            if not error_log['username-valid']:
+                self.create_accounts_title.setText(
+                    "Username must be between 6-16 characters AND only uses alphanumeric characters")
+
+            elif not error_log['username-unique']:
+                self.create_accounts_title.setText("Username is already taken")
+
+            elif not error_log['password-valid']:
+                self.create_accounts_title.setText(
+                    "Password must be between 8-32 characters AND contains at least 1 number")
+
+            elif not error_log['email-entered']:
+                self.create_accounts_title.setText("Please enter a valid email")
+
+            elif not error_log['city-entered']:
+                self.create_accounts_title.setText("Please enter a valid city")
 
     def save_all_changes(self):
         print("All changes have been saved.")
