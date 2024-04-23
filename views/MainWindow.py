@@ -265,5 +265,5 @@ class MainWindow(QWidget):
 
     #updates car list with the new paramaters
     def update_car_list(self, start_date=QDate.currentDate(), end_date=QDate.currentDate().addDays(1), rental_period=None):
-        if rental_period is NOne:
+        if rental_period is None:
             rental_period = []
