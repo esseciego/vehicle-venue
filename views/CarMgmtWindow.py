@@ -112,9 +112,4 @@ class CarMgmtWindow(QWidget):
         edit_dialog = EditCarWindow(car_data, self)
         if edit_dialog.exec() == QDialog.DialogCode.Accepted:
             self.populate_table()
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = CarMgmtWindow()
-    window.show()
-    sys.exit(app.exec())
+        
