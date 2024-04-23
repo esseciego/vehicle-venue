@@ -204,9 +204,17 @@ class Accounts:
         # Retrieves all accounts from the accounts collection
         try:
             return list(self.accounts_col.find({}))
-        except Exception as e:
-            print(f"An error occurred while fetching accounts: {e}")
-            return []
+        except ConnectionError:
+            print('Server unavailable.')
+
+    def get_accounts_by_role(self, role):
+        # Retrieves all employee accounts from the accounts collection
+        try:
+            accounts_by_role = {"role": role}
+            cursors = self.accounts_col.find(accounts_by_role)
+            return list(cursors)
+        except ConnectionError:
+            print('Server unavailable.')
 
     def update_account(self, account_id, field, new_value):
         print(f"Updating account with ID: {account_id}, Field: {field}, New Value: {new_value}")
@@ -223,6 +231,5 @@ class Accounts:
             success = update_result.modified_count > 0
             print(f"Update success: {success}, Modified count: {update_result.modified_count}")
             return success
-        except Exception as e:
-            print(f"An error occurred while updating the account: {e}")
-            return False
+        except ConnectionError:
+            print('Server unavailable.')

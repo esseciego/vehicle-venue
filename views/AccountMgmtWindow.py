@@ -26,7 +26,7 @@ class AccountMgmtWindow(QWidget):
         self.resize(int(screen_size.width() / 2), int(screen_size.height() / 2))
 
         # Manage Accounts label
-        self.settings_label = QLabel("Manage Accounts")
+        self.settings_label = QLabel("Manage Employee and Admin Accounts")
         self.settings_label.show()
         self.layout.addWidget(self.settings_label, 0, 0, 1, 0, Qt.AlignmentFlag.AlignCenter)
 
@@ -38,14 +38,14 @@ class AccountMgmtWindow(QWidget):
         self.back_button = QPushButton("Back to Main")
         self.back_button.clicked.connect(self.close)
 
-        # Accounts List button
-        self.account_list_button = QPushButton("Account List")
-        self.account_list_button.clicked.connect(self.show_account_list)
-        self.layout.addWidget(self.account_list_button, 1, 0)
+        # Edit Accounts button
+        self.edit_accounts_button = QPushButton("Edit Accounts")
+        self.edit_accounts_button.clicked.connect(self.show_account_list)
+        self.layout.addWidget(self.edit_accounts_button, 1, 0)
 
     def show_account_list(self):
         accounts_model = Accounts()
-        account_list = accounts_model.get_all_accounts()
+        account_list = accounts_model.get_accounts_by_role("Employee")
 
         self.table_widget = QTableWidget(len(account_list), 6)
         self.table_widget.setHorizontalHeaderLabels(["Username", "Password", "Email", "Role", "City"])
