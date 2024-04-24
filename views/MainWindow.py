@@ -30,12 +30,14 @@ class MainWindow(QWidget):
 
         # Layout for the Calendars to be placed on top of each other
         self.calendar_layout = QVBoxLayout()
-
         self.setWindowTitle("Home Page")
         self.setLayout(self.layout)
 
         # Size of the window, grabs the screen size of the user
         self.setFixedSize(int(screen_size.width()), int(screen_size.height() * .92))
+
+        # Background Color
+        self.setStyleSheet("background-color: #cce4fc")
 
         self.account = Accounts()
 
@@ -49,86 +51,128 @@ class MainWindow(QWidget):
         self.cars.username_signal.connect(self.login_check)
         self.car_list.hide()
 
-        # Welcome text
+        # "Welcome..." text
         self.welcome_label = QLabel("Welcome to the VehicleVenue\n\n"
                                     "Project Manager: Esse Ciego\n"
                                     "Scrum Master: Truman Moore\n"
                                     "Development Team: Austin Wing and Reid Castillo")
         self.welcome_label.setProperty("class", "heading")
         self.welcome_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.welcome_label.setStyleSheet("color: black;"
+                                         "font-weight: bold;"
+                                         "font-family: Tahoma;"
+                                         "font-size: 32px")
         self.layout.addWidget(self.welcome_label, 1, 1, Qt.AlignmentFlag.AlignCenter)
 
-        # Guest text
+        # "Guest" text
         self.user_name_label = QLabel("Guest")
         self.user_name_label.setProperty("class", "heading")
+        self.user_name_label.setStyleSheet("color: black;"
+                                           "font-family: Helvetica;"
+                                           "font-style: italic;"
+                                           "font-size: 16px")
         self.layout.addWidget(self.user_name_label, 0, 0, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
-        # Car List tab
+        # "Car Collection" button
         self.collection_tab = QPushButton("Car Collection")
         self.collection_tab.setFlat(True)
         self.collection_tab.clicked.connect(self.car_collection)
+        self.collection_tab.setStyleSheet("color: #f5840c;"
+                                          "font-weight: bold;"
+                                          "font-family: Tahoma;")
         self.layout.addWidget(self.collection_tab, 0, 0, Qt.AlignmentFlag.AlignCenter)
 
-        # Home Page tab
+        # "Home" button
         self.home_tab = QPushButton("Home")
         self.home_tab.setFlat(True)
         self.home_tab.clicked.connect(self.home_page)
+        self.home_tab.setStyleSheet("color: Blue;"
+                                    "font-weight: bold;"
+                                    "font-family: Tahoma;")
         self.layout.addWidget(self.home_tab, 0, 0, Qt.AlignmentFlag.AlignLeft)
 
-        # View Rentals button
+        # "View Rentals" button
         self.view_rental_button = QPushButton("View Rentals")
         self.view_rental_button.setFlat(True)
         self.view_rental_window = RentalWindow()
         self.view_rental_button.clicked.connect(self.rental_window)
+        self.view_rental_button.setStyleSheet("color: Red;"
+                                              "font-weight: bold;"
+                                              "font-family: Tahoma;")
         self.layout.addWidget(self.view_rental_button, 0, 0,
                               Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignBottom)
         self.view_rental_button.hide()
 
-        # Manage Cars button
+        # "Manage Cars" button
         self.car_mgmt_window_button = QPushButton("Manage Cars")
         self.car_mgmt_window_button.setFlat(True)
         self.car_mgmt_window_button.clicked.connect(self.car_mgmt_window)
+        self.car_mgmt_window_button.setStyleSheet("color: Red;"
+                                                  "font-weight: bold;"
+                                                  "font-family: Tahoma;")
         self.layout.addWidget(self.car_mgmt_window_button, 0, 0,
                               Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignBottom)
         self.car_mgmt_window_instance = None  # Keep a reference to the car window
         self.car_mgmt_window_button.hide()
 
-        #  Manage Accounts button
+        # "Manage Accounts" button
         self.accounts_mgmt_button = QPushButton("Manage Accounts")
         self.accounts_mgmt_button.setFlat(True)
         self.accounts_mgmt_button.clicked.connect(self.account_mgmt_window)
+        self.accounts_mgmt_button.setStyleSheet("color: Red;"
+                                                "font-weight: bold;"
+                                                "font-family: Tahoma;")
         self.layout.addWidget(self.accounts_mgmt_button, 0, 0,
                               Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom)
         self.account_mgmt_window_instance = None
         self.accounts_mgmt_button.hide()
 
-        # Sign Up button
+        # "Sign Up" button
         sign_up_button = QPushButton("Sign Up")
         sign_up_button.clicked.connect(self.sign_up_window)
+        sign_up_button.setStyleSheet("background-color: #6eb6ff;"
+                                     "color: black;"
+                                     "font-weight: bold;"
+                                     "font-family: Tahoma;")
         self.layout.addWidget(sign_up_button, 0, 2, Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop)
         self.sign_up_window = SignUpWindow()
         self.sign_up_window.window_closed.connect(self.login_check)
 
-        # Log In button
+        # "Log In" button
         self.login_button = QPushButton("Log In")
         self.login_button.clicked.connect(self.login_window)
+        self.login_button.setStyleSheet("background-color: #fa9352;"
+                                        "color: black;"
+                                        "font-weight: bold;"
+                                        "font-family: Tahoma;")
         self.layout.addWidget(self.login_button, 0, 2, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTop)
         self.login_window = LogInWindow()
         self.login_window.window_closed.connect(self.login_check)
 
-        # Log Out button
+        # "Log Out" button
         self.logout_button = QPushButton("Log Out")
         self.logout_button.clicked.connect(self.logout)
+        self.logout_button.setStyleSheet("background-color: #fa9352;"
+                                         "color: black;"
+                                         "font-weight: bold;"
+                                         "font-family: Tahoma;")
         self.layout.addWidget(self.logout_button, 0, 2, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTop)
         self.logout_button.hide()
 
-        # Guide text
-        self.guide_label = QLabel("Choose a Start and End Dates of Desired Rental Period")
+        # "Choose..." text
+        self.guide_label = QLabel("Choose a START and END date")
+        self.guide_label.setStyleSheet("color: black;"
+                                       "font-family: Tahoma;"
+                                       "font-size: 16px")
         self.calendar_layout.addWidget(self.guide_label)
         self.guide_label.hide()
 
-        # Enter start date prompt
+        # "Enter Start Date" text
         self.start_date_label = QLabel("Enter Start Date")
+        self.start_date_label.setStyleSheet("color: #f5840c;"
+                                            "font-family: Tahoma;"
+                                            "font-style: italic;"
+                                            "font-weight: bold")
         self.calendar_layout.addWidget(self.start_date_label)
         self.start_date_label.hide()
 
@@ -137,11 +181,16 @@ class MainWindow(QWidget):
         self.start_date_calendar.setMinimumDate(QDate.currentDate())
         self.start_date_calendar.setSelectedDate(QDate.currentDate())
         self.start_date_calendar.clicked.connect(self.minimum_end_date)
+        self.start_date_calendar.setStyleSheet("background-color: #fff1d9")
         self.calendar_layout.addWidget(self.start_date_calendar)
         self.start_date_calendar.hide()
 
-        # End date prompt
+        # "Enter End Date" text
         self.end_date_label = QLabel("Enter End Date")
+        self.end_date_label.setStyleSheet("color: #f5840c;"
+                                          "font-family: Tahoma;"
+                                          "font-style: italic;"
+                                          "font-weight: bold")
         self.calendar_layout.addWidget(self.end_date_label)
         self.end_date_label.hide()
 
@@ -149,12 +198,17 @@ class MainWindow(QWidget):
         self.end_date_calendar = QCalendarWidget()
         self.end_date_calendar.setMinimumDate(QDate.currentDate())
         self.end_date_calendar.setSelectedDate(QDate.currentDate().addDays(1))
+        self.end_date_calendar.setStyleSheet("background-color: #fff1d9")
         self.calendar_layout.addWidget(self.end_date_calendar)
         self.end_date_calendar.hide()
 
-        # Filter button to only show cars available for the start and end date
+        # "Filter Cars" button (only shows cars available within the START and END date)
         self.filter_button = QPushButton("Filter Cars")
         self.filter_button.clicked.connect(self.filter)
+        self.filter_button.setStyleSheet("background-color: #fa9352;"
+                                         "color: black;"
+                                         "font-weight: bold;"
+                                         "font-family: Tahoma;")
         self.calendar_layout.addWidget(self.filter_button)
         self.filter_button.hide()
 
@@ -242,7 +296,7 @@ class MainWindow(QWidget):
         self.filter_button.hide()
         self.welcome_label.show()
 
-    # When a start date is selected, set the minumum end date to that date plus 1
+    # When a start date is selected, set the minimum end date to that date plus 1
     def minimum_end_date(self):
         start_date = self.start_date_calendar.selectedDate()
         end_date = self.end_date_calendar.selectedDate()
@@ -257,13 +311,13 @@ class MainWindow(QWidget):
         end_date = self.end_date_calendar.selectedDate()
         rental_period = [start_date, end_date]
 
-        self.guide_label.setText("Showing Cars Available from " + start_date.toString()
-                                 + " to " + end_date.toString())
+        self.guide_label.setText("Cars Available from " + start_date.toString()
+                                 + " - " + end_date.toString() + ":")
 
         self.update_car_list(start_date, end_date, rental_period)
 
-
-    #updates car list with the new paramaters
-    def update_car_list(self, start_date=QDate.currentDate(), end_date=QDate.currentDate().addDays(1), rental_period=None):
+    # updates car list with the new parameters
+    def update_car_list(self, start_date=QDate.currentDate(), end_date=QDate.currentDate().addDays(1),
+                        rental_period=None):
         if rental_period is None:
             rental_period = []

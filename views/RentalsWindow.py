@@ -6,6 +6,7 @@ from PyQt6.QtWidgets import (QWidget, QGridLayout,
 from views.SignUpWindow import screen_size
 from models.Rentals import Rentals
 
+
 class RentalWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -18,6 +19,9 @@ class RentalWindow(QWidget):
         self.setLayout(self.layout)
         self.resize(screen_size / 2.0)
 
+        # Background Color
+        self.setStyleSheet("background-color: #ffe0c2")
+
         # Scroll Area Properties
         self.scroll = QScrollArea()
         self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
@@ -28,18 +32,30 @@ class RentalWindow(QWidget):
 
         self.layout.addWidget(self.make_rental_list())
 
-        self.back_button = QPushButton('Back to main')
+        self.back_button = QPushButton('Back to Main Menu')
         self.back_button.clicked.connect(lambda: self.close())
+        self.back_button.setStyleSheet("background-color: #fa9352;"
+                                       "color: black;"
+                                       "font-weight: bold;"
+                                       "font-family: Tahoma;")
         self.layout.addWidget(self.back_button)
 
-    # Makes the list that shows all of the rentals
+    # Makes the list that shows all the rentals
     def make_rental_list(self):
         list_layout = QVBoxLayout()  # Layout of the cars
         header_layout = QHBoxLayout()
 
         username_label = QLabel("Username")
+        username_label.setStyleSheet("font-family: Tahoma;"
+                                     "font-size: 14px")
+
         license_plates_label = QLabel("License Plate")
+        license_plates_label.setStyleSheet("font-family: Tahoma;"
+                                           "font-size: 14px")
+
         rental_period_label = QLabel("Rental Period")
+        rental_period_label.setStyleSheet("font-family: Tahoma;"
+                                          "font-size: 14px")
 
         header_layout.addWidget(username_label)
         header_layout.addWidget(license_plates_label)
@@ -48,6 +64,7 @@ class RentalWindow(QWidget):
         list_layout.addLayout(header_layout)
 
         rental_list = QWidget()  # Widget that contains the collection of the cars
+        rental_list.setStyleSheet("background-color: #d9e5ff")
         all_rentals = self.rentals.get_all_rentals()
 
         for i in range(len(all_rentals)):
@@ -67,4 +84,3 @@ class RentalWindow(QWidget):
         self.scroll.setWidget(rental_list)
 
         return self.scroll
-

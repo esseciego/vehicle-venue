@@ -8,6 +8,7 @@ from pymongo import MongoClient
 from bson import ObjectId
 from helpers.EnvVariables import EnvVariables
 
+
 class EditCarWindow(QDialog):
     def __init__(self, car_data, parent=None):
         super().__init__(parent)
@@ -42,7 +43,9 @@ class EditCarWindow(QDialog):
         layout.addRow(buttonBox)
 
     def accept(self):
-        client = MongoClient('mongodb+srv://tears_user:sobbing.emoji@carrental.fiinqnj.mongodb.net/?retryWrites=true&w=majority&appName=CarRental')
+        client = MongoClient(
+            'mongodb+srv://tears_user:sobbing.emoji@carrental.fiinqnj.mongodb.net/?retryWrites=true&w=majority'
+            '&appName=CarRental')
         db = client['car_rental_data']
         cars_collection = db['cars']
         updated_data = {
@@ -57,6 +60,7 @@ class EditCarWindow(QDialog):
         cars_collection.update_one({'_id': ObjectId(self.car_data['_id'])}, {'$set': updated_data})
         super().accept()
 
+
 class CarMgmtWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -65,23 +69,45 @@ class CarMgmtWindow(QWidget):
 
     def initUI(self):
         self.setWindowTitle("Car Management")
+
+        # Table
         self.layout = QVBoxLayout(self)
         self.table_widget = QTableWidget()
+        self.table_widget.setStyleSheet("background-color: #d9e5ff")
         self.layout.addWidget(self.table_widget)
+
+        # "Car List" button
         self.populate_table_button = QPushButton("Car List")
         self.populate_table_button.clicked.connect(self.populate_table)
+        self.populate_table_button.setStyleSheet("background-color: #6eb6ff;"
+                                                 "color: black;"
+                                                 "font-weight: bold;"
+                                                 "font-family: Tahoma;")
         self.layout.addWidget(self.populate_table_button)
+
+        # "Back to..." button
         self.back_to_main_button = QPushButton("Back to Main Menu")
         self.back_to_main_button.clicked.connect(self.close)
+        self.back_to_main_button.setStyleSheet("background-color: #fa9352;"
+                                               "color: black;"
+                                               "font-weight: bold;"
+                                               "font-family: Tahoma;")
         self.layout.addWidget(self.back_to_main_button)
+
         app = QApplication.instance()
         screen = app.primaryScreen()
         self.resize(int(screen.size().width() / 2), int(screen.size().height() / 2))
+
+        # Background Color
+        self.setStyleSheet("background-color: #ffe0c2")
+
         self.table_widget.cellDoubleClicked.connect(self.on_cell_double_clicked)
 
     def populate_table(self):
         current_city = self.env_vars.get_city()
-        client = MongoClient('mongodb+srv://tears_user:sobbing.emoji@carrental.fiinqnj.mongodb.net/?retryWrites=true&w=majority&appName=CarRental')
+        client = MongoClient(
+            'mongodb+srv://tears_user:sobbing.emoji@carrental.fiinqnj.mongodb.net/?retryWrites=true&w=majority'
+            '&appName=CarRental')
         db = client['car_rental_data']
         cars_collection = db['cars']
         query = {"curr_rental_location": current_city} if current_city else {}
@@ -104,7 +130,10 @@ class CarMgmtWindow(QWidget):
             self.table_widget.item(row, 0).setData(Qt.ItemDataRole.UserRole, str(car['_id']))
 
     def on_cell_double_clicked(self, row, column):
-        car_data = {self.table_widget.horizontalHeaderItem(i).text().lower().replace(" ", "_"): self.table_widget.item(row, i).text() for i in range(self.table_widget.columnCount())}
+        car_data = {
+            self.table_widget.horizontalHeaderItem(i).text().lower().replace(" ", "_"): self.table_widget.item(row,
+                                                                                                               i).text()
+            for i in range(self.table_widget.columnCount())}
         car_data['_id'] = self.table_widget.item(row, 0).data(Qt.ItemDataRole.UserRole)
         self.open_edit_car_window(car_data)
 
@@ -112,4 +141,3 @@ class CarMgmtWindow(QWidget):
         edit_dialog = EditCarWindow(car_data, self)
         if edit_dialog.exec() == QDialog.DialogCode.Accepted:
             self.populate_table()
-        
