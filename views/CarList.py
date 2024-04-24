@@ -31,6 +31,7 @@ class CarList(QWidget):
     def make_car_list(self, location, start_date=QDate.currentDate(), end_date=QDate.currentDate().addDays(1), rental_period=None):
         if rental_period is None:
             rental_period = []
+        print(location)
         list_layout = QGridLayout()  # Layout of the cars
         car_list = QWidget()  # Widget that contains the collection of the cars
         if location != "":
