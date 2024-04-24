@@ -94,7 +94,6 @@ class MainWindow(QWidget):
         # "View Rentals" button
         self.view_rental_button = QPushButton("View Rentals")
         self.view_rental_button.setFlat(True)
-        self.view_rental_window = RentalWindow()
         self.view_rental_button.clicked.connect(self.rental_window)
         self.view_rental_button.setStyleSheet("color: Red;"
                                               "font-weight: bold;"
@@ -226,6 +225,7 @@ class MainWindow(QWidget):
 
     # open up the view rental window
     def rental_window(self):
+        self.view_rental_window = RentalWindow()
         self.view_rental_window.show()
 
     # open up the sign up window
@@ -317,7 +317,8 @@ class MainWindow(QWidget):
         self.update_car_list(start_date, end_date, rental_period)
 
     # updates car list with the new parameters
-    def update_car_list(self, start_date=QDate.currentDate(), end_date=QDate.currentDate().addDays(1),
-                        rental_period=None):
+    def update_car_list(self, start_date=QDate.currentDate(), end_date=QDate.currentDate().addDays(1), rental_period=None):
         if rental_period is None:
             rental_period = []
+        self.car_list = self.cars.make_car_list(self.user_location, start_date, end_date, rental_period)
+

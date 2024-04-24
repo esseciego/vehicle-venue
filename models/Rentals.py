@@ -194,8 +194,3 @@ class Rentals:
             return len(rental_list)
         else:
             return 0
-
-
-
-
-
