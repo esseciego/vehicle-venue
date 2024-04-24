@@ -31,7 +31,7 @@ class ClientSignUpWindow(QWidget):
         self.title.setProperty("class", "heading")
         self.title.setStyleSheet("font-weight: bold;"
                                  "font-family: Tahoma;"
-                                 "font-size: 32px")
+                                 "font-size: 18px")
         self.layout.addWidget(self.title, 0, 0, 1, 0, Qt.AlignmentFlag.AlignCenter)
 
         # "Username:" text

@@ -57,7 +57,7 @@ class SpecificCarWindow(QWidget):
         self.guide_label.setStyleSheet("color: black;"
                                        "font-weight: bold;"
                                        "font-family: Tahoma;"
-                                       "font-size: 20px")
+                                       "font-size: 12px")
         self.calendar_layout.addWidget(self.guide_label)
 
         # Enter start date prompt

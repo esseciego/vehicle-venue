@@ -94,7 +94,6 @@ class MainWindow(QWidget):
         # "View Rentals" button
         self.view_rental_button = QPushButton("View Rentals")
         self.view_rental_button.setFlat(True)
-        self.view_rental_window = RentalWindow()
         self.view_rental_button.clicked.connect(self.rental_window)
         self.view_rental_button.setStyleSheet("color: Red;"
                                               "font-weight: bold;"
@@ -226,6 +225,7 @@ class MainWindow(QWidget):
 
     # open up the view rental window
     def rental_window(self):
+        self.view_rental_window = RentalWindow()
         self.view_rental_window.show()
 
     # open up the sign up window
@@ -258,17 +258,20 @@ class MainWindow(QWidget):
             self.car_mgmt_window_button.hide()
             self.view_rental_button.hide()
             self.user_location = ""
+            print("changed at 261")
             self.update_car_list()
         else:
             if env_vars.get_role() == "Employee" or env_vars.get_role() == "Admin":
+                if env_vars.get_role() == "Admin":
+                    self.accounts_mgmt_button.show()
                 self.car_mgmt_window_button.show()
                 self.view_rental_button.show()
                 self.user_location = env_vars.get_city()
+                print(self.user_location)
                 self.update_car_list()
-            if env_vars.get_role() == "Admin":
-                self.accounts_mgmt_button.show()
             else:
                 self.user_location = ""
+                print("changed at 274")
             self.logout_button.show()
             self.login_button.hide()
             self.user_name_label.setText(env_vars.get_user())
@@ -317,7 +320,15 @@ class MainWindow(QWidget):
         self.update_car_list(start_date, end_date, rental_period)
 
     # updates car list with the new parameters
-    def update_car_list(self, start_date=QDate.currentDate(), end_date=QDate.currentDate().addDays(1),
-                        rental_period=None):
+    def update_car_list(self, start_date=QDate.currentDate(), end_date=QDate.currentDate().addDays(1), rental_period=None):
         if rental_period is None:
             rental_period = []
+        if self.user_location == "":
+            print("why")
+            env = EnvVariables()
+            print(env.get_user())
+            print(env.get_role())
+        else:
+            print(self.user_location)
+        self.car_list = self.cars.make_car_list(self.user_location, start_date, end_date, rental_period)
+

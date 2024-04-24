@@ -22,27 +22,34 @@ class CarList(QWidget):
         self.scroll = QScrollArea()
         self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.scroll.setWidgetResizable(True) # Scroll Area which contains the widgets
+        self.scroll.setWidgetResizable(True)  # Scroll Area which contains the widgets
         self.scroll.setFixedSize(int(screen_size.width() * .50), int(screen_size.height() * .75))
 
         self.cars = Cars()
 
     #Populate the scroll area with the car objects
-    def make_car_list(self, location, start_date=QDate.currentDate(), end_date=QDate.currentDate().addDays(1), rental_period=[]):
+    def make_car_list(self, location, start_date=QDate.currentDate(), end_date=QDate.currentDate().addDays(1), rental_period=None):
+        if rental_period is None:
+            rental_period = []
+        print(location)
         list_layout = QGridLayout()  # Layout of the cars
         car_list = QWidget()  # Widget that contains the collection of the cars
         if location != "":
             self.list_of_cars = self.cars.get_cars_by_location(location)
+            j = 0
             for i in range(len(self.list_of_cars)):
                 if self.check_available_car(i, rental_period):
                     car_object = self.make_car_object(i)
-                    list_layout.addWidget(car_object, int(i / 3), i % 3)
+                    list_layout.addWidget(car_object, int(j / 3), j % 3)
+                    j += 1
         else:
-            for i in range(self.cars.get_num_cars()):
-                self.list_of_cars = self.cars.get_all_cars()
+            self.list_of_cars = self.cars.get_all_cars()
+            j = 0
+            for i in range(len(self.list_of_cars)):
                 if self.check_available_car(i, rental_period):
                     car_object = self.make_car_object(i)
-                    list_layout.addWidget(car_object, int(i / 3), i % 3)
+                    list_layout.addWidget(car_object, int(j / 3), j % 3)
+                    j += 1
 
         car_list.setLayout(list_layout)
         self.scroll.setWidget(car_list)
