@@ -138,7 +138,7 @@ class TestRentals:
         cars.delete_car("LIQUID")
         rentals.delete_rental("Lush", "LIQUID", "04-13-2024", "04-14-2024")
 
-<<<<<<< HEAD
+
     def test_get_rentals_by_location_multi(self):
         # Note: Using get_num_rentals_by_location() as a proxy for get_rentals_by_location()
         # For implementation, can just use rentals.get_cars_by_location()
@@ -197,8 +197,7 @@ class TestRentals:
         rentals.delete_rental("Puberty2", "LOSING", "04-13-2024", "04-14-2024")
         rentals.delete_rental("Puberty2", "DOGS", "04-15-2024", "04-16-2024")
 
-=======
->>>>>>> 7d40db1 (Add rental, delete rental, get all rentals)
+
 
 if __name__ == '__main__':
     pytest.main()
